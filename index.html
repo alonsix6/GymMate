@@ -12,6 +12,8 @@
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lottie-web/build/player/lottie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 
     <style>
         :root {
@@ -239,10 +241,23 @@
     <!-- Main Container -->
     <main class="max-w-7xl mx-auto px-4 py-4 md:py-8">
         <!-- Tab Navigation -->
-        <div id="tabContainer" class="bg-white rounded-xl shadow-lg p-2 mb-4 grid grid-cols-3 gap-2">
+        <div id="tabContainer" class="bg-white rounded-xl shadow-lg p-2 mb-4 grid grid-cols-2 md:grid-cols-5 gap-2">
             <button class="tab-btn active" data-tab="workout">💪 Entreno</button>
+            <button class="tab-btn" data-tab="charts">📊 Gráficos</button>
+            <button class="tab-btn" data-tab="calculators">📐 Calculadoras</button>
             <button class="tab-btn" data-tab="history">📅 Historial</button>
             <button class="tab-btn" data-tab="prs">🏆 PRs</button>
+        </div>
+
+        <!-- AI Suggestions Banner -->
+        <div id="aiSuggestionsBanner" class="hidden bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl p-4 mb-4">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="font-bold text-sm mb-1">🤖 Sugerencia IA</p>
+                    <p id="aiSuggestionText" class="text-sm"></p>
+                </div>
+                <button onclick="dismissAISuggestion()" class="text-white hover:text-gray-200 text-xl font-bold">&times;</button>
+            </div>
         </div>
 
         <!-- Workout Tab -->
@@ -325,6 +340,216 @@
             </div>
         </div>
 
+        <!-- Calculators Tab -->
+        <div id="calculatorsTab" class="tab-content hidden">
+            <div class="space-y-6">
+                <!-- 1RM Calculator -->
+                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
+                    <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">💪 Calculadora de 1RM</h2>
+                    <p class="text-sm text-gray-600 mb-4">Estima tu máximo para 1 repetición basándose en tu mejor rendimiento reciente</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Selecciona Ejercicio:</label>
+                            <select id="rm1ExerciseSelect" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg">
+                                <option value="">-- Elige un ejercicio --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="rm1Results" class="hidden">
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
+                            <p class="text-sm text-gray-700 mb-2"><strong>Mejor registro:</strong> <span id="rm1BestRecord"></span></p>
+                            <div class="grid grid-cols-3 gap-3 mt-4">
+                                <div class="text-center">
+                                    <p class="text-xs text-gray-600">Epley</p>
+                                    <p class="text-2xl font-bold text-blue-600" id="rm1Epley">-</p>
+                                    <p class="text-xs text-gray-500">kg</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-xs text-gray-600">Brzycki</p>
+                                    <p class="text-2xl font-bold text-blue-600" id="rm1Brzycki">-</p>
+                                    <p class="text-xs text-gray-500">kg</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-xs text-gray-600">Lombardi</p>
+                                    <p class="text-2xl font-bold text-blue-600" id="rm1Lombardi">-</p>
+                                    <p class="text-xs text-gray-500">kg</p>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-3 text-center">Promedio de 3 fórmulas científicas basadas en tu mejor rendimiento</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calories Calculator -->
+                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
+                    <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">🔥 Calculadora de Calorías</h2>
+                    <p class="text-sm text-gray-600 mb-4">Calcula tu gasto calórico diario y requerimientos nutricionales</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Edad:</label>
+                            <input type="number" id="caloriesAge" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" placeholder="Ej: 25">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Sexo:</label>
+                            <select id="caloriesGender" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg">
+                                <option value="male">Hombre</option>
+                                <option value="female">Mujer</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Peso (kg):</label>
+                            <input type="number" id="caloriesWeight" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" placeholder="Ej: 70">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Altura (cm):</label>
+                            <input type="number" id="caloriesHeight" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" placeholder="Ej: 175">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nivel de Actividad:</label>
+                            <select id="caloriesActivity" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg">
+                                <option value="1.2">Sedentario (poco o ningún ejercicio)</option>
+                                <option value="1.375">Ligero (1-3 días/semana)</option>
+                                <option value="1.55" selected>Moderado (3-5 días/semana)</option>
+                                <option value="1.725">Activo (6-7 días/semana)</option>
+                                <option value="1.9">Muy Activo (2 veces al día)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button onclick="calculateCalories()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg mb-4">
+                        Calcular
+                    </button>
+
+                    <div id="caloriesResults" class="hidden">
+                        <div class="bg-orange-50 border-l-4 border-orange-500 p-4 rounded-lg">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-sm text-gray-600">BMR (Metabolismo Basal)</p>
+                                    <p class="text-2xl font-bold text-orange-600" id="bmrResult">-</p>
+                                    <p class="text-xs text-gray-500">kcal/día</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600">TDEE (Gasto Total)</p>
+                                    <p class="text-2xl font-bold text-orange-600" id="tdeeResult">-</p>
+                                    <p class="text-xs text-gray-500">kcal/día</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-orange-200">
+                                <div class="text-center">
+                                    <p class="text-xs text-gray-600">Déficit (-20%)</p>
+                                    <p class="text-lg font-bold text-red-600" id="deficitResult">-</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-xs text-gray-600">Mantenimiento</p>
+                                    <p class="text-lg font-bold text-green-600" id="maintenanceResult">-</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-xs text-gray-600">Superávit (+20%)</p>
+                                    <p class="text-lg font-bold text-blue-600" id="surplusResult">-</p>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-3 text-center">Basado en fórmula de Mifflin-St Jeor y tu nivel de actividad</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progressive Weight Calculator -->
+                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
+                    <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">📈 Calculadora de Peso Progresivo</h2>
+                    <p class="text-sm text-gray-600 mb-4">Planifica tu próximo incremento de peso basándote en tu historial</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Selecciona Ejercicio:</label>
+                            <select id="progressiveExerciseSelect" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg">
+                                <option value="">-- Elige un ejercicio --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="progressiveResults" class="hidden">
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
+                            <p class="text-sm text-gray-700 mb-3"><strong>Peso actual:</strong> <span id="progressiveCurrentWeight"></span></p>
+
+                            <div class="space-y-3">
+                                <div class="bg-white rounded-lg p-3 border-2 border-green-200">
+                                    <p class="text-sm font-semibold text-gray-900">Opción 1: Incremento Conservador</p>
+                                    <p class="text-xl font-bold text-green-600 mt-1" id="progressiveConservative">-</p>
+                                    <p class="text-xs text-gray-500">+2.5kg - Ideal para principiantes</p>
+                                </div>
+
+                                <div class="bg-white rounded-lg p-3 border-2 border-blue-200">
+                                    <p class="text-sm font-semibold text-gray-900">Opción 2: Incremento Moderado</p>
+                                    <p class="text-xl font-bold text-blue-600 mt-1" id="progressiveModerate">-</p>
+                                    <p class="text-xs text-gray-500">+5kg - Para intermedios</p>
+                                </div>
+
+                                <div class="bg-white rounded-lg p-3 border-2 border-purple-200">
+                                    <p class="text-sm font-semibold text-gray-900">Opción 3: Incremento Agresivo</p>
+                                    <p class="text-xl font-bold text-purple-600 mt-1" id="progressiveAggressive">-</p>
+                                    <p class="text-xs text-gray-500">+10kg - Para avanzados</p>
+                                </div>
+                            </div>
+
+                            <p class="text-xs text-gray-500 mt-3 text-center">Basado en tu mejor rendimiento registrado</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Tab -->
+        <div id="chartsTab" class="tab-content hidden">
+            <div class="space-y-6">
+                <!-- Export Button -->
+                <div class="bg-white rounded-xl shadow-lg p-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-900">📊 Análisis de Progreso</h2>
+                        <button id="exportToExcelBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold text-sm">
+                            📥 Exportar a Excel
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Volume Trend Chart -->
+                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Tendencia de Volumen (Últimos 30 días)</h3>
+                    <p class="text-xs text-gray-500 mb-4">Visualiza tu progreso de volumen total a lo largo del tiempo</p>
+                    <canvas id="volumeTrendChart" class="w-full" style="max-height: 300px;"></canvas>
+                </div>
+
+                <!-- Muscle Group Distribution -->
+                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Distribución por Grupo Muscular</h3>
+                    <p class="text-xs text-gray-500 mb-4">Identifica qué grupos musculares has entrenado más en tu historial</p>
+                    <canvas id="muscleDistributionChart" class="w-full" style="max-height: 300px;"></canvas>
+                </div>
+
+                <!-- Weight Progress by Exercise -->
+                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Progresión de Peso por Ejercicio</h3>
+                    <p class="text-xs text-gray-500 mb-4">Rastrea tu evolución de fuerza en cada ejercicio específico</p>
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Selecciona Ejercicio:</label>
+                        <select id="exerciseChartSelect" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg">
+                            <option value="">-- Elige un ejercicio --</option>
+                        </select>
+                    </div>
+                    <canvas id="weightProgressChart" class="w-full" style="max-height: 300px;"></canvas>
+                </div>
+
+                <!-- Weekly Volume Comparison -->
+                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Comparativa Semanal</h3>
+                    <p class="text-xs text-gray-500 mb-4">Compara tu volumen total acumulado por semana</p>
+                    <canvas id="weeklyComparisonChart" class="w-full" style="max-height: 300px;"></canvas>
+                </div>
+            </div>
+        </div>
+
         <!-- History Tab -->
         <div id="historyTab" class="tab-content hidden">
             <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
@@ -381,15 +606,23 @@
     <!-- Bottom Navigation (Mobile) -->
     <nav class="bottom-nav md:hidden">
         <div class="bottom-nav-item active" data-tab="workout">
-            <span class="text-2xl">💪</span>
+            <span class="text-xl">💪</span>
             <span>Entreno</span>
         </div>
+        <div class="bottom-nav-item" data-tab="charts">
+            <span class="text-xl">📊</span>
+            <span>Gráficos</span>
+        </div>
+        <div class="bottom-nav-item" data-tab="calculators">
+            <span class="text-xl">📐</span>
+            <span>Calculadoras</span>
+        </div>
         <div class="bottom-nav-item" data-tab="history">
-            <span class="text-2xl">📅</span>
+            <span class="text-xl">📅</span>
             <span>Historial</span>
         </div>
         <div class="bottom-nav-item" data-tab="prs">
-            <span class="text-2xl">🏆</span>
+            <span class="text-xl">🏆</span>
             <span>PRs</span>
         </div>
     </nav>
@@ -915,9 +1148,8 @@
                 };
                 localStorage.setItem('gymmate_prs', JSON.stringify(prs));
 
-                if (ejercicioData.peso > 0) {
-                    showNotification(`🏆 ¡Nuevo PR en ${ejercicioNombre}! ${ejercicioData.peso}kg`);
-                }
+                // Silent PR tracking - no notification to avoid interrupting input
+                // PR will update dynamically in the PRs tab
             }
         }
 
@@ -981,6 +1213,11 @@
             }, 3000);
 
             loadHistory();
+
+            // Generate AI suggestions after saving
+            setTimeout(() => {
+                generateAISuggestions();
+            }, 1000);
         }
 
         function loadHistory() {
@@ -1102,6 +1339,10 @@
                 loadHistory();
             } else if (tabName === 'prs') {
                 loadPRs();
+            } else if (tabName === 'charts') {
+                initializeCharts();
+            } else if (tabName === 'calculators') {
+                populateCalculatorDropdowns();
             }
         }
 
@@ -1161,6 +1402,657 @@
         document.getElementById('statsBtn').addEventListener('click', () => {
             switchTab('prs');
         });
+
+        // Export to Excel button
+        document.getElementById('exportToExcelBtn').addEventListener('click', exportToExcel);
+
+        // ==========================================
+        // CHART.JS - PROGRESS GRAPHS
+        // ==========================================
+
+        let volumeTrendChart = null;
+        let muscleDistributionChart = null;
+        let weightProgressChart = null;
+        let weeklyComparisonChart = null;
+
+        function initializeCharts() {
+            // Destroy existing charts
+            if (volumeTrendChart) volumeTrendChart.destroy();
+            if (muscleDistributionChart) muscleDistributionChart.destroy();
+            if (weightProgressChart) weightProgressChart.destroy();
+            if (weeklyComparisonChart) weeklyComparisonChart.destroy();
+
+            const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
+
+            if (history.length === 0) {
+                console.log('No hay datos para gráficos');
+                return;
+            }
+
+            // 1. Volume Trend Chart
+            createVolumeTrendChart(history);
+
+            // 2. Muscle Distribution Chart
+            createMuscleDistributionChart(history);
+
+            // 3. Weight Progress Chart (populated after exercise selection)
+            populateExerciseDropdown(history);
+
+            // 4. Weekly Comparison Chart
+            createWeeklyComparisonChart(history);
+        }
+
+        function createVolumeTrendChart(history) {
+            const ctx = document.getElementById('volumeTrendChart');
+            if (!ctx) return;
+
+            // Get last 30 sessions
+            const last30 = history.slice(0, 30).reverse();
+
+            const dates = last30.map(s => new Date(s.savedAt || s.date).toLocaleDateString('es-ES', { month: 'short', day: 'numeric' }));
+            const volumes = last30.map(s => s.volumenTotal);
+
+            volumeTrendChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Volumen Total',
+                        data: volumes,
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Volumen'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createMuscleDistributionChart(history) {
+            const ctx = document.getElementById('muscleDistributionChart');
+            if (!ctx) return;
+
+            // Aggregate volume by muscle group across all history
+            const muscleVolumes = {};
+            history.forEach(session => {
+                Object.entries(session.volumenPorGrupo || {}).forEach(([muscle, volume]) => {
+                    muscleVolumes[muscle] = (muscleVolumes[muscle] || 0) + volume;
+                });
+            });
+
+            const muscles = Object.keys(muscleVolumes);
+            const volumes = Object.values(muscleVolumes);
+
+            muscleDistributionChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: muscles,
+                    datasets: [{
+                        data: volumes,
+                        backgroundColor: [
+                            '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function populateExerciseDropdown(history) {
+            const dropdown = document.getElementById('exerciseChartSelect');
+            if (!dropdown) return;
+
+            // Get all unique exercises
+            const exercises = new Set();
+            history.forEach(session => {
+                session.ejercicios.forEach(ej => {
+                    if (ej.peso > 0) {
+                        exercises.add(ej.nombre);
+                    }
+                });
+            });
+
+            dropdown.innerHTML = '<option value="">-- Elige un ejercicio --</option>';
+            Array.from(exercises).sort().forEach(exercise => {
+                const option = document.createElement('option');
+                option.value = exercise;
+                option.textContent = exercise;
+                dropdown.appendChild(option);
+            });
+
+            dropdown.addEventListener('change', (e) => {
+                if (e.target.value) {
+                    createWeightProgressChart(history, e.target.value);
+                }
+            });
+        }
+
+        function createWeightProgressChart(history, exerciseName) {
+            const ctx = document.getElementById('weightProgressChart');
+            if (!ctx) return;
+
+            if (weightProgressChart) weightProgressChart.destroy();
+
+            // Get weight data for this exercise
+            const exerciseData = [];
+            history.slice(0, 30).reverse().forEach(session => {
+                const exercise = session.ejercicios.find(ej => ej.nombre === exerciseName);
+                if (exercise && exercise.peso > 0) {
+                    exerciseData.push({
+                        date: new Date(session.savedAt || session.date).toLocaleDateString('es-ES', { month: 'short', day: 'numeric' }),
+                        peso: exercise.peso,
+                        sets: exercise.sets,
+                        reps: exercise.reps
+                    });
+                }
+            });
+
+            if (exerciseData.length === 0) {
+                ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
+                return;
+            }
+
+            const dates = exerciseData.map(d => d.date);
+            const pesos = exerciseData.map(d => d.peso);
+
+            weightProgressChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: `Peso (kg) - ${exerciseName}`,
+                        data: pesos,
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const dataPoint = exerciseData[context.dataIndex];
+                                    return `Peso: ${dataPoint.peso}kg (${dataPoint.sets}×${dataPoint.reps})`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'Peso (kg)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createWeeklyComparisonChart(history) {
+            const ctx = document.getElementById('weeklyComparisonChart');
+            if (!ctx) return;
+
+            // Group by week
+            const weeklyData = {};
+            history.forEach(session => {
+                const date = new Date(session.savedAt || session.date);
+                const week = getWeekNumber(date);
+                const weekKey = `Semana ${week}`;
+
+                if (!weeklyData[weekKey]) {
+                    weeklyData[weekKey] = 0;
+                }
+                weeklyData[weekKey] += session.volumenTotal;
+            });
+
+            const weeks = Object.keys(weeklyData).slice(0, 8).reverse();
+            const volumes = weeks.map(w => weeklyData[w]);
+
+            weeklyComparisonChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: weeks,
+                    datasets: [{
+                        label: 'Volumen Semanal',
+                        data: volumes,
+                        backgroundColor: '#8B5CF6',
+                        borderColor: '#7C3AED',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Volumen Total'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function getWeekNumber(date) {
+            const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+            const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+            return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+        }
+
+        // ==========================================
+        // AI SUGGESTIONS SYSTEM
+        // ==========================================
+
+        function generateAISuggestions() {
+            const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
+
+            if (history.length < 3) {
+                return; // Need at least 3 sessions for meaningful suggestions
+            }
+
+            const suggestions = [];
+
+            // 1. Check for stagnation in weight progression
+            const weightSuggestion = checkWeightStagnation(history);
+            if (weightSuggestion) suggestions.push(weightSuggestion);
+
+            // 2. Check for volume drops
+            const volumeSuggestion = checkVolumeDrop(history);
+            if (volumeSuggestion) suggestions.push(volumeSuggestion);
+
+            // 3. Check for muscle group imbalances
+            const balanceSuggestion = checkMuscleImbalance(history);
+            if (balanceSuggestion) suggestions.push(balanceSuggestion);
+
+            // 4. Check for rest days needed
+            const restSuggestion = checkRestNeeded(history);
+            if (restSuggestion) suggestions.push(restSuggestion);
+
+            // Show first suggestion
+            if (suggestions.length > 0) {
+                showAISuggestion(suggestions[0]);
+            }
+        }
+
+        function checkWeightStagnation(history) {
+            // Get last 3 sessions for each exercise
+            const exerciseProgress = {};
+
+            history.slice(0, 5).forEach(session => {
+                session.ejercicios.forEach(ej => {
+                    if (!exerciseProgress[ej.nombre]) {
+                        exerciseProgress[ej.nombre] = [];
+                    }
+                    if (ej.peso > 0) {
+                        exerciseProgress[ej.nombre].push(ej.peso);
+                    }
+                });
+            });
+
+            // Find stagnant exercises (same weight for 3+ sessions)
+            for (const [exercise, weights] of Object.entries(exerciseProgress)) {
+                if (weights.length >= 3) {
+                    const lastThree = weights.slice(0, 3);
+                    const allSame = lastThree.every(w => w === lastThree[0]);
+
+                    if (allSame && lastThree[0] > 0) {
+                        const suggestedIncrease = lastThree[0] <= 20 ? 2.5 : 5;
+                        return `💪 Progresión detectada: Has usado ${lastThree[0]}kg en ${exercise} las últimas 3 sesiones. Considera incrementar a ${(lastThree[0] + suggestedIncrease).toFixed(1)}kg`;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        function checkVolumeDrop(history) {
+            if (history.length < 2) return null;
+
+            const lastSession = history[0];
+            const previousSessions = history.slice(1, 4);
+            const avgPreviousVolume = previousSessions.reduce((sum, s) => sum + s.volumenTotal, 0) / previousSessions.length;
+
+            if (lastSession.volumenTotal < avgPreviousVolume * 0.7) {
+                return `📉 Volumen bajo: Tu último entreno tuvo ${lastSession.volumenTotal.toFixed(0)} de volumen, un ${((1 - lastSession.volumenTotal / avgPreviousVolume) * 100).toFixed(0)}% menos que tu promedio. ¿Necesitas más descanso?`;
+            }
+
+            return null;
+        }
+
+        function checkMuscleImbalance(history) {
+            const muscleVolumes = {};
+
+            history.slice(0, 10).forEach(session => {
+                Object.entries(session.volumenPorGrupo || {}).forEach(([muscle, volume]) => {
+                    muscleVolumes[muscle] = (muscleVolumes[muscle] || 0) + volume;
+                });
+            });
+
+            const muscles = Object.keys(muscleVolumes);
+            if (muscles.length < 2) return null;
+
+            const maxVolume = Math.max(...Object.values(muscleVolumes));
+            const minVolume = Math.min(...Object.values(muscleVolumes));
+
+            if (maxVolume / minVolume > 3) {
+                const undertrainedMuscle = Object.entries(muscleVolumes).find(([_, vol]) => vol === minVolume)[0];
+                return `⚖️ Desequilibrio detectado: ${undertrainedMuscle} tiene solo el ${((minVolume / maxVolume) * 100).toFixed(0)}% del volumen de tu grupo muscular más entrenado. Considera añadir más trabajo de ${undertrainedMuscle}.`;
+            }
+
+            return null;
+        }
+
+        function checkRestNeeded(history) {
+            if (history.length < 7) return null;
+
+            // Check if trained 7 days in a row
+            const last7Days = history.slice(0, 7);
+            const dates = last7Days.map(s => new Date(s.savedAt || s.date).toDateString());
+            const uniqueDates = new Set(dates);
+
+            if (uniqueDates.size >= 6) {
+                return `🛑 Descanso recomendado: Has entrenado ${uniqueDates.size} de los últimos 7 días. Considera tomar un día de descanso para optimizar recuperación.`;
+            }
+
+            return null;
+        }
+
+        function showAISuggestion(suggestion) {
+            const banner = document.getElementById('aiSuggestionsBanner');
+            const text = document.getElementById('aiSuggestionText');
+
+            if (banner && text) {
+                text.textContent = suggestion;
+                banner.classList.remove('hidden');
+            }
+        }
+
+        function dismissAISuggestion() {
+            const banner = document.getElementById('aiSuggestionsBanner');
+            if (banner) {
+                banner.classList.add('hidden');
+            }
+        }
+
+        // ==========================================
+        // CALCULATORS - 1RM, CALORIES, PROGRESSIVE
+        // ==========================================
+
+        function calculate1RM(exerciseName) {
+            const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
+
+            // Find best performance for this exercise
+            let bestPerformance = null;
+            let maxWeight = 0;
+
+            history.forEach(session => {
+                const exercise = session.ejercicios.find(ej => ej.nombre === exerciseName);
+                if (exercise && exercise.peso > 0) {
+                    if (exercise.peso > maxWeight ||
+                        (exercise.peso === maxWeight && exercise.reps > (bestPerformance?.reps || 0))) {
+                        maxWeight = exercise.peso;
+                        bestPerformance = exercise;
+                    }
+                }
+            });
+
+            if (!bestPerformance) {
+                return null;
+            }
+
+            const peso = bestPerformance.peso;
+            const reps = bestPerformance.reps;
+
+            // Three 1RM formulas
+            const epley = peso * (1 + reps / 30);
+            const brzycki = peso * (36 / (37 - reps));
+            const lombardi = peso * Math.pow(reps, 0.1);
+
+            return {
+                bestPerformance,
+                epley: epley.toFixed(1),
+                brzycki: brzycki.toFixed(1),
+                lombardi: lombardi.toFixed(1),
+                average: ((epley + brzycki + lombardi) / 3).toFixed(1)
+            };
+        }
+
+        function calculateCalories() {
+            const age = parseFloat(document.getElementById('caloriesAge').value);
+            const gender = document.getElementById('caloriesGender').value;
+            const weight = parseFloat(document.getElementById('caloriesWeight').value);
+            const height = parseFloat(document.getElementById('caloriesHeight').value);
+            const activity = parseFloat(document.getElementById('caloriesActivity').value);
+
+            if (!age || !weight || !height) {
+                alert('Por favor completa todos los campos');
+                return;
+            }
+
+            // Mifflin-St Jeor formula
+            let bmr;
+            if (gender === 'male') {
+                bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+            } else {
+                bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+            }
+
+            const tdee = bmr * activity;
+            const deficit = tdee * 0.8;
+            const surplus = tdee * 1.2;
+
+            document.getElementById('bmrResult').textContent = Math.round(bmr);
+            document.getElementById('tdeeResult').textContent = Math.round(tdee);
+            document.getElementById('deficitResult').textContent = Math.round(deficit) + ' kcal';
+            document.getElementById('maintenanceResult').textContent = Math.round(tdee) + ' kcal';
+            document.getElementById('surplusResult').textContent = Math.round(surplus) + ' kcal';
+
+            document.getElementById('caloriesResults').classList.remove('hidden');
+        }
+
+        function calculateProgressive(exerciseName) {
+            const prs = JSON.parse(localStorage.getItem('gymmate_prs') || '{}');
+            const exercisePR = prs[exerciseName];
+
+            if (!exercisePR) {
+                return null;
+            }
+
+            const currentWeight = exercisePR.peso;
+            const conservative = currentWeight + 2.5;
+            const moderate = currentWeight + 5;
+            const aggressive = currentWeight + 10;
+
+            return {
+                current: currentWeight,
+                conservative: conservative.toFixed(1),
+                moderate: moderate.toFixed(1),
+                aggressive: aggressive.toFixed(1)
+            };
+        }
+
+        // Populate calculator dropdowns when calculators tab is opened
+        function populateCalculatorDropdowns() {
+            const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
+
+            // Get all unique exercises
+            const exercises = new Set();
+            history.forEach(session => {
+                session.ejercicios.forEach(ej => {
+                    if (ej.peso > 0) {
+                        exercises.add(ej.nombre);
+                    }
+                });
+            });
+
+            const exerciseArray = Array.from(exercises).sort();
+
+            // Populate 1RM dropdown
+            const rm1Select = document.getElementById('rm1ExerciseSelect');
+            rm1Select.innerHTML = '<option value="">-- Elige un ejercicio --</option>';
+            exerciseArray.forEach(ex => {
+                const option = document.createElement('option');
+                option.value = ex;
+                option.textContent = ex;
+                rm1Select.appendChild(option);
+            });
+
+            // Populate Progressive dropdown
+            const progressiveSelect = document.getElementById('progressiveExerciseSelect');
+            progressiveSelect.innerHTML = '<option value="">-- Elige un ejercicio --</option>';
+            exerciseArray.forEach(ex => {
+                const option = document.createElement('option');
+                option.value = ex;
+                option.textContent = ex;
+                progressiveSelect.appendChild(option);
+            });
+
+            // Event listeners
+            rm1Select.addEventListener('change', (e) => {
+                if (e.target.value) {
+                    const result = calculate1RM(e.target.value);
+                    if (result) {
+                        document.getElementById('rm1BestRecord').textContent =
+                            `${result.bestPerformance.peso}kg × ${result.bestPerformance.reps} reps (${result.bestPerformance.sets} sets)`;
+                        document.getElementById('rm1Epley').textContent = result.epley;
+                        document.getElementById('rm1Brzycki').textContent = result.brzycki;
+                        document.getElementById('rm1Lombardi').textContent = result.lombardi;
+                        document.getElementById('rm1Results').classList.remove('hidden');
+                    }
+                }
+            });
+
+            progressiveSelect.addEventListener('change', (e) => {
+                if (e.target.value) {
+                    const result = calculateProgressive(e.target.value);
+                    if (result) {
+                        document.getElementById('progressiveCurrentWeight').textContent = `${result.current}kg`;
+                        document.getElementById('progressiveConservative').textContent = `${result.conservative}kg`;
+                        document.getElementById('progressiveModerate').textContent = `${result.moderate}kg`;
+                        document.getElementById('progressiveAggressive').textContent = `${result.aggressive}kg`;
+                        document.getElementById('progressiveResults').classList.remove('hidden');
+                    }
+                }
+            });
+        }
+
+        // ==========================================
+        // EXPORT TO REAL EXCEL (.XLSX)
+        // ==========================================
+
+        function exportToExcel() {
+            const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
+
+            if (history.length === 0) {
+                alert('No hay datos para exportar');
+                return;
+            }
+
+            // Prepare data for Excel
+            const excelData = [];
+
+            // Headers
+            excelData.push(['Fecha', 'Grupo', 'Ejercicio', 'Sets', 'Reps', 'Peso (kg)', 'Es Mancuerna', 'Grupo Muscular', 'Volumen', 'Completado', 'Volumen Total Sesión']);
+
+            // Data rows
+            history.forEach(session => {
+                const fecha = new Date(session.savedAt || session.date).toLocaleDateString('es-ES');
+                const grupo = session.grupo;
+                const volumenTotalSesion = session.volumenTotal;
+
+                session.ejercicios.forEach(ej => {
+                    if (ej.volumen > 0) {
+                        excelData.push([
+                            fecha,
+                            grupo,
+                            ej.nombre,
+                            ej.sets,
+                            ej.reps,
+                            ej.peso,
+                            ej.esMancuerna ? 'Sí' : 'No',
+                            ej.grupoMuscular,
+                            ej.volumen,
+                            ej.completado ? 'Sí' : 'No',
+                            volumenTotalSesion
+                        ]);
+                    }
+                });
+            });
+
+            // Create workbook and worksheet
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(excelData);
+
+            // Set column widths
+            ws['!cols'] = [
+                { wch: 12 },  // Fecha
+                { wch: 30 },  // Grupo
+                { wch: 30 },  // Ejercicio
+                { wch: 8 },   // Sets
+                { wch: 8 },   // Reps
+                { wch: 10 },  // Peso
+                { wch: 15 },  // Es Mancuerna
+                { wch: 18 },  // Grupo Muscular
+                { wch: 10 },  // Volumen
+                { wch: 12 },  // Completado
+                { wch: 18 }   // Volumen Total
+            ];
+
+            // Add worksheet to workbook
+            XLSX.utils.book_append_sheet(wb, ws, 'Historial de Entrenos');
+
+            // Generate Excel file and download
+            XLSX.writeFile(wb, `GymMate_Historial_${new Date().toISOString().split('T')[0]}.xlsx`);
+        }
 
         // ==========================================
         // PWA & NOTIFICATIONS
