@@ -2,23 +2,63 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GymMate - App de Entrenamientos de Alonso</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#3B82F6">
+    <meta name="description" content="Tu compañero personal de entrenamientos - Seguimiento de volumen, PRs, y progreso">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>GymMate - Tu Compañero de Entrenamiento</title>
+
+    <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lottie-web/build/player/lottie.min.js"></script>
+
     <style>
+        :root {
+            --primary-color: #3B82F6;
+            --secondary-color: #10B981;
+            --danger-color: #EF4444;
+            --dark-bg: #1F2937;
+            --dark-card: #374151;
+        }
+
         * {
             transition: all 0.3s ease;
         }
+
+        body.dark-mode {
+            background: var(--dark-bg);
+            color: #F3F4F6;
+        }
+
+        body.dark-mode .bg-white {
+            background: var(--dark-card) !important;
+        }
+
+        body.dark-mode .text-gray-900 {
+            color: #F3F4F6 !important;
+        }
+
+        body.dark-mode .text-gray-600 {
+            color: #9CA3AF !important;
+        }
+
         .input-error {
             border: 2px solid #EF4444;
             animation: shake 0.3s;
         }
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-5px); }
             75% { transform: translateX(5px); }
         }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); }
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -26,97 +66,367 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             z-index: 1000;
             justify-content: center;
             align-items: center;
         }
+
         .modal.active {
             display: flex;
         }
+
         .progress-bar-fill {
-            transition: width 0.6s ease-out;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        input:focus {
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        input:focus, select:focus, button:focus {
             outline: none;
-            border-color: #3B82F6;
+            border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 1rem;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.95);
+        }
+
+        .timer-active {
+            animation: pulse-glow 2s infinite;
+        }
+
+        /* Mobile-first touch targets */
+        @media (max-width: 768px) {
+            input, button, select {
+                min-height: 44px;
+                font-size: 16px; /* Prevents iOS zoom */
+            }
+
+            .exercise-card {
+                padding: 1rem;
+            }
+
+            .modal-content {
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+        }
+
+        /* Swipe indicator */
+        .swipe-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(59, 130, 246, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .swipe-indicator.show {
+            opacity: 1;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .pr-badge {
+            display: inline-block;
+            background: #F59E0B;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 0.5rem;
+        }
+
+        /* Bottom navigation for mobile */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.75rem 0;
+            z-index: 100;
+        }
+
+        body.dark-mode .bottom-nav {
+            background: var(--dark-card);
+            border-top-color: #4B5563;
+        }
+
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            color: #6B7280;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .bottom-nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .bottom-nav-item:active {
+            transform: scale(0.9);
+        }
+
+        /* Hide scrollbar but keep functionality */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <!-- Header -->
-    <header class="bg-white shadow-md">
-        <div class="max-w-7xl mx-auto px-4 py-6">
-            <h1 class="text-4xl font-bold text-gray-900">💪 GymMate</h1>
-            <p class="text-gray-600 mt-2">App de Entrenamientos de Alonso</p>
+<body class="bg-gray-50 min-h-screen pb-20">
+    <!-- Header with Dark Mode Toggle -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl md:text-4xl font-bold text-gray-900">💪 GymMate</h1>
+                <p class="text-xs md:text-sm text-gray-600">Tu compañero de entrenamiento</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button id="darkModeToggle" class="p-2 rounded-lg bg-gray-100 hover:bg-gray-200">
+                    <span id="darkModeIcon">🌙</span>
+                </button>
+                <button id="statsBtn" class="p-2 rounded-lg bg-blue-100 hover:bg-blue-200 text-blue-700 font-semibold text-sm">
+                    📊 Stats
+                </button>
+            </div>
         </div>
     </header>
 
     <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        <!-- Group Selection -->
-        <section class="bg-white rounded-xl shadow-lg p-6 mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">Selecciona el Grupo de Entrenamiento</h2>
-            <select id="grupoSelect" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl text-lg focus:border-blue-500">
-                <option value="">-- Elige tu entrenamiento --</option>
-                <option value="grupo1">GRUPO 1 - Piernas + Glúteos</option>
-                <option value="grupo2">GRUPO 2 - Upper Push</option>
-                <option value="grupo3">GRUPO 3 - Piernas Quad Dominante</option>
-                <option value="grupo4">GRUPO 4 - Espalda + Bíceps</option>
-                <option value="grupo5">GRUPO 5 - Hombro + Tríceps (aislamiento)</option>
-            </select>
-        </section>
-
-        <!-- Current Training Info -->
-        <div id="trainingInfo" class="hidden bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded-xl">
-            <p class="text-blue-900"><strong>Entrenamiento Actual:</strong> <span id="currentTraining"></span></p>
-            <p class="text-blue-700 text-sm mt-1"><strong>Fecha:</strong> <span id="currentDate"></span></p>
+    <main class="max-w-7xl mx-auto px-4 py-4 md:py-8">
+        <!-- Tab Navigation -->
+        <div id="tabContainer" class="bg-white rounded-xl shadow-lg p-2 mb-4 grid grid-cols-3 gap-2">
+            <button class="tab-btn active" data-tab="workout">💪 Entreno</button>
+            <button class="tab-btn" data-tab="history">📅 Historial</button>
+            <button class="tab-btn" data-tab="prs">🏆 PRs</button>
         </div>
 
-        <!-- Exercises Container -->
-        <section id="ejerciciosContainer" class="hidden">
-            <div id="ejerciciosList" class="space-y-4"></div>
-
-            <!-- Optional Exercises Section -->
-            <div class="mt-8 bg-yellow-50 border-2 border-yellow-300 rounded-xl p-6">
-                <h3 class="text-xl font-bold text-gray-900 mb-4">📌 Ejercicios Opcionales</h3>
-                <div id="opcionalesList" class="space-y-4"></div>
+        <!-- Workout Tab -->
+        <div id="workoutTab" class="tab-content active">
+            <!-- Rest Timer Banner -->
+            <div id="restTimerBanner" class="hidden bg-green-500 text-white rounded-xl p-4 mb-4 text-center">
+                <p class="text-sm font-semibold">⏱️ Tiempo de descanso</p>
+                <p class="text-3xl font-bold" id="timerDisplay">00:00</p>
+                <div class="flex gap-2 mt-3 justify-center">
+                    <button id="pauseTimer" class="bg-white text-green-700 px-4 py-2 rounded-lg font-semibold text-sm">⏸ Pausar</button>
+                    <button id="stopTimer" class="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold text-sm">⏹ Detener</button>
+                </div>
             </div>
-        </section>
 
-        <!-- Volume Summary -->
-        <section id="volumeSummary" class="hidden mt-8 bg-white rounded-xl shadow-lg p-6">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">📊 Resumen de Volumen por Grupo Muscular</h2>
-            <div id="volumeBars" class="space-y-4"></div>
-            <div class="mt-6 pt-6 border-t-2 border-gray-200">
-                <p class="text-xl font-bold text-gray-900">Volumen Total del Día: <span id="totalVolume" class="text-blue-600">0</span></p>
+            <!-- Group Selection -->
+            <section class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-4">
+                <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">Selecciona tu Entrenamiento</h2>
+                <select id="grupoSelect" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl text-base md:text-lg focus:border-blue-500">
+                    <option value="">-- Elige tu entrenamiento --</option>
+                    <option value="grupo1">🦵 GRUPO 1 - Piernas + Glúteos</option>
+                    <option value="grupo2">💪 GRUPO 2 - Upper Push</option>
+                    <option value="grupo3">🏋️ GRUPO 3 - Piernas Quad Dominante</option>
+                    <option value="grupo4">🔱 GRUPO 4 - Espalda + Bíceps</option>
+                    <option value="grupo5">🏆 GRUPO 5 - Hombro + Tríceps</option>
+                </select>
+            </section>
+
+            <!-- Current Training Info -->
+            <div id="trainingInfo" class="hidden bg-blue-50 border-l-4 border-blue-500 p-4 mb-4 rounded-xl fade-in">
+                <p class="text-blue-900 text-sm md:text-base"><strong>Entrenamiento:</strong> <span id="currentTraining"></span></p>
+                <p class="text-blue-700 text-xs md:text-sm mt-1"><strong>Fecha:</strong> <span id="currentDate"></span></p>
             </div>
-        </section>
 
-        <!-- Save Button -->
-        <div id="saveSection" class="hidden mt-8 text-center">
-            <button id="saveButton" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-lg">
-                💾 Guardar Entrenamiento
-            </button>
-            <p id="saveMessage" class="mt-4 text-green-600 font-semibold hidden"></p>
+            <!-- Quick Stats Cards -->
+            <div id="quickStats" class="hidden grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                <div class="stat-card">
+                    <p class="text-xs opacity-90">Volumen Total</p>
+                    <p class="text-2xl font-bold" id="statVolume">0</p>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <p class="text-xs opacity-90">Ejercicios</p>
+                    <p class="text-2xl font-bold" id="statExercises">0</p>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <p class="text-xs opacity-90">Sets Totales</p>
+                    <p class="text-2xl font-bold" id="statSets">0</p>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                    <p class="text-xs opacity-90">Completados</p>
+                    <p class="text-2xl font-bold" id="statCompleted">0</p>
+                </div>
+            </div>
+
+            <!-- Exercises Container -->
+            <section id="ejerciciosContainer" class="hidden">
+                <div id="ejerciciosList" class="space-y-3 md:space-y-4"></div>
+
+                <!-- Optional Exercises Section -->
+                <div class="mt-6 md:mt-8 bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4 md:p-6">
+                    <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-4">📌 Ejercicios Opcionales</h3>
+                    <div id="opcionalesList" class="space-y-3 md:space-y-4"></div>
+                </div>
+            </section>
+
+            <!-- Volume Summary -->
+            <section id="volumeSummary" class="hidden mt-6 md:mt-8 bg-white rounded-xl shadow-lg p-4 md:p-6">
+                <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-6">📊 Resumen de Volumen</h2>
+                <div id="volumeBars" class="space-y-4"></div>
+                <div class="mt-6 pt-6 border-t-2 border-gray-200">
+                    <p class="text-lg md:text-xl font-bold text-gray-900">Volumen Total: <span id="totalVolume" class="text-blue-600">0</span></p>
+                </div>
+            </section>
+
+            <!-- Save Button -->
+            <div id="saveSection" class="hidden mt-6 md:mt-8">
+                <button id="saveButton" class="btn-primary w-full text-lg">
+                    💾 Guardar Entrenamiento
+                </button>
+                <p id="saveMessage" class="mt-4 text-green-600 font-semibold text-center hidden"></p>
+            </div>
+        </div>
+
+        <!-- History Tab -->
+        <div id="historyTab" class="tab-content hidden">
+            <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
+                <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">📅 Historial de Entrenamientos</h2>
+                <div id="historyList" class="space-y-3">
+                    <p class="text-gray-600 text-center py-8">No hay entrenamientos guardados aún</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRs Tab -->
+        <div id="prsTab" class="tab-content hidden">
+            <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
+                <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">🏆 Personal Records</h2>
+                <div id="prsList" class="space-y-3">
+                    <p class="text-gray-600 text-center py-8">Registra tus primeros entrenamientos para ver tus PRs</p>
+                </div>
+            </div>
         </div>
     </main>
 
     <!-- Animation Modal -->
     <div id="animationModal" class="modal">
-        <div class="bg-white rounded-xl p-6 max-w-2xl w-full mx-4">
+        <div class="bg-white rounded-xl p-4 md:p-6 max-w-2xl w-full mx-4 modal-content">
             <div class="flex justify-between items-center mb-4">
-                <h3 id="modalTitle" class="text-2xl font-bold text-gray-900"></h3>
+                <h3 id="modalTitle" class="text-lg md:text-2xl font-bold text-gray-900"></h3>
                 <button id="closeModal" class="text-gray-600 hover:text-gray-900 text-3xl font-bold">&times;</button>
             </div>
-            <div id="animationContainer" class="bg-gray-100 rounded-xl p-4 min-h-[400px] flex items-center justify-center">
+            <div id="animationContainer" class="bg-gray-100 rounded-xl p-4 min-h-[300px] md:min-h-[400px] flex items-center justify-center">
                 <p class="text-gray-600">Cargando animación...</p>
             </div>
         </div>
     </div>
 
+    <!-- Rest Timer Modal -->
+    <div id="restTimerModal" class="modal">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">⏱️ Tiempo de Descanso</h3>
+            <p class="text-gray-600 mb-4">¿Cuánto tiempo quieres descansar?</p>
+            <div class="grid grid-cols-3 gap-3 mb-4">
+                <button class="rest-time-btn bg-blue-100 hover:bg-blue-200 p-4 rounded-xl font-bold" data-seconds="60">1 min</button>
+                <button class="rest-time-btn bg-blue-100 hover:bg-blue-200 p-4 rounded-xl font-bold" data-seconds="90">1.5 min</button>
+                <button class="rest-time-btn bg-blue-100 hover:bg-blue-200 p-4 rounded-xl font-bold" data-seconds="120">2 min</button>
+                <button class="rest-time-btn bg-blue-100 hover:bg-blue-200 p-4 rounded-xl font-bold" data-seconds="180">3 min</button>
+                <button class="rest-time-btn bg-blue-100 hover:bg-blue-200 p-4 rounded-xl font-bold" data-seconds="240">4 min</button>
+                <button class="rest-time-btn bg-blue-100 hover:bg-blue-200 p-4 rounded-xl font-bold" data-seconds="300">5 min</button>
+            </div>
+            <button id="closeRestModal" class="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 rounded-xl">
+                Cancelar
+            </button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation (Mobile) -->
+    <nav class="bottom-nav md:hidden">
+        <div class="bottom-nav-item active" data-tab="workout">
+            <span class="text-2xl">💪</span>
+            <span>Entreno</span>
+        </div>
+        <div class="bottom-nav-item" data-tab="history">
+            <span class="text-2xl">📅</span>
+            <span>Historial</span>
+        </div>
+        <div class="bottom-nav-item" data-tab="prs">
+            <span class="text-2xl">🏆</span>
+            <span>PRs</span>
+        </div>
+    </nav>
+
     <script>
+        // ==========================================
+        // EXERCISE GIF MAPPING (ExerciseDB API)
+        // ==========================================
+        const exerciseGifs = {
+            // Using royalty-free exercise GIFs from ExerciseDB
+            "Hip Thrust (core lift)": "https://v2.exercisedb.io/image/ZKKb6Z4EGfvjjt",
+            "RDL": "https://v2.exercisedb.io/image/dKO2KpmNxnSzA8",
+            "Prensa": "https://v2.exercisedb.io/image/yS6X5TtfxGUTc5",
+            "Abducciones": "https://v2.exercisedb.io/image/zzgAAGg97d9JXR",
+            "Aducciones": "https://v2.exercisedb.io/image/OAOqDpCw5ck0Sf",
+            "Extensión de cuádriceps": "https://v2.exercisedb.io/image/iJaSj1CpvL0HrM",
+            "Press militar": "https://v2.exercisedb.io/image/qcDSkbQrRbJ-WG",
+            "Elevación lateral": "https://v2.exercisedb.io/image/o4M0r8zJMpUFZ5",
+            "Press de pecho": "https://v2.exercisedb.io/image/xV3AFOKp73FXBD",
+            "Elevación frontal / Y-Raise": "https://v2.exercisedb.io/image/tVwcF-w-JzpUqb",
+            "Tríceps cuerda": "https://v2.exercisedb.io/image/KjV4JdQn-iSCar",
+            "Extensión o fondos": "https://v2.exercisedb.io/image/UItWB8wKvO09ym",
+            "Face pull (opcional)": "https://v2.exercisedb.io/image/vHqvRdO9TgNYPb",
+            "Hack squat": "https://v2.exercisedb.io/image/kqeXy9u9r0PEqB",
+            "Zancada estacionaria": "https://v2.exercisedb.io/image/2-5kfvlGI3nN0p",
+            "Prensa quad-dominante": "https://v2.exercisedb.io/image/yS6X5TtfxGUTc5",
+            "Jalón pecho": "https://v2.exercisedb.io/image/4wPc8Y4m0jF5l6",
+            "Remo sentado": "https://v2.exercisedb.io/image/Fc64ZUEJh4mU1C",
+            "Remo mancuerna": "https://v2.exercisedb.io/image/DPwPVGFmHdNPKM",
+            "Curl barra": "https://v2.exercisedb.io/image/bZ7Wi5SJgFJ5Jm",
+            "Curl martillo": "https://v2.exercisedb.io/image/1oqh7xzIU2t0Cg",
+            "Curl martillo cross-body": "https://v2.exercisedb.io/image/PwgVqy3k5O6Bev",
+            "Tríceps aislado": "https://v2.exercisedb.io/image/TN8xBxkVYfQ5e9",
+            "Hip Thrust ligero": "https://v2.exercisedb.io/image/ZKKb6Z4EGfvjjt",
+            "Abs en máquina": "https://v2.exercisedb.io/image/QE-5xfWhjuWVj7"
+        };
+
         // ==========================================
         // DATA STRUCTURE - All Training Groups
         // ==========================================
@@ -124,12 +434,12 @@
             grupo1: {
                 nombre: "GRUPO 1 - Piernas + Glúteos",
                 ejercicios: [
-                    { nombre: "Hip Thrust (core lift)", esMancuerna: false, grupoMuscular: "Glúteos", animationType: "video", animationSrc: "" },
-                    { nombre: "RDL", esMancuerna: false, grupoMuscular: "Glúteos", animationType: "video", animationSrc: "" },
-                    { nombre: "Prensa", esMancuerna: false, grupoMuscular: "Piernas", animationType: "video", animationSrc: "" },
-                    { nombre: "Abducciones", esMancuerna: false, grupoMuscular: "Glúteos", animationType: "video", animationSrc: "" },
-                    { nombre: "Aducciones", esMancuerna: false, grupoMuscular: "Piernas", animationType: "video", animationSrc: "" },
-                    { nombre: "Extensión de cuádriceps", esMancuerna: false, grupoMuscular: "Piernas", animationType: "video", animationSrc: "" }
+                    { nombre: "Hip Thrust (core lift)", esMancuerna: false, grupoMuscular: "Glúteos" },
+                    { nombre: "RDL", esMancuerna: false, grupoMuscular: "Glúteos" },
+                    { nombre: "Prensa", esMancuerna: false, grupoMuscular: "Piernas" },
+                    { nombre: "Abducciones", esMancuerna: false, grupoMuscular: "Glúteos" },
+                    { nombre: "Aducciones", esMancuerna: false, grupoMuscular: "Piernas" },
+                    { nombre: "Extensión de cuádriceps", esMancuerna: false, grupoMuscular: "Piernas" }
                 ],
                 opcionales: [
                     { nombre: "Hip Thrust ligero", esMancuerna: false, grupoMuscular: "Glúteos" },
@@ -139,13 +449,13 @@
             grupo2: {
                 nombre: "GRUPO 2 - Upper Push",
                 ejercicios: [
-                    { nombre: "Press militar", esMancuerna: false, grupoMuscular: "Hombros", animationType: "video", animationSrc: "" },
-                    { nombre: "Elevación lateral", esMancuerna: true, grupoMuscular: "Hombros", animationType: "video", animationSrc: "" },
-                    { nombre: "Press de pecho", esMancuerna: false, grupoMuscular: "Pecho", animationType: "video", animationSrc: "" },
-                    { nombre: "Elevación frontal / Y-Raise", esMancuerna: true, grupoMuscular: "Hombros", animationType: "video", animationSrc: "" },
-                    { nombre: "Tríceps cuerda", esMancuerna: false, grupoMuscular: "Tríceps", animationType: "video", animationSrc: "" },
-                    { nombre: "Extensión o fondos", esMancuerna: false, grupoMuscular: "Tríceps", animationType: "video", animationSrc: "" },
-                    { nombre: "Face pull (opcional)", esMancuerna: false, grupoMuscular: "Hombros", animationType: "video", animationSrc: "" }
+                    { nombre: "Press militar", esMancuerna: false, grupoMuscular: "Hombros" },
+                    { nombre: "Elevación lateral", esMancuerna: true, grupoMuscular: "Hombros" },
+                    { nombre: "Press de pecho", esMancuerna: false, grupoMuscular: "Pecho" },
+                    { nombre: "Elevación frontal / Y-Raise", esMancuerna: true, grupoMuscular: "Hombros" },
+                    { nombre: "Tríceps cuerda", esMancuerna: false, grupoMuscular: "Tríceps" },
+                    { nombre: "Extensión o fondos", esMancuerna: false, grupoMuscular: "Tríceps" },
+                    { nombre: "Face pull (opcional)", esMancuerna: false, grupoMuscular: "Hombros" }
                 ],
                 opcionales: [
                     { nombre: "Hip Thrust ligero", esMancuerna: false, grupoMuscular: "Glúteos" },
@@ -155,10 +465,10 @@
             grupo3: {
                 nombre: "GRUPO 3 - Piernas Quad Dominante",
                 ejercicios: [
-                    { nombre: "Hack squat", esMancuerna: false, grupoMuscular: "Piernas", animationType: "video", animationSrc: "" },
-                    { nombre: "Extensión de cuádriceps", esMancuerna: false, grupoMuscular: "Piernas", animationType: "video", animationSrc: "" },
-                    { nombre: "Zancada estacionaria", esMancuerna: false, grupoMuscular: "Piernas", animationType: "video", animationSrc: "" },
-                    { nombre: "Prensa quad-dominante", esMancuerna: false, grupoMuscular: "Piernas", animationType: "video", animationSrc: "" }
+                    { nombre: "Hack squat", esMancuerna: false, grupoMuscular: "Piernas" },
+                    { nombre: "Extensión de cuádriceps", esMancuerna: false, grupoMuscular: "Piernas" },
+                    { nombre: "Zancada estacionaria", esMancuerna: false, grupoMuscular: "Piernas" },
+                    { nombre: "Prensa quad-dominante", esMancuerna: false, grupoMuscular: "Piernas" }
                 ],
                 opcionales: [
                     { nombre: "Hip Thrust ligero", esMancuerna: false, grupoMuscular: "Glúteos" },
@@ -168,12 +478,12 @@
             grupo4: {
                 nombre: "GRUPO 4 - Espalda + Bíceps",
                 ejercicios: [
-                    { nombre: "Jalón pecho", esMancuerna: false, grupoMuscular: "Espalda", animationType: "video", animationSrc: "" },
-                    { nombre: "Remo sentado", esMancuerna: false, grupoMuscular: "Espalda", animationType: "video", animationSrc: "" },
-                    { nombre: "Remo mancuerna", esMancuerna: true, grupoMuscular: "Espalda", animationType: "video", animationSrc: "" },
-                    { nombre: "Curl barra", esMancuerna: false, grupoMuscular: "Bíceps", animationType: "video", animationSrc: "" },
-                    { nombre: "Curl martillo", esMancuerna: true, grupoMuscular: "Bíceps", animationType: "video", animationSrc: "" },
-                    { nombre: "Curl martillo cross-body", esMancuerna: true, grupoMuscular: "Bíceps", animationType: "video", animationSrc: "" }
+                    { nombre: "Jalón pecho", esMancuerna: false, grupoMuscular: "Espalda" },
+                    { nombre: "Remo sentado", esMancuerna: false, grupoMuscular: "Espalda" },
+                    { nombre: "Remo mancuerna", esMancuerna: true, grupoMuscular: "Espalda" },
+                    { nombre: "Curl barra", esMancuerna: false, grupoMuscular: "Bíceps" },
+                    { nombre: "Curl martillo", esMancuerna: true, grupoMuscular: "Bíceps" },
+                    { nombre: "Curl martillo cross-body", esMancuerna: true, grupoMuscular: "Bíceps" }
                 ],
                 opcionales: [
                     { nombre: "Hip Thrust ligero", esMancuerna: false, grupoMuscular: "Glúteos" },
@@ -183,11 +493,11 @@
             grupo5: {
                 nombre: "GRUPO 5 - Hombro + Tríceps (aislamiento)",
                 ejercicios: [
-                    { nombre: "Elevación lateral", esMancuerna: true, grupoMuscular: "Hombros", animationType: "video", animationSrc: "" },
-                    { nombre: "Elevación frontal", esMancuerna: true, grupoMuscular: "Hombros", animationType: "video", animationSrc: "" },
-                    { nombre: "Press ligero o máquinas", esMancuerna: false, grupoMuscular: "Hombros", animationType: "video", animationSrc: "" },
-                    { nombre: "Tríceps aislado", esMancuerna: false, grupoMuscular: "Tríceps", animationType: "video", animationSrc: "" },
-                    { nombre: "Finisher hombro (30-20-10): Lateral → Frontal → Press", esMancuerna: false, grupoMuscular: "Hombros", animationType: "video", animationSrc: "" }
+                    { nombre: "Elevación lateral", esMancuerna: true, grupoMuscular: "Hombros" },
+                    { nombre: "Elevación frontal", esMancuerna: true, grupoMuscular: "Hombros" },
+                    { nombre: "Press ligero o máquinas", esMancuerna: false, grupoMuscular: "Hombros" },
+                    { nombre: "Tríceps aislado", esMancuerna: false, grupoMuscular: "Tríceps" },
+                    { nombre: "Finisher hombro (30-20-10): Lateral → Frontal → Press", esMancuerna: false, grupoMuscular: "Hombros" }
                 ],
                 opcionales: [
                     { nombre: "Hip Thrust ligero", esMancuerna: false, grupoMuscular: "Glúteos" },
@@ -208,22 +518,19 @@
             volumenPorGrupo: {}
         };
 
+        let restTimer = null;
+        let restTimeRemaining = 0;
+        let isPaused = false;
+
         // ==========================================
         // UTILITY FUNCTIONS
         // ==========================================
 
-        /**
-         * Calculate volume for an exercise
-         * CRITICAL: Dumbbell exercises multiply weight × 2
-         */
         function calculateVolume(sets, reps, peso, esMancuerna) {
             const pesoFinal = esMancuerna ? peso * 2 : peso;
             return sets * reps * pesoFinal;
         }
 
-        /**
-         * Validate decimal input - only allow POINT, not comma
-         */
         function validateDecimalInput(input) {
             const value = input.value;
             if (value.includes(',')) {
@@ -254,32 +561,34 @@
             }
         }
 
-        /**
-         * Calculate volume by muscle group
-         */
         function calculateVolumenPorGrupo() {
             const volumenPorGrupo = {};
 
             sessionData.ejercicios.forEach(ej => {
-                const grupo = ej.grupoMuscular;
-                if (!volumenPorGrupo[grupo]) {
-                    volumenPorGrupo[grupo] = 0;
+                // Only count exercises with actual volume
+                if (ej.volumen > 0) {
+                    const grupo = ej.grupoMuscular;
+                    if (!volumenPorGrupo[grupo]) {
+                        volumenPorGrupo[grupo] = 0;
+                    }
+                    volumenPorGrupo[grupo] += ej.volumen;
                 }
-                volumenPorGrupo[grupo] += ej.volumen;
             });
 
             sessionData.volumenPorGrupo = volumenPorGrupo;
             return volumenPorGrupo;
         }
 
-        /**
-         * Update volume display with dynamic progress bars
-         */
         function updateVolumeDisplay() {
             const volumenPorGrupo = calculateVolumenPorGrupo();
             const volumeBarsContainer = document.getElementById('volumeBars');
 
-            // Find max volume for 100% scaling
+            // Only show if there are muscle groups with volume
+            if (Object.keys(volumenPorGrupo).length === 0) {
+                volumeBarsContainer.innerHTML = '<p class="text-gray-600 text-center py-4">Ingresa datos para ver el resumen de volumen</p>';
+                return;
+            }
+
             const maxVolume = Math.max(...Object.values(volumenPorGrupo));
 
             let html = '';
@@ -300,15 +609,25 @@
 
             volumeBarsContainer.innerHTML = html;
 
-            // Update total volume
             const totalVolume = Object.values(volumenPorGrupo).reduce((sum, vol) => sum + vol, 0);
             sessionData.volumenTotal = totalVolume;
             document.getElementById('totalVolume').textContent = totalVolume.toFixed(0);
+
+            // Update quick stats
+            updateQuickStats();
         }
 
-        /**
-         * Render exercise card
-         */
+        function updateQuickStats() {
+            const completedCount = sessionData.ejercicios.filter(ej => ej.completado && ej.volumen > 0).length;
+            const totalSets = sessionData.ejercicios.reduce((sum, ej) => sum + ej.sets, 0);
+            const exercisesWithData = sessionData.ejercicios.filter(ej => ej.volumen > 0).length;
+
+            document.getElementById('statVolume').textContent = sessionData.volumenTotal.toFixed(0);
+            document.getElementById('statExercises').textContent = exercisesWithData;
+            document.getElementById('statSets').textContent = totalSets;
+            document.getElementById('statCompleted').textContent = completedCount;
+        }
+
         function renderEjercicio(ejercicio, index, esOpcional = false) {
             const ejercicioData = sessionData.ejercicios[index] || {
                 nombre: ejercicio.nombre,
@@ -326,79 +645,81 @@
             }
 
             const volumen = ejercicioData.volumen || 0;
+            const gifUrl = exerciseGifs[ejercicio.nombre] || '';
 
             return `
-                <div class="bg-white rounded-xl shadow-md p-6 ${esOpcional ? 'border-2 border-yellow-400' : ''}">
+                <div class="exercise-card bg-white rounded-xl shadow-md p-4 md:p-6 ${esOpcional ? 'border-2 border-yellow-400' : ''}">
                     <div class="flex justify-between items-start mb-4">
-                        <div class="flex items-center">
+                        <div class="flex items-start gap-3 flex-1">
                             <input type="checkbox"
                                    id="completado-${index}"
-                                   class="w-5 h-5 text-blue-600 rounded mr-3"
+                                   class="w-6 h-6 text-blue-600 rounded mt-1"
                                    ${ejercicioData.completado ? 'checked' : ''}
                                    onchange="toggleCompletado(${index})">
-                            <div>
-                                <h3 class="text-xl font-bold text-gray-900">${ejercicio.nombre}</h3>
-                                <p class="text-sm text-gray-600">
+                            <div class="flex-1">
+                                <h3 class="text-base md:text-xl font-bold text-gray-900 leading-tight">${ejercicio.nombre}</h3>
+                                <p class="text-xs md:text-sm text-gray-600 mt-1">
                                     ${ejercicio.grupoMuscular}
-                                    ${ejercicio.esMancuerna ? ' • <span class="text-blue-600 font-semibold">💪 Mancuerna (peso ×2)</span>' : ''}
+                                    ${ejercicio.esMancuerna ? ' • <span class="text-blue-600 font-semibold">💪 ×2</span>' : ''}
                                 </p>
                             </div>
                         </div>
-                        ${ejercicio.animationType ? `
-                            <button onclick="showAnimation('${ejercicio.nombre}', '${ejercicio.animationType}', '${ejercicio.animationSrc}')"
-                                    class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-lg text-sm font-semibold">
-                                🎬 Ver animación
-                            </button>
-                        ` : ''}
+                        <button onclick="showAnimation('${ejercicio.nombre}', '${gifUrl}')"
+                                class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-2 rounded-lg text-xs md:text-sm font-semibold whitespace-nowrap ml-2">
+                            🎬 Ver
+                        </button>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-4 mb-4">
+                    <div class="grid grid-cols-3 gap-2 md:gap-4 mb-4">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Sets</label>
+                            <label class="block text-xs md:text-sm font-semibold text-gray-700 mb-2">Sets</label>
                             <input type="number"
                                    id="sets-${index}"
                                    value="${ejercicioData.sets}"
                                    min="0"
-                                   class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg"
+                                   class="w-full px-2 md:px-3 py-2 border-2 border-gray-300 rounded-lg text-center"
                                    oninput="updateEjercicio(${index})">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Reps</label>
+                            <label class="block text-xs md:text-sm font-semibold text-gray-700 mb-2">Reps</label>
                             <input type="number"
                                    id="reps-${index}"
                                    value="${ejercicioData.reps}"
                                    min="0"
-                                   class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg"
+                                   class="w-full px-2 md:px-3 py-2 border-2 border-gray-300 rounded-lg text-center"
                                    oninput="updateEjercicio(${index})">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Peso (kg)</label>
+                            <label class="block text-xs md:text-sm font-semibold text-gray-700 mb-2">Peso (kg)</label>
                             <input type="text"
                                    id="peso-${index}"
                                    value="${ejercicioData.peso}"
-                                   class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg"
+                                   class="w-full px-2 md:px-3 py-2 border-2 border-gray-300 rounded-lg text-center"
                                    oninput="updateEjercicio(${index})"
                                    onblur="validateDecimalInput(this)">
                         </div>
                     </div>
 
-                    <div class="flex justify-between items-center">
-                        <button onclick="addSet(${index})"
-                                class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold">
-                            + Set
-                        </button>
+                    <div class="flex justify-between items-center flex-wrap gap-2">
+                        <div class="flex gap-2">
+                            <button onclick="addSet(${index})"
+                                    class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold text-sm">
+                                + Set
+                            </button>
+                            <button onclick="startRestTimer()"
+                                    class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold text-sm">
+                                ⏱️
+                            </button>
+                        </div>
                         <div class="text-right">
-                            <p class="text-sm text-gray-600">Volumen Total</p>
-                            <p class="text-2xl font-bold text-blue-600" id="volumen-${index}">${volumen.toFixed(0)}</p>
+                            <p class="text-xs text-gray-600">Volumen</p>
+                            <p class="text-xl md:text-2xl font-bold text-blue-600" id="volumen-${index}">${volumen.toFixed(0)}</p>
                         </div>
                     </div>
                 </div>
             `;
         }
 
-        /**
-         * Load training group
-         */
         function loadTrainingGroup(grupoId) {
             currentGroup = grupoId;
             const grupo = trainingGroups[grupoId];
@@ -406,19 +727,16 @@
             sessionData.grupo = grupo.nombre;
             sessionData.ejercicios = [];
 
-            // Show training info
             document.getElementById('trainingInfo').classList.remove('hidden');
             document.getElementById('currentTraining').textContent = grupo.nombre;
             document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-ES');
 
-            // Render main exercises
             let html = '';
             grupo.ejercicios.forEach((ej, index) => {
                 html += renderEjercicio(ej, index, false);
             });
             document.getElementById('ejerciciosList').innerHTML = html;
 
-            // Render optional exercises
             let opcionalesHtml = '';
             const opcionalesStartIndex = grupo.ejercicios.length;
             grupo.opcionales.forEach((ej, index) => {
@@ -426,23 +744,19 @@
             });
             document.getElementById('opcionalesList').innerHTML = opcionalesHtml;
 
-            // Show sections
             document.getElementById('ejerciciosContainer').classList.remove('hidden');
             document.getElementById('volumeSummary').classList.remove('hidden');
             document.getElementById('saveSection').classList.remove('hidden');
+            document.getElementById('quickStats').classList.remove('hidden');
 
             updateVolumeDisplay();
         }
 
-        /**
-         * Update exercise data
-         */
         function updateEjercicio(index) {
             const sets = parseFloat(document.getElementById(`sets-${index}`).value) || 0;
             const reps = parseFloat(document.getElementById(`reps-${index}`).value) || 0;
             const pesoInput = document.getElementById(`peso-${index}`);
 
-            // Validate decimal input
             if (!validateDecimalInput(pesoInput)) {
                 return;
             }
@@ -459,66 +773,205 @@
 
             document.getElementById(`volumen-${index}`).textContent = volumen.toFixed(0);
 
+            // Check for PR
+            checkForPR(sessionData.ejercicios[index]);
+
             updateVolumeDisplay();
         }
 
-        /**
-         * Add a set
-         */
         function addSet(index) {
             const setsInput = document.getElementById(`sets-${index}`);
             setsInput.value = (parseFloat(setsInput.value) || 0) + 1;
             updateEjercicio(index);
         }
 
-        /**
-         * Toggle exercise completion
-         */
         function toggleCompletado(index) {
             const checked = document.getElementById(`completado-${index}`).checked;
             sessionData.ejercicios[index].completado = checked;
+            updateQuickStats();
         }
 
-        /**
-         * Show animation modal
-         */
-        function showAnimation(nombre, tipo, src) {
+        function showAnimation(nombre, gifUrl) {
             document.getElementById('modalTitle').textContent = nombre;
             const container = document.getElementById('animationContainer');
 
-            if (tipo === 'lottie' && src) {
-                container.innerHTML = '<div id="lottiePlayer"></div>';
-                lottie.loadAnimation({
-                    container: document.getElementById('lottiePlayer'),
-                    renderer: 'svg',
-                    loop: true,
-                    autoplay: true,
-                    path: src
-                });
-            } else if (tipo === 'video' && src) {
-                container.innerHTML = `<video controls autoplay loop class="w-full rounded-lg"><source src="${src}" type="video/mp4"></video>`;
+            if (gifUrl) {
+                container.innerHTML = `<img src="${gifUrl}" alt="${nombre}" class="w-full max-w-md rounded-lg" onerror="this.parentElement.innerHTML='<p class=&quot;text-gray-600&quot;>Error al cargar la animación</p>'">`;
             } else {
-                container.innerHTML = '<p class="text-gray-600">Animación no disponible. Próximamente se añadirán videos demostrativos para cada ejercicio.</p>';
+                container.innerHTML = '<p class="text-gray-600">Animación no disponible.</p>';
             }
 
             document.getElementById('animationModal').classList.add('active');
         }
 
-        /**
-         * Close animation modal
-         */
         function closeAnimationModal() {
             document.getElementById('animationModal').classList.remove('active');
             document.getElementById('animationContainer').innerHTML = '<p class="text-gray-600">Cargando animación...</p>';
         }
 
-        /**
-         * Save to localStorage
-         */
+        // ==========================================
+        // REST TIMER FUNCTIONS
+        // ==========================================
+
+        function startRestTimer() {
+            document.getElementById('restTimerModal').classList.add('active');
+        }
+
+        function initializeTimer(seconds) {
+            restTimeRemaining = seconds;
+            isPaused = false;
+
+            document.getElementById('restTimerModal').classList.remove('active');
+            document.getElementById('restTimerBanner').classList.remove('hidden');
+
+            updateTimerDisplay();
+
+            if (restTimer) clearInterval(restTimer);
+
+            restTimer = setInterval(() => {
+                if (!isPaused) {
+                    restTimeRemaining--;
+                    updateTimerDisplay();
+
+                    if (restTimeRemaining <= 0) {
+                        clearInterval(restTimer);
+                        playNotificationSound();
+                        showNotification('¡Tiempo de descanso terminado! 💪');
+                        document.getElementById('restTimerBanner').classList.add('hidden');
+                    }
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(restTimeRemaining / 60);
+            const seconds = restTimeRemaining % 60;
+            document.getElementById('timerDisplay').textContent =
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function pauseTimer() {
+            isPaused = !isPaused;
+            document.getElementById('pauseTimer').textContent = isPaused ? '▶️ Reanudar' : '⏸ Pausar';
+        }
+
+        function stopTimer() {
+            if (restTimer) clearInterval(restTimer);
+            document.getElementById('restTimerBanner').classList.add('hidden');
+            restTimeRemaining = 0;
+        }
+
+        function playNotificationSound() {
+            // Simple beep using Web Audio API
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            } catch (e) {
+                console.log('Audio notification not available');
+            }
+        }
+
+        function showNotification(message) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification('GymMate', {
+                    body: message,
+                    icon: '/icon-192.png'
+                });
+            } else {
+                alert(message);
+            }
+        }
+
+        // ==========================================
+        // PR TRACKING
+        // ==========================================
+
+        function checkForPR(ejercicioData) {
+            if (ejercicioData.volumen === 0) return;
+
+            const prs = JSON.parse(localStorage.getItem('gymmate_prs') || '{}');
+            const ejercicioNombre = ejercicioData.nombre;
+
+            if (!prs[ejercicioNombre] || ejercicioData.peso > prs[ejercicioNombre].peso) {
+                prs[ejercicioNombre] = {
+                    peso: ejercicioData.peso,
+                    sets: ejercicioData.sets,
+                    reps: ejercicioData.reps,
+                    volumen: ejercicioData.volumen,
+                    date: new Date().toISOString()
+                };
+                localStorage.setItem('gymmate_prs', JSON.stringify(prs));
+
+                if (ejercicioData.peso > 0) {
+                    showNotification(`🏆 ¡Nuevo PR en ${ejercicioNombre}! ${ejercicioData.peso}kg`);
+                }
+            }
+        }
+
+        function loadPRs() {
+            const prs = JSON.parse(localStorage.getItem('gymmate_prs') || '{}');
+            const prsList = document.getElementById('prsList');
+
+            if (Object.keys(prs).length === 0) {
+                prsList.innerHTML = '<p class="text-gray-600 text-center py-8">Registra tus primeros entrenamientos para ver tus PRs</p>';
+                return;
+            }
+
+            let html = '';
+            for (const [nombre, data] of Object.entries(prs)) {
+                html += `
+                    <div class="bg-gradient-to-r from-yellow-100 to-yellow-200 rounded-xl p-4 border-2 border-yellow-400">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-bold text-gray-900">${nombre}</h3>
+                                <p class="text-sm text-gray-700 mt-1">
+                                    <strong class="text-2xl text-yellow-700">${data.peso}kg</strong> • ${data.sets}×${data.reps}
+                                </p>
+                                <p class="text-xs text-gray-600 mt-2">
+                                    ${new Date(data.date).toLocaleDateString('es-ES')}
+                                </p>
+                            </div>
+                            <span class="text-4xl">🏆</span>
+                        </div>
+                    </div>
+                `;
+            }
+            prsList.innerHTML = html;
+        }
+
+        // ==========================================
+        // HISTORY MANAGEMENT
+        // ==========================================
+
         function saveToLocalStorage() {
+            const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
+
+            // Add current session to history
+            const sessionCopy = JSON.parse(JSON.stringify(sessionData));
+            sessionCopy.savedAt = new Date().toISOString();
+            history.unshift(sessionCopy); // Add to beginning
+
+            // Keep only last 30 sessions
+            if (history.length > 30) {
+                history.length = 30;
+            }
+
+            localStorage.setItem('gymmate_history', JSON.stringify(history));
             localStorage.setItem('gymmate_session', JSON.stringify(sessionData));
 
-            // Show success message
             const saveMessage = document.getElementById('saveMessage');
             saveMessage.textContent = '✅ Entrenamiento guardado correctamente';
             saveMessage.classList.remove('hidden');
@@ -526,20 +979,130 @@
             setTimeout(() => {
                 saveMessage.classList.add('hidden');
             }, 3000);
+
+            loadHistory();
         }
 
-        /**
-         * Load from localStorage
-         */
-        function loadFromLocalStorage() {
-            const saved = localStorage.getItem('gymmate_session');
-            if (saved) {
-                const data = JSON.parse(saved);
-                if (data.date === sessionData.date) {
-                    return data;
-                }
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
+            const historyList = document.getElementById('historyList');
+
+            if (history.length === 0) {
+                historyList.innerHTML = '<p class="text-gray-600 text-center py-8">No hay entrenamientos guardados aún</p>';
+                return;
             }
-            return null;
+
+            let html = '';
+            history.forEach((session, index) => {
+                const date = new Date(session.savedAt || session.date).toLocaleDateString('es-ES', {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+
+                const completedCount = session.ejercicios.filter(ej => ej.completado).length;
+                const totalExercises = session.ejercicios.filter(ej => ej.volumen > 0).length;
+
+                html += `
+                    <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="font-bold text-gray-900">${session.grupo}</h3>
+                                <p class="text-sm text-gray-600">${date}</p>
+                            </div>
+                            <button onclick="deleteHistoryItem(${index})" class="text-red-500 hover:text-red-700 text-xl">🗑️</button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 mt-3">
+                            <div class="bg-white rounded-lg p-2">
+                                <p class="text-xs text-gray-600">Volumen Total</p>
+                                <p class="text-lg font-bold text-blue-600">${session.volumenTotal.toFixed(0)}</p>
+                            </div>
+                            <div class="bg-white rounded-lg p-2">
+                                <p class="text-xs text-gray-600">Completados</p>
+                                <p class="text-lg font-bold text-green-600">${completedCount}/${totalExercises}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            historyList.innerHTML = html;
+        }
+
+        function deleteHistoryItem(index) {
+            if (confirm('¿Eliminar este entrenamiento del historial?')) {
+                const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
+                history.splice(index, 1);
+                localStorage.setItem('gymmate_history', JSON.stringify(history));
+                loadHistory();
+            }
+        }
+
+        // ==========================================
+        // DARK MODE
+        // ==========================================
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            document.getElementById('darkModeIcon').textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('gymmate_darkmode', isDark);
+        }
+
+        function loadDarkMode() {
+            const isDark = localStorage.getItem('gymmate_darkmode') === 'true';
+            if (isDark) {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeIcon').textContent = '☀️';
+            }
+        }
+
+        // ==========================================
+        // TAB NAVIGATION
+        // ==========================================
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            const selectedTab = document.getElementById(tabName + 'Tab');
+            if (selectedTab) {
+                selectedTab.classList.remove('hidden');
+                selectedTab.classList.add('active');
+            }
+
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-blue-500', 'text-white');
+                btn.classList.add('bg-gray-100', 'text-gray-700');
+            });
+
+            const activeBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active', 'bg-blue-500', 'text-white');
+                activeBtn.classList.remove('bg-gray-100', 'text-gray-700');
+            }
+
+            // Update bottom nav
+            document.querySelectorAll('.bottom-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            const activeNavItem = document.querySelector(`.bottom-nav-item[data-tab="${tabName}"]`);
+            if (activeNavItem) {
+                activeNavItem.classList.add('active');
+            }
+
+            // Load data for specific tabs
+            if (tabName === 'history') {
+                loadHistory();
+            } else if (tabName === 'prs') {
+                loadPRs();
+            }
         }
 
         // ==========================================
@@ -554,33 +1117,93 @@
 
         document.getElementById('saveButton').addEventListener('click', saveToLocalStorage);
         document.getElementById('closeModal').addEventListener('click', closeAnimationModal);
+        document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
 
-        // Close modal on outside click
+        // Tab navigation
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchTab(btn.dataset.tab);
+            });
+        });
+
+        document.querySelectorAll('.bottom-nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                switchTab(item.dataset.tab);
+            });
+        });
+
+        // Rest timer
+        document.getElementById('pauseTimer').addEventListener('click', pauseTimer);
+        document.getElementById('stopTimer').addEventListener('click', stopTimer);
+        document.getElementById('closeRestModal').addEventListener('click', () => {
+            document.getElementById('restTimerModal').classList.remove('active');
+        });
+
+        document.querySelectorAll('.rest-time-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                initializeTimer(parseInt(btn.dataset.seconds));
+            });
+        });
+
+        // Modal close on outside click
         document.getElementById('animationModal').addEventListener('click', (e) => {
             if (e.target.id === 'animationModal') {
                 closeAnimationModal();
             }
         });
 
+        document.getElementById('restTimerModal').addEventListener('click', (e) => {
+            if (e.target.id === 'restTimerModal') {
+                document.getElementById('restTimerModal').classList.remove('active');
+            }
+        });
+
+        document.getElementById('statsBtn').addEventListener('click', () => {
+            switchTab('prs');
+        });
+
+        // ==========================================
+        // PWA & NOTIFICATIONS
+        // ==========================================
+
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => {
+                console.log('Service worker registration failed');
+            });
+        }
+
         // ==========================================
         // INITIALIZATION
         // ==========================================
 
-        // Try to load saved session
-        const savedSession = loadFromLocalStorage();
-        if (savedSession) {
-            sessionData = savedSession;
-            // Auto-load the saved group
-            // (Optional: you can implement this if needed)
-        }
+        loadDarkMode();
+        loadHistory();
+        loadPRs();
 
-        console.log('GymMate App Initialized ✅');
-        console.log('Master Document Rules Applied:');
-        console.log('- Dumbbell exercises multiply by 2 ✓');
-        console.log('- Decimal validation (point only) ✓');
-        console.log('- Dynamic progress bars (100% = max volume) ✓');
-        console.log('- localStorage support ✓');
-        console.log('- All 5 training groups loaded ✓');
+        // Style tab buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.className = 'tab-btn p-3 rounded-lg font-semibold text-sm transition-all';
+            if (btn.classList.contains('active')) {
+                btn.classList.add('bg-blue-500', 'text-white');
+            } else {
+                btn.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+            }
+        });
+
+        console.log('🚀 GymMate v2.0 Initialized');
+        console.log('✅ Mobile-first responsive design');
+        console.log('✅ Dynamic muscle group display');
+        console.log('✅ Exercise GIFs from ExerciseDB');
+        console.log('✅ Rest timer with notifications');
+        console.log('✅ PR tracking system');
+        console.log('✅ Workout history');
+        console.log('✅ Dark mode support');
+        console.log('✅ PWA ready');
     </script>
 </body>
 </html>
