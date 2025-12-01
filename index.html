@@ -12,6 +12,7 @@
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lottie-web/build/player/lottie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
     <style>
         :root {
@@ -239,10 +240,22 @@
     <!-- Main Container -->
     <main class="max-w-7xl mx-auto px-4 py-4 md:py-8">
         <!-- Tab Navigation -->
-        <div id="tabContainer" class="bg-white rounded-xl shadow-lg p-2 mb-4 grid grid-cols-3 gap-2">
+        <div id="tabContainer" class="bg-white rounded-xl shadow-lg p-2 mb-4 grid grid-cols-2 md:grid-cols-4 gap-2">
             <button class="tab-btn active" data-tab="workout">💪 Entreno</button>
+            <button class="tab-btn" data-tab="charts">📊 Gráficos</button>
             <button class="tab-btn" data-tab="history">📅 Historial</button>
             <button class="tab-btn" data-tab="prs">🏆 PRs</button>
+        </div>
+
+        <!-- AI Suggestions Banner -->
+        <div id="aiSuggestionsBanner" class="hidden bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl p-4 mb-4">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="font-bold text-sm mb-1">🤖 Sugerencia IA</p>
+                    <p id="aiSuggestionText" class="text-sm"></p>
+                </div>
+                <button onclick="dismissAISuggestion()" class="text-white hover:text-gray-200 text-xl font-bold">&times;</button>
+            </div>
         </div>
 
         <!-- Workout Tab -->
@@ -325,6 +338,51 @@
             </div>
         </div>
 
+        <!-- Charts Tab -->
+        <div id="chartsTab" class="tab-content hidden">
+            <div class="space-y-6">
+                <!-- Export Button -->
+                <div class="bg-white rounded-xl shadow-lg p-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-900">📊 Análisis de Progreso</h2>
+                        <button id="exportToExcelBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold text-sm">
+                            📥 Exportar a Excel
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Volume Trend Chart -->
+                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Tendencia de Volumen (Últimos 30 días)</h3>
+                    <canvas id="volumeTrendChart" class="w-full" style="max-height: 300px;"></canvas>
+                </div>
+
+                <!-- Muscle Group Distribution -->
+                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Distribución por Grupo Muscular</h3>
+                    <canvas id="muscleDistributionChart" class="w-full" style="max-height: 300px;"></canvas>
+                </div>
+
+                <!-- Weight Progress by Exercise -->
+                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Progresión de Peso por Ejercicio</h3>
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Selecciona Ejercicio:</label>
+                        <select id="exerciseChartSelect" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg">
+                            <option value="">-- Elige un ejercicio --</option>
+                        </select>
+                    </div>
+                    <canvas id="weightProgressChart" class="w-full" style="max-height: 300px;"></canvas>
+                </div>
+
+                <!-- Weekly Volume Comparison -->
+                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Comparativa Semanal</h3>
+                    <canvas id="weeklyComparisonChart" class="w-full" style="max-height: 300px;"></canvas>
+                </div>
+            </div>
+        </div>
+
         <!-- History Tab -->
         <div id="historyTab" class="tab-content hidden">
             <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
@@ -383,6 +441,10 @@
         <div class="bottom-nav-item active" data-tab="workout">
             <span class="text-2xl">💪</span>
             <span>Entreno</span>
+        </div>
+        <div class="bottom-nav-item" data-tab="charts">
+            <span class="text-2xl">📊</span>
+            <span>Gráficos</span>
         </div>
         <div class="bottom-nav-item" data-tab="history">
             <span class="text-2xl">📅</span>
@@ -981,6 +1043,11 @@
             }, 3000);
 
             loadHistory();
+
+            // Generate AI suggestions after saving
+            setTimeout(() => {
+                generateAISuggestions();
+            }, 1000);
         }
 
         function loadHistory() {
@@ -1102,6 +1169,8 @@
                 loadHistory();
             } else if (tabName === 'prs') {
                 loadPRs();
+            } else if (tabName === 'charts') {
+                initializeCharts();
             }
         }
 
@@ -1161,6 +1230,471 @@
         document.getElementById('statsBtn').addEventListener('click', () => {
             switchTab('prs');
         });
+
+        // Export to Excel button
+        document.getElementById('exportToExcelBtn').addEventListener('click', exportToExcel);
+
+        // ==========================================
+        // CHART.JS - PROGRESS GRAPHS
+        // ==========================================
+
+        let volumeTrendChart = null;
+        let muscleDistributionChart = null;
+        let weightProgressChart = null;
+        let weeklyComparisonChart = null;
+
+        function initializeCharts() {
+            // Destroy existing charts
+            if (volumeTrendChart) volumeTrendChart.destroy();
+            if (muscleDistributionChart) muscleDistributionChart.destroy();
+            if (weightProgressChart) weightProgressChart.destroy();
+            if (weeklyComparisonChart) weeklyComparisonChart.destroy();
+
+            const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
+
+            if (history.length === 0) {
+                console.log('No hay datos para gráficos');
+                return;
+            }
+
+            // 1. Volume Trend Chart
+            createVolumeTrendChart(history);
+
+            // 2. Muscle Distribution Chart
+            createMuscleDistributionChart(history);
+
+            // 3. Weight Progress Chart (populated after exercise selection)
+            populateExerciseDropdown(history);
+
+            // 4. Weekly Comparison Chart
+            createWeeklyComparisonChart(history);
+        }
+
+        function createVolumeTrendChart(history) {
+            const ctx = document.getElementById('volumeTrendChart');
+            if (!ctx) return;
+
+            // Get last 30 sessions
+            const last30 = history.slice(0, 30).reverse();
+
+            const dates = last30.map(s => new Date(s.savedAt || s.date).toLocaleDateString('es-ES', { month: 'short', day: 'numeric' }));
+            const volumes = last30.map(s => s.volumenTotal);
+
+            volumeTrendChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Volumen Total',
+                        data: volumes,
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Volumen'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createMuscleDistributionChart(history) {
+            const ctx = document.getElementById('muscleDistributionChart');
+            if (!ctx) return;
+
+            // Aggregate volume by muscle group across all history
+            const muscleVolumes = {};
+            history.forEach(session => {
+                Object.entries(session.volumenPorGrupo || {}).forEach(([muscle, volume]) => {
+                    muscleVolumes[muscle] = (muscleVolumes[muscle] || 0) + volume;
+                });
+            });
+
+            const muscles = Object.keys(muscleVolumes);
+            const volumes = Object.values(muscleVolumes);
+
+            muscleDistributionChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: muscles,
+                    datasets: [{
+                        data: volumes,
+                        backgroundColor: [
+                            '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function populateExerciseDropdown(history) {
+            const dropdown = document.getElementById('exerciseChartSelect');
+            if (!dropdown) return;
+
+            // Get all unique exercises
+            const exercises = new Set();
+            history.forEach(session => {
+                session.ejercicios.forEach(ej => {
+                    if (ej.peso > 0) {
+                        exercises.add(ej.nombre);
+                    }
+                });
+            });
+
+            dropdown.innerHTML = '<option value="">-- Elige un ejercicio --</option>';
+            Array.from(exercises).sort().forEach(exercise => {
+                const option = document.createElement('option');
+                option.value = exercise;
+                option.textContent = exercise;
+                dropdown.appendChild(option);
+            });
+
+            dropdown.addEventListener('change', (e) => {
+                if (e.target.value) {
+                    createWeightProgressChart(history, e.target.value);
+                }
+            });
+        }
+
+        function createWeightProgressChart(history, exerciseName) {
+            const ctx = document.getElementById('weightProgressChart');
+            if (!ctx) return;
+
+            if (weightProgressChart) weightProgressChart.destroy();
+
+            // Get weight data for this exercise
+            const exerciseData = [];
+            history.slice(0, 30).reverse().forEach(session => {
+                const exercise = session.ejercicios.find(ej => ej.nombre === exerciseName);
+                if (exercise && exercise.peso > 0) {
+                    exerciseData.push({
+                        date: new Date(session.savedAt || session.date).toLocaleDateString('es-ES', { month: 'short', day: 'numeric' }),
+                        peso: exercise.peso,
+                        sets: exercise.sets,
+                        reps: exercise.reps
+                    });
+                }
+            });
+
+            if (exerciseData.length === 0) {
+                ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
+                return;
+            }
+
+            const dates = exerciseData.map(d => d.date);
+            const pesos = exerciseData.map(d => d.peso);
+
+            weightProgressChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: `Peso (kg) - ${exerciseName}`,
+                        data: pesos,
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const dataPoint = exerciseData[context.dataIndex];
+                                    return `Peso: ${dataPoint.peso}kg (${dataPoint.sets}×${dataPoint.reps})`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'Peso (kg)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createWeeklyComparisonChart(history) {
+            const ctx = document.getElementById('weeklyComparisonChart');
+            if (!ctx) return;
+
+            // Group by week
+            const weeklyData = {};
+            history.forEach(session => {
+                const date = new Date(session.savedAt || session.date);
+                const week = getWeekNumber(date);
+                const weekKey = `Semana ${week}`;
+
+                if (!weeklyData[weekKey]) {
+                    weeklyData[weekKey] = 0;
+                }
+                weeklyData[weekKey] += session.volumenTotal;
+            });
+
+            const weeks = Object.keys(weeklyData).slice(0, 8).reverse();
+            const volumes = weeks.map(w => weeklyData[w]);
+
+            weeklyComparisonChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: weeks,
+                    datasets: [{
+                        label: 'Volumen Semanal',
+                        data: volumes,
+                        backgroundColor: '#8B5CF6',
+                        borderColor: '#7C3AED',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Volumen Total'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function getWeekNumber(date) {
+            const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+            const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+            return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+        }
+
+        // ==========================================
+        // AI SUGGESTIONS SYSTEM
+        // ==========================================
+
+        function generateAISuggestions() {
+            const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
+
+            if (history.length < 3) {
+                return; // Need at least 3 sessions for meaningful suggestions
+            }
+
+            const suggestions = [];
+
+            // 1. Check for stagnation in weight progression
+            const weightSuggestion = checkWeightStagnation(history);
+            if (weightSuggestion) suggestions.push(weightSuggestion);
+
+            // 2. Check for volume drops
+            const volumeSuggestion = checkVolumeDrop(history);
+            if (volumeSuggestion) suggestions.push(volumeSuggestion);
+
+            // 3. Check for muscle group imbalances
+            const balanceSuggestion = checkMuscleImbalance(history);
+            if (balanceSuggestion) suggestions.push(balanceSuggestion);
+
+            // 4. Check for rest days needed
+            const restSuggestion = checkRestNeeded(history);
+            if (restSuggestion) suggestions.push(restSuggestion);
+
+            // Show first suggestion
+            if (suggestions.length > 0) {
+                showAISuggestion(suggestions[0]);
+            }
+        }
+
+        function checkWeightStagnation(history) {
+            // Get last 3 sessions for each exercise
+            const exerciseProgress = {};
+
+            history.slice(0, 5).forEach(session => {
+                session.ejercicios.forEach(ej => {
+                    if (!exerciseProgress[ej.nombre]) {
+                        exerciseProgress[ej.nombre] = [];
+                    }
+                    if (ej.peso > 0) {
+                        exerciseProgress[ej.nombre].push(ej.peso);
+                    }
+                });
+            });
+
+            // Find stagnant exercises (same weight for 3+ sessions)
+            for (const [exercise, weights] of Object.entries(exerciseProgress)) {
+                if (weights.length >= 3) {
+                    const lastThree = weights.slice(0, 3);
+                    const allSame = lastThree.every(w => w === lastThree[0]);
+
+                    if (allSame && lastThree[0] > 0) {
+                        const suggestedIncrease = lastThree[0] <= 20 ? 2.5 : 5;
+                        return `💪 Progresión detectada: Has usado ${lastThree[0]}kg en ${exercise} las últimas 3 sesiones. Considera incrementar a ${(lastThree[0] + suggestedIncrease).toFixed(1)}kg`;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        function checkVolumeDrop(history) {
+            if (history.length < 2) return null;
+
+            const lastSession = history[0];
+            const previousSessions = history.slice(1, 4);
+            const avgPreviousVolume = previousSessions.reduce((sum, s) => sum + s.volumenTotal, 0) / previousSessions.length;
+
+            if (lastSession.volumenTotal < avgPreviousVolume * 0.7) {
+                return `📉 Volumen bajo: Tu último entreno tuvo ${lastSession.volumenTotal.toFixed(0)} de volumen, un ${((1 - lastSession.volumenTotal / avgPreviousVolume) * 100).toFixed(0)}% menos que tu promedio. ¿Necesitas más descanso?`;
+            }
+
+            return null;
+        }
+
+        function checkMuscleImbalance(history) {
+            const muscleVolumes = {};
+
+            history.slice(0, 10).forEach(session => {
+                Object.entries(session.volumenPorGrupo || {}).forEach(([muscle, volume]) => {
+                    muscleVolumes[muscle] = (muscleVolumes[muscle] || 0) + volume;
+                });
+            });
+
+            const muscles = Object.keys(muscleVolumes);
+            if (muscles.length < 2) return null;
+
+            const maxVolume = Math.max(...Object.values(muscleVolumes));
+            const minVolume = Math.min(...Object.values(muscleVolumes));
+
+            if (maxVolume / minVolume > 3) {
+                const undertrainedMuscle = Object.entries(muscleVolumes).find(([_, vol]) => vol === minVolume)[0];
+                return `⚖️ Desequilibrio detectado: ${undertrainedMuscle} tiene solo el ${((minVolume / maxVolume) * 100).toFixed(0)}% del volumen de tu grupo muscular más entrenado. Considera añadir más trabajo de ${undertrainedMuscle}.`;
+            }
+
+            return null;
+        }
+
+        function checkRestNeeded(history) {
+            if (history.length < 7) return null;
+
+            // Check if trained 7 days in a row
+            const last7Days = history.slice(0, 7);
+            const dates = last7Days.map(s => new Date(s.savedAt || s.date).toDateString());
+            const uniqueDates = new Set(dates);
+
+            if (uniqueDates.size >= 6) {
+                return `🛑 Descanso recomendado: Has entrenado ${uniqueDates.size} de los últimos 7 días. Considera tomar un día de descanso para optimizar recuperación.`;
+            }
+
+            return null;
+        }
+
+        function showAISuggestion(suggestion) {
+            const banner = document.getElementById('aiSuggestionsBanner');
+            const text = document.getElementById('aiSuggestionText');
+
+            if (banner && text) {
+                text.textContent = suggestion;
+                banner.classList.remove('hidden');
+            }
+        }
+
+        function dismissAISuggestion() {
+            const banner = document.getElementById('aiSuggestionsBanner');
+            if (banner) {
+                banner.classList.add('hidden');
+            }
+        }
+
+        // ==========================================
+        // EXPORT TO EXCEL/CSV
+        // ==========================================
+
+        function exportToExcel() {
+            const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
+
+            if (history.length === 0) {
+                alert('No hay datos para exportar');
+                return;
+            }
+
+            // Create CSV content
+            let csvContent = 'data:text/csv;charset=utf-8,';
+
+            // Headers
+            csvContent += 'Fecha,Grupo,Ejercicio,Sets,Reps,Peso (kg),Es Mancuerna,Grupo Muscular,Volumen,Completado,Volumen Total Sesión\n';
+
+            // Data rows
+            history.forEach(session => {
+                const fecha = new Date(session.savedAt || session.date).toLocaleDateString('es-ES');
+                const grupo = session.grupo;
+                const volumenTotalSesion = session.volumenTotal;
+
+                session.ejercicios.forEach(ej => {
+                    if (ej.volumen > 0) {
+                        csvContent += `${fecha},"${grupo}","${ej.nombre}",${ej.sets},${ej.reps},${ej.peso},${ej.esMancuerna ? 'Sí' : 'No'},"${ej.grupoMuscular}",${ej.volumen},${ej.completado ? 'Sí' : 'No'},${volumenTotalSesion}\n`;
+                    }
+                });
+            });
+
+            // Create download link
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', `GymMate_Historial_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+
+            link.click();
+            document.body.removeChild(link);
+
+            // Show success message
+            alert('✅ Datos exportados correctamente a CSV. Puedes abrir el archivo con Excel.');
+        }
 
         // ==========================================
         // PWA & NOTIFICATIONS
