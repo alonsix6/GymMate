@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GymMate - App de Entrenamientos de Alonso</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lottie-web/build/player/lottie.min.js"></script>
+    <style>
+        * {
+            transition: all 0.3s ease;
+        }
+        .input-error {
+            border: 2px solid #EF4444;
+            animation: shake 0.3s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .progress-bar-fill {
+            transition: width 0.6s ease-out;
+        }
+        input:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-6">
+            <h1 class="text-4xl font-bold text-gray-900">💪 GymMate</h1>
+            <p class="text-gray-600 mt-2">App de Entrenamientos de Alonso</p>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Group Selection -->
+        <section class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Selecciona el Grupo de Entrenamiento</h2>
+            <select id="grupoSelect" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl text-lg focus:border-blue-500">
+                <option value="">-- Elige tu entrenamiento --</option>
+                <option value="grupo1">GRUPO 1 - Piernas + Glúteos</option>
+                <option value="grupo2">GRUPO 2 - Upper Push</option>
+                <option value="grupo3">GRUPO 3 - Piernas Quad Dominante</option>
+                <option value="grupo4">GRUPO 4 - Espalda + Bíceps</option>
+                <option value="grupo5">GRUPO 5 - Hombro + Tríceps (aislamiento)</option>
+            </select>
+        </section>
+
+        <!-- Current Training Info -->
+        <div id="trainingInfo" class="hidden bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded-xl">
+            <p class="text-blue-900"><strong>Entrenamiento Actual:</strong> <span id="currentTraining"></span></p>
+            <p class="text-blue-700 text-sm mt-1"><strong>Fecha:</strong> <span id="currentDate"></span></p>
+        </div>
+
+        <!-- Exercises Container -->
+        <section id="ejerciciosContainer" class="hidden">
+            <div id="ejerciciosList" class="space-y-4"></div>
+
+            <!-- Optional Exercises Section -->
+            <div class="mt-8 bg-yellow-50 border-2 border-yellow-300 rounded-xl p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">📌 Ejercicios Opcionales</h3>
+                <div id="opcionalesList" class="space-y-4"></div>
+            </div>
+        </section>
+
+        <!-- Volume Summary -->
+        <section id="volumeSummary" class="hidden mt-8 bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">📊 Resumen de Volumen por Grupo Muscular</h2>
+            <div id="volumeBars" class="space-y-4"></div>
+            <div class="mt-6 pt-6 border-t-2 border-gray-200">
+                <p class="text-xl font-bold text-gray-900">Volumen Total del Día: <span id="totalVolume" class="text-blue-600">0</span></p>
+            </div>
+        </section>
+
+        <!-- Save Button -->
+        <div id="saveSection" class="hidden mt-8 text-center">
+            <button id="saveButton" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-lg">
+                💾 Guardar Entrenamiento
+            </button>
+            <p id="saveMessage" class="mt-4 text-green-600 font-semibold hidden"></p>
+        </div>
+    </main>
+
+    <!-- Animation Modal -->
+    <div id="animationModal" class="modal">
+        <div class="bg-white rounded-xl p-6 max-w-2xl w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="modalTitle" class="text-2xl font-bold text-gray-900"></h3>
+                <button id="closeModal" class="text-gray-600 hover:text-gray-900 text-3xl font-bold">&times;</button>
+            </div>
+            <div id="animationContainer" class="bg-gray-100 rounded-xl p-4 min-h-[400px] flex items-center justify-center">
+                <p class="text-gray-600">Cargando animación...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // DATA STRUCTURE - All Training Groups
+        // ==========================================
+        const trainingGroups = {
+            grupo1: {
+                nombre: "GRUPO 1 - Piernas + Glúteos",
+                ejercicios: [
+                    { nombre: "Hip Thrust (core lift)", esMancuerna: false, grupoMuscular: "Glúteos", animationType: "video", animationSrc: "" },
+                    { nombre: "RDL", esMancuerna: false, grupoMuscular: "Glúteos", animationType: "video", animationSrc: "" },
+                    { nombre: "Prensa", esMancuerna: false, grupoMuscular: "Piernas", animationType: "video", animationSrc: "" },
+                    { nombre: "Abducciones", esMancuerna: false, grupoMuscular: "Glúteos", animationType: "video", animationSrc: "" },
+                    { nombre: "Aducciones", esMancuerna: false, grupoMuscular: "Piernas", animationType: "video", animationSrc: "" },
+                    { nombre: "Extensión de cuádriceps", esMancuerna: false, grupoMuscular: "Piernas", animationType: "video", animationSrc: "" }
+                ],
+                opcionales: [
+                    { nombre: "Hip Thrust ligero", esMancuerna: false, grupoMuscular: "Glúteos" },
+                    { nombre: "Abs en máquina", esMancuerna: false, grupoMuscular: "Core" }
+                ]
+            },
+            grupo2: {
+                nombre: "GRUPO 2 - Upper Push",
+                ejercicios: [
+                    { nombre: "Press militar", esMancuerna: false, grupoMuscular: "Hombros", animationType: "video", animationSrc: "" },
+                    { nombre: "Elevación lateral", esMancuerna: true, grupoMuscular: "Hombros", animationType: "video", animationSrc: "" },
+                    { nombre: "Press de pecho", esMancuerna: false, grupoMuscular: "Pecho", animationType: "video", animationSrc: "" },
+                    { nombre: "Elevación frontal / Y-Raise", esMancuerna: true, grupoMuscular: "Hombros", animationType: "video", animationSrc: "" },
+                    { nombre: "Tríceps cuerda", esMancuerna: false, grupoMuscular: "Tríceps", animationType: "video", animationSrc: "" },
+                    { nombre: "Extensión o fondos", esMancuerna: false, grupoMuscular: "Tríceps", animationType: "video", animationSrc: "" },
+                    { nombre: "Face pull (opcional)", esMancuerna: false, grupoMuscular: "Hombros", animationType: "video", animationSrc: "" }
+                ],
+                opcionales: [
+                    { nombre: "Hip Thrust ligero", esMancuerna: false, grupoMuscular: "Glúteos" },
+                    { nombre: "Abs en máquina", esMancuerna: false, grupoMuscular: "Core" }
+                ]
+            },
+            grupo3: {
+                nombre: "GRUPO 3 - Piernas Quad Dominante",
+                ejercicios: [
+                    { nombre: "Hack squat", esMancuerna: false, grupoMuscular: "Piernas", animationType: "video", animationSrc: "" },
+                    { nombre: "Extensión de cuádriceps", esMancuerna: false, grupoMuscular: "Piernas", animationType: "video", animationSrc: "" },
+                    { nombre: "Zancada estacionaria", esMancuerna: false, grupoMuscular: "Piernas", animationType: "video", animationSrc: "" },
+                    { nombre: "Prensa quad-dominante", esMancuerna: false, grupoMuscular: "Piernas", animationType: "video", animationSrc: "" }
+                ],
+                opcionales: [
+                    { nombre: "Hip Thrust ligero", esMancuerna: false, grupoMuscular: "Glúteos" },
+                    { nombre: "Abs en máquina", esMancuerna: false, grupoMuscular: "Core" }
+                ]
+            },
+            grupo4: {
+                nombre: "GRUPO 4 - Espalda + Bíceps",
+                ejercicios: [
+                    { nombre: "Jalón pecho", esMancuerna: false, grupoMuscular: "Espalda", animationType: "video", animationSrc: "" },
+                    { nombre: "Remo sentado", esMancuerna: false, grupoMuscular: "Espalda", animationType: "video", animationSrc: "" },
+                    { nombre: "Remo mancuerna", esMancuerna: true, grupoMuscular: "Espalda", animationType: "video", animationSrc: "" },
+                    { nombre: "Curl barra", esMancuerna: false, grupoMuscular: "Bíceps", animationType: "video", animationSrc: "" },
+                    { nombre: "Curl martillo", esMancuerna: true, grupoMuscular: "Bíceps", animationType: "video", animationSrc: "" },
+                    { nombre: "Curl martillo cross-body", esMancuerna: true, grupoMuscular: "Bíceps", animationType: "video", animationSrc: "" }
+                ],
+                opcionales: [
+                    { nombre: "Hip Thrust ligero", esMancuerna: false, grupoMuscular: "Glúteos" },
+                    { nombre: "Abs en máquina", esMancuerna: false, grupoMuscular: "Core" }
+                ]
+            },
+            grupo5: {
+                nombre: "GRUPO 5 - Hombro + Tríceps (aislamiento)",
+                ejercicios: [
+                    { nombre: "Elevación lateral", esMancuerna: true, grupoMuscular: "Hombros", animationType: "video", animationSrc: "" },
+                    { nombre: "Elevación frontal", esMancuerna: true, grupoMuscular: "Hombros", animationType: "video", animationSrc: "" },
+                    { nombre: "Press ligero o máquinas", esMancuerna: false, grupoMuscular: "Hombros", animationType: "video", animationSrc: "" },
+                    { nombre: "Tríceps aislado", esMancuerna: false, grupoMuscular: "Tríceps", animationType: "video", animationSrc: "" },
+                    { nombre: "Finisher hombro (30-20-10): Lateral → Frontal → Press", esMancuerna: false, grupoMuscular: "Hombros", animationType: "video", animationSrc: "" }
+                ],
+                opcionales: [
+                    { nombre: "Hip Thrust ligero", esMancuerna: false, grupoMuscular: "Glúteos" },
+                    { nombre: "Abs en máquina", esMancuerna: false, grupoMuscular: "Core" }
+                ]
+            }
+        };
+
+        // ==========================================
+        // STATE MANAGEMENT
+        // ==========================================
+        let currentGroup = null;
+        let sessionData = {
+            date: new Date().toISOString().split('T')[0],
+            grupo: "",
+            ejercicios: [],
+            volumenTotal: 0,
+            volumenPorGrupo: {}
+        };
+
+        // ==========================================
+        // UTILITY FUNCTIONS
+        // ==========================================
+
+        /**
+         * Calculate volume for an exercise
+         * CRITICAL: Dumbbell exercises multiply weight × 2
+         */
+        function calculateVolume(sets, reps, peso, esMancuerna) {
+            const pesoFinal = esMancuerna ? peso * 2 : peso;
+            return sets * reps * pesoFinal;
+        }
+
+        /**
+         * Validate decimal input - only allow POINT, not comma
+         */
+        function validateDecimalInput(input) {
+            const value = input.value;
+            if (value.includes(',')) {
+                input.classList.add('input-error');
+                showError(input, 'Usa punto (.) para decimales');
+                return false;
+            } else {
+                input.classList.remove('input-error');
+                hideError(input);
+                return true;
+            }
+        }
+
+        function showError(input, message) {
+            let errorDiv = input.parentElement.querySelector('.error-message');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message text-red-500 text-sm mt-1';
+                input.parentElement.appendChild(errorDiv);
+            }
+            errorDiv.textContent = message;
+        }
+
+        function hideError(input) {
+            const errorDiv = input.parentElement.querySelector('.error-message');
+            if (errorDiv) {
+                errorDiv.remove();
+            }
+        }
+
+        /**
+         * Calculate volume by muscle group
+         */
+        function calculateVolumenPorGrupo() {
+            const volumenPorGrupo = {};
+
+            sessionData.ejercicios.forEach(ej => {
+                const grupo = ej.grupoMuscular;
+                if (!volumenPorGrupo[grupo]) {
+                    volumenPorGrupo[grupo] = 0;
+                }
+                volumenPorGrupo[grupo] += ej.volumen;
+            });
+
+            sessionData.volumenPorGrupo = volumenPorGrupo;
+            return volumenPorGrupo;
+        }
+
+        /**
+         * Update volume display with dynamic progress bars
+         */
+        function updateVolumeDisplay() {
+            const volumenPorGrupo = calculateVolumenPorGrupo();
+            const volumeBarsContainer = document.getElementById('volumeBars');
+
+            // Find max volume for 100% scaling
+            const maxVolume = Math.max(...Object.values(volumenPorGrupo));
+
+            let html = '';
+            for (const [grupo, volumen] of Object.entries(volumenPorGrupo)) {
+                const percentage = maxVolume > 0 ? (volumen / maxVolume) * 100 : 0;
+                html += `
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-2">
+                            <span class="font-semibold text-gray-900">${grupo}</span>
+                            <span class="text-gray-700">${volumen.toFixed(0)} (${percentage.toFixed(0)}%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-6">
+                            <div class="progress-bar-fill bg-blue-500 h-6 rounded-full" style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            volumeBarsContainer.innerHTML = html;
+
+            // Update total volume
+            const totalVolume = Object.values(volumenPorGrupo).reduce((sum, vol) => sum + vol, 0);
+            sessionData.volumenTotal = totalVolume;
+            document.getElementById('totalVolume').textContent = totalVolume.toFixed(0);
+        }
+
+        /**
+         * Render exercise card
+         */
+        function renderEjercicio(ejercicio, index, esOpcional = false) {
+            const ejercicioData = sessionData.ejercicios[index] || {
+                nombre: ejercicio.nombre,
+                sets: 0,
+                reps: 0,
+                peso: 0,
+                esMancuerna: ejercicio.esMancuerna,
+                grupoMuscular: ejercicio.grupoMuscular,
+                volumen: 0,
+                completado: false
+            };
+
+            if (!sessionData.ejercicios[index]) {
+                sessionData.ejercicios[index] = ejercicioData;
+            }
+
+            const volumen = ejercicioData.volumen || 0;
+
+            return `
+                <div class="bg-white rounded-xl shadow-md p-6 ${esOpcional ? 'border-2 border-yellow-400' : ''}">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center">
+                            <input type="checkbox"
+                                   id="completado-${index}"
+                                   class="w-5 h-5 text-blue-600 rounded mr-3"
+                                   ${ejercicioData.completado ? 'checked' : ''}
+                                   onchange="toggleCompletado(${index})">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900">${ejercicio.nombre}</h3>
+                                <p class="text-sm text-gray-600">
+                                    ${ejercicio.grupoMuscular}
+                                    ${ejercicio.esMancuerna ? ' • <span class="text-blue-600 font-semibold">💪 Mancuerna (peso ×2)</span>' : ''}
+                                </p>
+                            </div>
+                        </div>
+                        ${ejercicio.animationType ? `
+                            <button onclick="showAnimation('${ejercicio.nombre}', '${ejercicio.animationType}', '${ejercicio.animationSrc}')"
+                                    class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-lg text-sm font-semibold">
+                                🎬 Ver animación
+                            </button>
+                        ` : ''}
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Sets</label>
+                            <input type="number"
+                                   id="sets-${index}"
+                                   value="${ejercicioData.sets}"
+                                   min="0"
+                                   class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg"
+                                   oninput="updateEjercicio(${index})">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Reps</label>
+                            <input type="number"
+                                   id="reps-${index}"
+                                   value="${ejercicioData.reps}"
+                                   min="0"
+                                   class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg"
+                                   oninput="updateEjercicio(${index})">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Peso (kg)</label>
+                            <input type="text"
+                                   id="peso-${index}"
+                                   value="${ejercicioData.peso}"
+                                   class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg"
+                                   oninput="updateEjercicio(${index})"
+                                   onblur="validateDecimalInput(this)">
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <button onclick="addSet(${index})"
+                                class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold">
+                            + Set
+                        </button>
+                        <div class="text-right">
+                            <p class="text-sm text-gray-600">Volumen Total</p>
+                            <p class="text-2xl font-bold text-blue-600" id="volumen-${index}">${volumen.toFixed(0)}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Load training group
+         */
+        function loadTrainingGroup(grupoId) {
+            currentGroup = grupoId;
+            const grupo = trainingGroups[grupoId];
+
+            sessionData.grupo = grupo.nombre;
+            sessionData.ejercicios = [];
+
+            // Show training info
+            document.getElementById('trainingInfo').classList.remove('hidden');
+            document.getElementById('currentTraining').textContent = grupo.nombre;
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-ES');
+
+            // Render main exercises
+            let html = '';
+            grupo.ejercicios.forEach((ej, index) => {
+                html += renderEjercicio(ej, index, false);
+            });
+            document.getElementById('ejerciciosList').innerHTML = html;
+
+            // Render optional exercises
+            let opcionalesHtml = '';
+            const opcionalesStartIndex = grupo.ejercicios.length;
+            grupo.opcionales.forEach((ej, index) => {
+                opcionalesHtml += renderEjercicio(ej, opcionalesStartIndex + index, true);
+            });
+            document.getElementById('opcionalesList').innerHTML = opcionalesHtml;
+
+            // Show sections
+            document.getElementById('ejerciciosContainer').classList.remove('hidden');
+            document.getElementById('volumeSummary').classList.remove('hidden');
+            document.getElementById('saveSection').classList.remove('hidden');
+
+            updateVolumeDisplay();
+        }
+
+        /**
+         * Update exercise data
+         */
+        function updateEjercicio(index) {
+            const sets = parseFloat(document.getElementById(`sets-${index}`).value) || 0;
+            const reps = parseFloat(document.getElementById(`reps-${index}`).value) || 0;
+            const pesoInput = document.getElementById(`peso-${index}`);
+
+            // Validate decimal input
+            if (!validateDecimalInput(pesoInput)) {
+                return;
+            }
+
+            const peso = parseFloat(pesoInput.value) || 0;
+            const esMancuerna = sessionData.ejercicios[index].esMancuerna;
+
+            const volumen = calculateVolume(sets, reps, peso, esMancuerna);
+
+            sessionData.ejercicios[index].sets = sets;
+            sessionData.ejercicios[index].reps = reps;
+            sessionData.ejercicios[index].peso = peso;
+            sessionData.ejercicios[index].volumen = volumen;
+
+            document.getElementById(`volumen-${index}`).textContent = volumen.toFixed(0);
+
+            updateVolumeDisplay();
+        }
+
+        /**
+         * Add a set
+         */
+        function addSet(index) {
+            const setsInput = document.getElementById(`sets-${index}`);
+            setsInput.value = (parseFloat(setsInput.value) || 0) + 1;
+            updateEjercicio(index);
+        }
+
+        /**
+         * Toggle exercise completion
+         */
+        function toggleCompletado(index) {
+            const checked = document.getElementById(`completado-${index}`).checked;
+            sessionData.ejercicios[index].completado = checked;
+        }
+
+        /**
+         * Show animation modal
+         */
+        function showAnimation(nombre, tipo, src) {
+            document.getElementById('modalTitle').textContent = nombre;
+            const container = document.getElementById('animationContainer');
+
+            if (tipo === 'lottie' && src) {
+                container.innerHTML = '<div id="lottiePlayer"></div>';
+                lottie.loadAnimation({
+                    container: document.getElementById('lottiePlayer'),
+                    renderer: 'svg',
+                    loop: true,
+                    autoplay: true,
+                    path: src
+                });
+            } else if (tipo === 'video' && src) {
+                container.innerHTML = `<video controls autoplay loop class="w-full rounded-lg"><source src="${src}" type="video/mp4"></video>`;
+            } else {
+                container.innerHTML = '<p class="text-gray-600">Animación no disponible. Próximamente se añadirán videos demostrativos para cada ejercicio.</p>';
+            }
+
+            document.getElementById('animationModal').classList.add('active');
+        }
+
+        /**
+         * Close animation modal
+         */
+        function closeAnimationModal() {
+            document.getElementById('animationModal').classList.remove('active');
+            document.getElementById('animationContainer').innerHTML = '<p class="text-gray-600">Cargando animación...</p>';
+        }
+
+        /**
+         * Save to localStorage
+         */
+        function saveToLocalStorage() {
+            localStorage.setItem('gymmate_session', JSON.stringify(sessionData));
+
+            // Show success message
+            const saveMessage = document.getElementById('saveMessage');
+            saveMessage.textContent = '✅ Entrenamiento guardado correctamente';
+            saveMessage.classList.remove('hidden');
+
+            setTimeout(() => {
+                saveMessage.classList.add('hidden');
+            }, 3000);
+        }
+
+        /**
+         * Load from localStorage
+         */
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('gymmate_session');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.date === sessionData.date) {
+                    return data;
+                }
+            }
+            return null;
+        }
+
+        // ==========================================
+        // EVENT LISTENERS
+        // ==========================================
+
+        document.getElementById('grupoSelect').addEventListener('change', (e) => {
+            if (e.target.value) {
+                loadTrainingGroup(e.target.value);
+            }
+        });
+
+        document.getElementById('saveButton').addEventListener('click', saveToLocalStorage);
+        document.getElementById('closeModal').addEventListener('click', closeAnimationModal);
+
+        // Close modal on outside click
+        document.getElementById('animationModal').addEventListener('click', (e) => {
+            if (e.target.id === 'animationModal') {
+                closeAnimationModal();
+            }
+        });
+
+        // ==========================================
+        // INITIALIZATION
+        // ==========================================
+
+        // Try to load saved session
+        const savedSession = loadFromLocalStorage();
+        if (savedSession) {
+            sessionData = savedSession;
+            // Auto-load the saved group
+            // (Optional: you can implement this if needed)
+        }
+
+        console.log('GymMate App Initialized ✅');
+        console.log('Master Document Rules Applied:');
+        console.log('- Dumbbell exercises multiply by 2 ✓');
+        console.log('- Decimal validation (point only) ✓');
+        console.log('- Dynamic progress bars (100% = max volume) ✓');
+        console.log('- localStorage support ✓');
+        console.log('- All 5 training groups loaded ✓');
+    </script>
+</body>
+</html>
