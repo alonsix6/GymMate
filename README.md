@@ -1,17 +1,28 @@
-# 💪 GymMate - App de Entrenamientos de Alonso
+# 💪 GymMate v2.0 - Tu Compañero Personal de Entrenamiento
 
-**Web interactiva para gestionar entrenamientos con seguimiento completo de volumen y progreso.**
+**Progressive Web App para gestionar entrenamientos con seguimiento completo de volumen, PRs, historial y progreso.**
+
+🚀 **NUEVO EN v2.0:**
+- 📱 Mobile-First Design con PWA
+- 🎬 Animaciones reales de ejercicios (ExerciseDB)
+- ⏱️ Temporizador de descanso integrado
+- 🏆 Tracking automático de Personal Records
+- 📅 Historial de últimos 30 entrenamientos
+- 🌙 Dark Mode
+- 📊 Estadísticas en tiempo real
 
 ---
 
 ## 🎯 Características Principales
 
+### 💪 **Core Features**
+
 ✅ **5 Grupos de Entrenamiento Completos:**
-- GRUPO 1: Piernas + Glúteos
-- GRUPO 2: Upper Push
-- GRUPO 3: Piernas Quad Dominante
-- GRUPO 4: Espalda + Bíceps
-- GRUPO 5: Hombro + Tríceps (aislamiento)
+- 🦵 GRUPO 1: Piernas + Glúteos
+- 💪 GRUPO 2: Upper Push
+- 🏋️ GRUPO 3: Piernas Quad Dominante
+- 🔱 GRUPO 4: Espalda + Bíceps
+- 🏆 GRUPO 5: Hombro + Tríceps (aislamiento)
 
 ✅ **Cálculo Automático de Volumen:**
 - Fórmula base: `volumen = sets × reps × peso`
@@ -22,7 +33,8 @@
 - Solo permite punto (.) para decimales
 - Bloquea comas (,) con mensaje de error y animación
 
-✅ **Barras de Progreso Dinámicas:**
+✅ **Resumen Dinámico de Volumen:**
+- **Solo muestra grupos musculares de la rutina seleccionada**
 - El músculo con mayor volumen del día = 100%
 - Todas las demás barras escalan proporcionalmente
 - Visualización clara del progreso por grupo muscular
@@ -31,14 +43,95 @@
 - Hip Thrust ligero (disponible en todos los grupos)
 - Abs en máquina (disponible en todos los grupos)
 
-✅ **Guardado Local:**
-- Los entrenamientos se guardan en localStorage
-- Recuperación automática de sesiones del mismo día
+---
 
-✅ **Sistema de Animaciones:**
-- Soporte para videos demostrativos (mp4)
-- Soporte para animaciones Lottie
-- Modal interactivo para visualización
+### 📱 **Mobile-First & PWA**
+
+✅ **Progressive Web App:**
+- Instalable como app nativa en móvil
+- Funciona offline con Service Worker
+- Navegación inferior optimizada para móvil
+- Touch targets de 44px mínimo
+- Previene zoom accidental en iOS
+- Compatible con iOS Safari
+
+✅ **Diseño Responsive:**
+- Mobile-first approach
+- Adaptativo para tablet y desktop
+- Sticky header en scroll
+- Bottom navigation en móviles
+- Gestos táctiles optimizados
+
+---
+
+### 🎬 **Animaciones de Ejercicios**
+
+✅ **ExerciseDB Integration:**
+- GIFs de demostración para 20+ ejercicios
+- Modal de visualización optimizado
+- Carga lazy de imágenes
+- Fallback para errores de red
+- Royalty-free exercise animations
+
+---
+
+### ⏱️ **Temporizador de Descanso**
+
+✅ **Rest Timer Completo:**
+- 6 opciones predefinidas (1-5 minutos)
+- Pausar/Reanudar funcionalidad
+- Banner visible durante countdown
+- Notificación al finalizar
+- Sonido de alerta (Web Audio API)
+- Botón rápido en cada ejercicio
+
+---
+
+### 🏆 **Personal Records Tracking**
+
+✅ **Sistema de PRs:**
+- Detección automática de nuevos récords
+- Notificación push al batir PR
+- Vista dedicada con historial de PRs
+- Tracking de mejor peso por ejercicio
+- Persistencia en localStorage
+- Badge visual para nuevos PRs
+
+---
+
+### 📅 **Historial de Entrenamientos**
+
+✅ **Workout History:**
+- Últimos 30 entrenamientos guardados
+- Resumen de volumen total
+- Contador de ejercicios completados
+- Fecha formateada en español
+- Función de eliminar entrenos
+- Vista organizada por fecha
+
+---
+
+### 📊 **Estadísticas en Tiempo Real**
+
+✅ **Quick Stats Dashboard:**
+- Volumen Total del día
+- Número de ejercicios activos
+- Sets totales realizados
+- Ejercicios completados
+- Tarjetas con gradientes coloridos
+- Actualización instantánea
+
+---
+
+### 🌙 **Dark Mode**
+
+✅ **Modo Oscuro:**
+- Toggle fácil en header
+- Persistencia de preferencia
+- Todos los componentes adaptados
+- CSS variables para colores
+- Smooth transitions
+- Menor fatiga visual nocturna
 
 ---
 
