@@ -493,36 +493,36 @@
         <div id="calculatorsTab" class="tab-content hidden">
             <div class="space-y-6">
                 <!-- 1RM Calculator -->
-                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
-                    <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">💪 Calculadora de 1RM</h2>
-                    <p class="text-sm text-gray-600 mb-4">Estima tu máximo para 1 repetición basándose en tu mejor rendimiento reciente</p>
+                <div class="glass-card p-4 md:p-6">
+                    <h2 class="text-xl md:text-2xl font-display font-bold uppercase mb-2">💪 Calculadora de 1RM</h2>
+                    <p class="text-sm text-gray-400 mb-4">Estima tu máximo para 1 repetición basándose en tu mejor rendimiento reciente</p>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Selecciona Ejercicio:</label>
-                            <select id="rm1ExerciseSelect" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg">
+                            <label class="block text-sm font-semibold text-gray-300 mb-2">Selecciona Ejercicio:</label>
+                            <select id="rm1ExerciseSelect" class="w-full px-4 py-2 bg-dark-surface border border-white/10 rounded-lg text-white focus:border-blue-500">
                                 <option value="">-- Elige un ejercicio --</option>
                             </select>
                         </div>
                     </div>
 
                     <div id="rm1Results" class="hidden">
-                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
-                            <p class="text-sm text-gray-700 mb-2"><strong>Mejor registro:</strong> <span id="rm1BestRecord"></span></p>
+                        <div class="bg-blue-500/10 border-l-4 border-blue-500 p-4 rounded-lg backdrop-blur-sm">
+                            <p class="text-sm text-gray-300 mb-2"><strong>Mejor registro:</strong> <span id="rm1BestRecord"></span></p>
                             <div class="grid grid-cols-3 gap-3 mt-4">
                                 <div class="text-center">
-                                    <p class="text-xs text-gray-600">Epley</p>
-                                    <p class="text-2xl font-bold text-blue-600" id="rm1Epley">-</p>
+                                    <p class="text-xs text-gray-400">Epley</p>
+                                    <p class="text-2xl font-bold gradient-text" id="rm1Epley">-</p>
                                     <p class="text-xs text-gray-500">kg</p>
                                 </div>
                                 <div class="text-center">
-                                    <p class="text-xs text-gray-600">Brzycki</p>
-                                    <p class="text-2xl font-bold text-blue-600" id="rm1Brzycki">-</p>
+                                    <p class="text-xs text-gray-400">Brzycki</p>
+                                    <p class="text-2xl font-bold gradient-text" id="rm1Brzycki">-</p>
                                     <p class="text-xs text-gray-500">kg</p>
                                 </div>
                                 <div class="text-center">
-                                    <p class="text-xs text-gray-600">Lombardi</p>
-                                    <p class="text-2xl font-bold text-blue-600" id="rm1Lombardi">-</p>
+                                    <p class="text-xs text-gray-400">Lombardi</p>
+                                    <p class="text-2xl font-bold gradient-text" id="rm1Lombardi">-</p>
                                     <p class="text-xs text-gray-500">kg</p>
                                 </div>
                             </div>
@@ -532,33 +532,33 @@
                 </div>
 
                 <!-- Calories Calculator -->
-                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
-                    <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">🔥 Calculadora de Calorías</h2>
-                    <p class="text-sm text-gray-600 mb-4">Calcula tu gasto calórico diario y requerimientos nutricionales</p>
+                <div class="glass-card p-4 md:p-6">
+                    <h2 class="text-xl md:text-2xl font-display font-bold uppercase mb-2">🔥 Calculadora de Calorías</h2>
+                    <p class="text-sm text-gray-400 mb-4">Calcula tu gasto calórico diario y requerimientos nutricionales</p>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Edad:</label>
-                            <input type="number" id="caloriesAge" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" placeholder="Ej: 25">
+                            <label class="block text-sm font-semibold text-gray-300 mb-2">Edad:</label>
+                            <input type="number" id="caloriesAge" class="w-full px-4 py-2 bg-dark-surface border border-white/10 rounded-lg text-white focus:border-orange-500" placeholder="Ej: 25">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Sexo:</label>
-                            <select id="caloriesGender" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg">
+                            <label class="block text-sm font-semibold text-gray-300 mb-2">Sexo:</label>
+                            <select id="caloriesGender" class="w-full px-4 py-2 bg-dark-surface border border-white/10 rounded-lg text-white focus:border-orange-500">
                                 <option value="male">Hombre</option>
                                 <option value="female">Mujer</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Peso (kg):</label>
-                            <input type="number" id="caloriesWeight" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" placeholder="Ej: 70">
+                            <label class="block text-sm font-semibold text-gray-300 mb-2">Peso (kg):</label>
+                            <input type="number" id="caloriesWeight" class="w-full px-4 py-2 bg-dark-surface border border-white/10 rounded-lg text-white focus:border-orange-500" placeholder="Ej: 70">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Altura (cm):</label>
-                            <input type="number" id="caloriesHeight" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" placeholder="Ej: 175">
+                            <label class="block text-sm font-semibold text-gray-300 mb-2">Altura (cm):</label>
+                            <input type="number" id="caloriesHeight" class="w-full px-4 py-2 bg-dark-surface border border-white/10 rounded-lg text-white focus:border-orange-500" placeholder="Ej: 175">
                         </div>
                         <div class="md:col-span-2">
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nivel de Actividad:</label>
-                            <select id="caloriesActivity" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg">
+                            <label class="block text-sm font-semibold text-gray-300 mb-2">Nivel de Actividad:</label>
+                            <select id="caloriesActivity" class="w-full px-4 py-2 bg-dark-surface border border-white/10 rounded-lg text-white focus:border-orange-500">
                                 <option value="1.2">Sedentario (poco o ningún ejercicio)</option>
                                 <option value="1.375">Ligero (1-3 días/semana)</option>
                                 <option value="1.55" selected>Moderado (3-5 días/semana)</option>
@@ -568,36 +568,36 @@
                         </div>
                     </div>
 
-                    <button onclick="calculateCalories()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg mb-4">
+                    <button onclick="calculateCalories()" class="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-semibold py-3 rounded-xl shadow-lg shadow-orange-500/30 active:scale-95 transition-transform mb-4">
                         Calcular
                     </button>
 
                     <div id="caloriesResults" class="hidden">
-                        <div class="bg-orange-50 border-l-4 border-orange-500 p-4 rounded-lg">
+                        <div class="bg-orange-500/10 border-l-4 border-orange-500 p-4 rounded-lg backdrop-blur-sm">
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <p class="text-sm text-gray-600">BMR (Metabolismo Basal)</p>
-                                    <p class="text-2xl font-bold text-orange-600" id="bmrResult">-</p>
+                                    <p class="text-sm text-gray-400">BMR (Metabolismo Basal)</p>
+                                    <p class="text-2xl font-bold text-orange-400" id="bmrResult">-</p>
                                     <p class="text-xs text-gray-500">kcal/día</p>
                                 </div>
                                 <div>
-                                    <p class="text-sm text-gray-600">TDEE (Gasto Total)</p>
-                                    <p class="text-2xl font-bold text-orange-600" id="tdeeResult">-</p>
+                                    <p class="text-sm text-gray-400">TDEE (Gasto Total)</p>
+                                    <p class="text-2xl font-bold text-orange-400" id="tdeeResult">-</p>
                                     <p class="text-xs text-gray-500">kcal/día</p>
                                 </div>
                             </div>
-                            <div class="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-orange-200">
+                            <div class="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-orange-500/20">
                                 <div class="text-center">
-                                    <p class="text-xs text-gray-600">Déficit (-20%)</p>
-                                    <p class="text-lg font-bold text-red-600" id="deficitResult">-</p>
+                                    <p class="text-xs text-gray-400">Déficit (-20%)</p>
+                                    <p class="text-lg font-bold text-red-400" id="deficitResult">-</p>
                                 </div>
                                 <div class="text-center">
-                                    <p class="text-xs text-gray-600">Mantenimiento</p>
-                                    <p class="text-lg font-bold text-green-600" id="maintenanceResult">-</p>
+                                    <p class="text-xs text-gray-400">Mantenimiento</p>
+                                    <p class="text-lg font-bold text-green-400" id="maintenanceResult">-</p>
                                 </div>
                                 <div class="text-center">
-                                    <p class="text-xs text-gray-600">Superávit (+20%)</p>
-                                    <p class="text-lg font-bold text-blue-600" id="surplusResult">-</p>
+                                    <p class="text-xs text-gray-400">Superávit (+20%)</p>
+                                    <p class="text-lg font-bold text-blue-400" id="surplusResult">-</p>
                                 </div>
                             </div>
                             <p class="text-xs text-gray-500 mt-3 text-center">Basado en fórmula de Mifflin-St Jeor y tu nivel de actividad</p>
@@ -606,39 +606,39 @@
                 </div>
 
                 <!-- Progressive Weight Calculator -->
-                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
-                    <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">📈 Calculadora de Peso Progresivo</h2>
-                    <p class="text-sm text-gray-600 mb-4">Planifica tu próximo incremento de peso basándote en tu historial</p>
+                <div class="glass-card p-4 md:p-6">
+                    <h2 class="text-xl md:text-2xl font-display font-bold uppercase mb-2">📈 Calculadora de Peso Progresivo</h2>
+                    <p class="text-sm text-gray-400 mb-4">Planifica tu próximo incremento de peso basándote en tu historial</p>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Selecciona Ejercicio:</label>
-                            <select id="progressiveExerciseSelect" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg">
+                            <label class="block text-sm font-semibold text-gray-300 mb-2">Selecciona Ejercicio:</label>
+                            <select id="progressiveExerciseSelect" class="w-full px-4 py-2 bg-dark-surface border border-white/10 rounded-lg text-white focus:border-green-500">
                                 <option value="">-- Elige un ejercicio --</option>
                             </select>
                         </div>
                     </div>
 
                     <div id="progressiveResults" class="hidden">
-                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
-                            <p class="text-sm text-gray-700 mb-3"><strong>Peso actual:</strong> <span id="progressiveCurrentWeight"></span></p>
+                        <div class="bg-green-500/10 border-l-4 border-green-500 p-4 rounded-lg backdrop-blur-sm">
+                            <p class="text-sm text-gray-300 mb-3"><strong>Peso actual:</strong> <span id="progressiveCurrentWeight"></span></p>
 
                             <div class="space-y-3">
-                                <div class="bg-white rounded-lg p-3 border-2 border-green-200">
-                                    <p class="text-sm font-semibold text-gray-900">Opción 1: Incremento Conservador</p>
-                                    <p class="text-xl font-bold text-green-600 mt-1" id="progressiveConservative">-</p>
+                                <div class="bg-dark-surface/50 rounded-lg p-3 border border-green-500/20">
+                                    <p class="text-sm font-semibold text-gray-200">Opción 1: Incremento Conservador</p>
+                                    <p class="text-xl font-bold text-green-400 mt-1" id="progressiveConservative">-</p>
                                     <p class="text-xs text-gray-500">+2.5kg - Ideal para principiantes</p>
                                 </div>
 
-                                <div class="bg-white rounded-lg p-3 border-2 border-blue-200">
-                                    <p class="text-sm font-semibold text-gray-900">Opción 2: Incremento Moderado</p>
-                                    <p class="text-xl font-bold text-blue-600 mt-1" id="progressiveModerate">-</p>
+                                <div class="bg-dark-surface/50 rounded-lg p-3 border border-blue-500/20">
+                                    <p class="text-sm font-semibold text-gray-200">Opción 2: Incremento Moderado</p>
+                                    <p class="text-xl font-bold text-blue-400 mt-1" id="progressiveModerate">-</p>
                                     <p class="text-xs text-gray-500">+5kg - Para intermedios</p>
                                 </div>
 
-                                <div class="bg-white rounded-lg p-3 border-2 border-purple-200">
-                                    <p class="text-sm font-semibold text-gray-900">Opción 3: Incremento Agresivo</p>
-                                    <p class="text-xl font-bold text-purple-600 mt-1" id="progressiveAggressive">-</p>
+                                <div class="bg-dark-surface/50 rounded-lg p-3 border border-purple-500/20">
+                                    <p class="text-sm font-semibold text-gray-200">Opción 3: Incremento Agresivo</p>
+                                    <p class="text-xl font-bold text-purple-400 mt-1" id="progressiveAggressive">-</p>
                                     <p class="text-xs text-gray-500">+10kg - Para avanzados</p>
                                 </div>
                             </div>
@@ -654,36 +654,36 @@
         <div id="chartsTab" class="tab-content hidden">
             <div class="space-y-6">
                 <!-- Export Button -->
-                <div class="bg-white rounded-xl shadow-lg p-4">
+                <div class="glass-card p-4">
                     <div class="flex justify-between items-center">
-                        <h2 class="text-xl md:text-2xl font-bold text-gray-900">📊 Análisis de Progreso</h2>
-                        <button id="exportToExcelBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold text-sm">
+                        <h2 class="text-xl md:text-2xl font-display font-bold uppercase">📊 Análisis de Progreso</h2>
+                        <button id="exportToExcelBtn" class="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white px-4 py-2 rounded-lg font-semibold text-sm shadow-lg shadow-green-500/30 active:scale-95 transition-transform">
                             📥 Exportar a Excel
                         </button>
                     </div>
                 </div>
 
                 <!-- Volume Trend Chart -->
-                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
-                    <h3 class="text-lg font-bold text-gray-900 mb-2">Tendencia de Volumen (Últimos 30 días)</h3>
-                    <p class="text-xs text-gray-500 mb-4">Visualiza tu progreso de volumen total a lo largo del tiempo</p>
+                <div class="glass-card p-4 md:p-6">
+                    <h3 class="text-lg font-bold text-white mb-2">Tendencia de Volumen (Últimos 30 días)</h3>
+                    <p class="text-xs text-gray-400 mb-4">Visualiza tu progreso de volumen total a lo largo del tiempo</p>
                     <canvas id="volumeTrendChart" class="w-full" style="max-height: 300px;"></canvas>
                 </div>
 
                 <!-- Muscle Group Distribution -->
-                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
-                    <h3 class="text-lg font-bold text-gray-900 mb-2">Distribución por Grupo Muscular</h3>
-                    <p class="text-xs text-gray-500 mb-4">Identifica qué grupos musculares has entrenado más en tu historial</p>
+                <div class="glass-card p-4 md:p-6">
+                    <h3 class="text-lg font-bold text-white mb-2">Distribución por Grupo Muscular</h3>
+                    <p class="text-xs text-gray-400 mb-4">Identifica qué grupos musculares has entrenado más en tu historial</p>
                     <canvas id="muscleDistributionChart" class="w-full" style="max-height: 300px;"></canvas>
                 </div>
 
                 <!-- Weight Progress by Exercise -->
-                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
-                    <h3 class="text-lg font-bold text-gray-900 mb-2">Progresión de Peso por Ejercicio</h3>
-                    <p class="text-xs text-gray-500 mb-4">Rastrea tu evolución de fuerza en cada ejercicio específico</p>
+                <div class="glass-card p-4 md:p-6">
+                    <h3 class="text-lg font-bold text-white mb-2">Progresión de Peso por Ejercicio</h3>
+                    <p class="text-xs text-gray-400 mb-4">Rastrea tu evolución de fuerza en cada ejercicio específico</p>
                     <div class="mb-4">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Selecciona Ejercicio:</label>
-                        <select id="exerciseChartSelect" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg">
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Selecciona Ejercicio:</label>
+                        <select id="exerciseChartSelect" class="w-full px-4 py-2 bg-dark-surface border border-white/10 rounded-lg text-white focus:border-blue-500">
                             <option value="">-- Elige un ejercicio --</option>
                         </select>
                     </div>
@@ -691,9 +691,9 @@
                 </div>
 
                 <!-- Weekly Volume Comparison -->
-                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
-                    <h3 class="text-lg font-bold text-gray-900 mb-2">Comparativa Semanal</h3>
-                    <p class="text-xs text-gray-500 mb-4">Compara tu volumen total acumulado por semana</p>
+                <div class="glass-card p-4 md:p-6">
+                    <h3 class="text-lg font-bold text-white mb-2">Comparativa Semanal</h3>
+                    <p class="text-xs text-gray-400 mb-4">Compara tu volumen total acumulado por semana</p>
                     <canvas id="weeklyComparisonChart" class="w-full" style="max-height: 300px;"></canvas>
                 </div>
             </div>
@@ -701,20 +701,20 @@
 
         <!-- History Tab -->
         <div id="historyTab" class="tab-content hidden">
-            <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
-                <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">📅 Historial de Entrenamientos</h2>
+            <div class="glass-card p-4 md:p-6">
+                <h2 class="text-xl md:text-2xl font-display font-bold uppercase mb-4">📅 Historial de Entrenamientos</h2>
                 <div id="historyList" class="space-y-3">
-                    <p class="text-gray-600 text-center py-8">No hay entrenamientos guardados aún</p>
+                    <p class="text-gray-400 text-center py-8">No hay entrenamientos guardados aún</p>
                 </div>
             </div>
         </div>
 
         <!-- PRs Tab -->
         <div id="prsTab" class="tab-content hidden">
-            <div class="bg-white rounded-xl shadow-lg p-4 md:p-6">
-                <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">🏆 Personal Records</h2>
+            <div class="glass-card p-4 md:p-6">
+                <h2 class="text-xl md:text-2xl font-display font-bold uppercase mb-4">🏆 Personal Records</h2>
                 <div id="prsList" class="space-y-3">
-                    <p class="text-gray-600 text-center py-8">Registra tus primeros entrenamientos para ver tus PRs</p>
+                    <p class="text-gray-400 text-center py-8">Registra tus primeros entrenamientos para ver tus PRs</p>
                 </div>
             </div>
         </div>
@@ -745,59 +745,35 @@
 
     <!-- Animation Modal -->
     <div id="animationModal" class="modal">
-        <div class="bg-white rounded-xl p-4 md:p-6 max-w-2xl w-full mx-4 modal-content">
+        <div class="glass-card p-4 md:p-6 max-w-2xl w-full mx-4 modal-content">
             <div class="flex justify-between items-center mb-4">
-                <h3 id="modalTitle" class="text-lg md:text-2xl font-bold text-gray-900"></h3>
-                <button id="closeModal" class="text-gray-600 hover:text-gray-900 text-3xl font-bold">&times;</button>
+                <h3 id="modalTitle" class="text-lg md:text-2xl font-display font-bold uppercase text-white"></h3>
+                <button id="closeModal" class="text-gray-400 hover:text-white text-3xl font-bold transition-colors">&times;</button>
             </div>
-            <div id="animationContainer" class="bg-gray-100 rounded-xl p-4 min-h-[300px] md:min-h-[400px] flex items-center justify-center">
-                <p class="text-gray-600">Cargando animación...</p>
+            <div id="animationContainer" class="bg-dark-surface rounded-xl p-4 min-h-[300px] md:min-h-[400px] flex items-center justify-center border border-white/10">
+                <p class="text-gray-400">Cargando animación...</p>
             </div>
         </div>
     </div>
 
     <!-- Rest Timer Modal -->
     <div id="restTimerModal" class="modal">
-        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
-            <h3 class="text-2xl font-bold text-gray-900 mb-4">⏱️ Tiempo de Descanso</h3>
-            <p class="text-gray-600 mb-4">¿Cuánto tiempo quieres descansar?</p>
+        <div class="glass-card p-6 max-w-md w-full mx-4">
+            <h3 class="text-2xl font-display font-bold uppercase mb-4">⏱️ Tiempo de Descanso</h3>
+            <p class="text-gray-400 mb-4">¿Cuánto tiempo quieres descansar?</p>
             <div class="grid grid-cols-3 gap-3 mb-4">
-                <button class="rest-time-btn bg-blue-100 hover:bg-blue-200 p-4 rounded-xl font-bold" data-seconds="60">1 min</button>
-                <button class="rest-time-btn bg-blue-100 hover:bg-blue-200 p-4 rounded-xl font-bold" data-seconds="90">1.5 min</button>
-                <button class="rest-time-btn bg-blue-100 hover:bg-blue-200 p-4 rounded-xl font-bold" data-seconds="120">2 min</button>
-                <button class="rest-time-btn bg-blue-100 hover:bg-blue-200 p-4 rounded-xl font-bold" data-seconds="180">3 min</button>
-                <button class="rest-time-btn bg-blue-100 hover:bg-blue-200 p-4 rounded-xl font-bold" data-seconds="240">4 min</button>
-                <button class="rest-time-btn bg-blue-100 hover:bg-blue-200 p-4 rounded-xl font-bold" data-seconds="300">5 min</button>
+                <button class="rest-time-btn bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/40 p-4 rounded-xl font-bold text-white active:scale-95 transition-transform" data-seconds="60">1 min</button>
+                <button class="rest-time-btn bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/40 p-4 rounded-xl font-bold text-white active:scale-95 transition-transform" data-seconds="90">1.5 min</button>
+                <button class="rest-time-btn bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/40 p-4 rounded-xl font-bold text-white active:scale-95 transition-transform" data-seconds="120">2 min</button>
+                <button class="rest-time-btn bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/40 p-4 rounded-xl font-bold text-white active:scale-95 transition-transform" data-seconds="180">3 min</button>
+                <button class="rest-time-btn bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/40 p-4 rounded-xl font-bold text-white active:scale-95 transition-transform" data-seconds="240">4 min</button>
+                <button class="rest-time-btn bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/40 p-4 rounded-xl font-bold text-white active:scale-95 transition-transform" data-seconds="300">5 min</button>
             </div>
-            <button id="closeRestModal" class="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 rounded-xl">
+            <button id="closeRestModal" class="w-full bg-dark-surface border border-white/10 hover:bg-dark-surface/80 text-gray-300 font-bold py-3 rounded-xl active:scale-95 transition-transform">
                 Cancelar
             </button>
         </div>
     </div>
-
-    <!-- Bottom Navigation (Mobile) -->
-    <nav class="bottom-nav md:hidden">
-        <div class="bottom-nav-item active" data-tab="workout">
-            <span class="text-xl">💪</span>
-            <span>Entreno</span>
-        </div>
-        <div class="bottom-nav-item" data-tab="charts">
-            <span class="text-xl">📊</span>
-            <span>Gráficos</span>
-        </div>
-        <div class="bottom-nav-item" data-tab="calculators">
-            <span class="text-xl">📐</span>
-            <span>Calculadoras</span>
-        </div>
-        <div class="bottom-nav-item" data-tab="history">
-            <span class="text-xl">📅</span>
-            <span>Historial</span>
-        </div>
-        <div class="bottom-nav-item" data-tab="prs">
-            <span class="text-xl">🏆</span>
-            <span>PRs</span>
-        </div>
-    </nav>
 
     <script>
         // ==========================================

@@ -1,15 +1,25 @@
-# 💪 GymMate v2.0 - Tu Compañero Personal de Entrenamiento
+# 💪 GymMate v2.1 - Tu Compañero Personal de Entrenamiento
 
 **Progressive Web App para gestionar entrenamientos con seguimiento completo de volumen, PRs, historial y progreso.**
 
-🚀 **NUEVO EN v2.0:**
+🚀 **NUEVO EN v2.1:**
+- 🎨 **Dark Mode Premium Redesign** - Interfaz completamente renovada
+- ✨ Efectos Glassmorphism y gradientes vibrantes
+- 🔤 Tipografía premium (Inter + Oswald)
+- 🎯 Iconografía moderna con Phosphor Icons
+- 🎭 FAB central flotante en navegación
+- 💫 Feedback táctil en todos los elementos
+- 📐 Sistema de diseño documentado
+
+🎯 **v2.0 Características:**
 - 📱 Mobile-First Design con PWA
 - 🎬 Animaciones reales de ejercicios (ExerciseDB)
 - ⏱️ Temporizador de descanso integrado
 - 🏆 Tracking automático de Personal Records
 - 📅 Historial de últimos 30 entrenamientos
-- 🌙 Dark Mode
 - 📊 Estadísticas en tiempo real
+- 📊 Gráficos de progreso con Chart.js
+- 📥 Exportación a Excel con datos reales
 
 ---
 
@@ -123,15 +133,29 @@
 
 ---
 
-### 🌙 **Dark Mode**
+### 🎨 **Dark Mode Premium Design System**
 
-✅ **Modo Oscuro:**
-- Toggle fácil en header
-- Persistencia de preferencia
-- Todos los componentes adaptados
-- CSS variables para colores
-- Smooth transitions
-- Menor fatiga visual nocturna
+✅ **Estética Dark Mode Premium:**
+- Glassmorphism effects con backdrop-filter
+- Gradientes vibrantes (Blue → Purple)
+- Alto contraste para legibilidad
+- Tipografía premium (Inter + Oswald)
+- Iconografía Phosphor Icons
+- FAB central flotante en navegación
+- Feedback táctil en todos los elementos (active:scale-95)
+- Sistema de diseño completamente documentado
+
+📖 **[Ver Sistema de Diseño Completo →](DESIGN_SYSTEM.md)**
+
+El archivo `DESIGN_SYSTEM.md` contiene:
+- Paleta de colores completa
+- Guía de tipografía
+- Componentes reutilizables
+- Efectos visuales (glassmorphism, glow, gradients)
+- Buenas prácticas
+- Checklist de implementación
+
+**IMPORTANTE:** Para mantener la consistencia visual en futuras actualizaciones, siempre consulta el `DESIGN_SYSTEM.md` antes de agregar nuevos componentes o funcionalidades.
 
 ---
 
@@ -189,11 +213,16 @@ Press militar: 3 sets × 10 reps × 40kg
 
 ## 🎨 Tecnologías
 
-- **HTML5** - Estructura
+- **HTML5** - Estructura semántica
 - **JavaScript (Vanilla)** - Lógica y cálculos
-- **Tailwind CSS** - Estilización moderna
+- **Tailwind CSS** - Framework CSS utility-first
+- **Google Fonts** - Tipografía (Inter + Oswald)
+- **Phosphor Icons** - Iconografía moderna
+- **Chart.js** - Gráficos y visualización de datos
+- **SheetJS (XLSX)** - Exportación a Excel
+- **ExerciseDB** - GIFs de ejercicios
 - **Lottie** - Animaciones vectoriales (opcional)
-- **localStorage** - Persistencia de datos
+- **localStorage** - Persistencia de datos local
 
 ---
 
@@ -279,7 +308,31 @@ Esta implementación sigue fielmente el **Documento Madre Definitivo** que defin
 Sistema diseñado específicamente para el seguimiento de entrenamientos personalizados.
 
 **Fecha de creación:** Diciembre 2025
-**Versión:** 1.0.0
+**Versión:** 2.1.0
+
+### 📋 Changelog
+
+#### v2.1.0 (Diciembre 2025)
+- 🎨 Rediseño completo con Dark Mode Premium
+- ✨ Glassmorphism y efectos visuales modernos
+- 🔤 Nueva tipografía (Inter + Oswald)
+- 🎯 Phosphor Icons en toda la interfaz
+- 🎭 FAB central en bottom navigation
+- 📐 Sistema de diseño documentado (DESIGN_SYSTEM.md)
+
+#### v2.0.0 (Diciembre 2025)
+- 📊 Gráficos con Chart.js
+- 📥 Exportación a Excel
+- 🤖 Sugerencias de IA
+- 🎬 Integración con ExerciseDB
+- ⏱️ Temporizador de descanso
+- 🏆 Tracking de PRs
+
+#### v1.0.0 (Diciembre 2025)
+- 💪 Lanzamiento inicial
+- 📱 PWA Mobile-First
+- 📊 Tracking de volumen
+- 📅 Historial de entrenamientos
 
 ---
 
