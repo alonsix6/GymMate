@@ -332,62 +332,64 @@
 
     <!-- Main Container -->
     <main class="px-6 space-y-6">
-        <!-- Hero Section - Estado Actual -->
-        <section class="relative glass-card p-6 overflow-hidden">
-            <div class="glow-bg"></div>
-            <div class="relative z-10">
-                <p class="text-gray-400 text-sm mb-2">HOY TOCA</p>
-                <h2 class="text-2xl font-display font-bold mb-1 gradient-text">PIERNAS + GLÚTEOS</h2>
-                <p class="text-sm text-gray-400 mb-6">Última vez: hace 3 días</p>
-                <button id="startWorkoutBtn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-4 rounded-xl shadow-lg shadow-blue-500/30 active:scale-95 transition-transform">
-                    COMENZAR ENTRENAMIENTO
-                </button>
-            </div>
-        </section>
-
-        <!-- Grid de Herramientas - Quick Actions -->
-        <section class="grid grid-cols-2 gap-4">
-            <div class="glass-card p-4 flex flex-col items-center justify-center gap-3 active:scale-95 transition-transform cursor-pointer" data-action="calculators">
-                <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
-                    <i class="ph-bold ph-calculator text-purple-400 text-2xl"></i>
+        <!-- HOME VIEW -->
+        <div id="homeView" class="space-y-6">
+            <!-- Hero Section - Estado Actual -->
+            <section class="relative glass-card p-6 overflow-hidden">
+                <div class="glow-bg"></div>
+                <div class="relative z-10">
+                    <p class="text-gray-400 text-sm mb-2">HOY TOCA</p>
+                    <h2 class="text-2xl font-display font-bold mb-1 gradient-text">PIERNAS + GLÚTEOS</h2>
+                    <p class="text-sm text-gray-400 mb-6">Última vez: hace 3 días</p>
+                    <button id="startWorkoutBtn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-4 rounded-xl shadow-lg shadow-blue-500/30 active:scale-95 transition-transform">
+                        VER MIS RUTINAS
+                    </button>
                 </div>
-                <span class="text-sm font-medium">1RM Calc</span>
-            </div>
-            <div class="glass-card p-4 flex flex-col items-center justify-center gap-3 active:scale-95 transition-transform cursor-pointer" data-action="history">
-                <div class="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center">
-                    <i class="ph-bold ph-clock-counter-clockwise text-cyan-400 text-2xl"></i>
-                </div>
-                <span class="text-sm font-medium">Historial</span>
-            </div>
-            <div class="glass-card p-4 flex flex-col items-center justify-center gap-3 active:scale-95 transition-transform cursor-pointer" data-action="charts">
-                <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                    <i class="ph-bold ph-chart-line text-blue-400 text-2xl"></i>
-                </div>
-                <span class="text-sm font-medium">Progreso</span>
-            </div>
-            <div class="glass-card p-4 flex flex-col items-center justify-center gap-3 active:scale-95 transition-transform cursor-pointer" data-action="prs">
-                <div class="w-12 h-12 rounded-xl bg-yellow-500/10 flex items-center justify-center">
-                    <i class="ph-bold ph-trophy text-yellow-400 text-2xl"></i>
-                </div>
-                <span class="text-sm font-medium">PRs</span>
-            </div>
-        </section>
+            </section>
 
-        <!-- Selector de Rutinas (Sin <select>) -->
-        <section>
-            <h3 class="text-lg font-display font-bold uppercase mb-4 tracking-wide">RUTINAS DISPONIBLES</h3>
+            <!-- Grid de Herramientas - Quick Actions -->
+            <section class="grid grid-cols-2 gap-4">
+                <div class="glass-card p-4 flex flex-col items-center justify-center gap-3 active:scale-95 transition-transform cursor-pointer" data-action="calculators">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                        <i class="ph-bold ph-calculator text-purple-400 text-2xl"></i>
+                    </div>
+                    <span class="text-sm font-medium">1RM Calc</span>
+                </div>
+                <div class="glass-card p-4 flex flex-col items-center justify-center gap-3 active:scale-95 transition-transform cursor-pointer" data-action="history">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center">
+                        <i class="ph-bold ph-clock-counter-clockwise text-cyan-400 text-2xl"></i>
+                    </div>
+                    <span class="text-sm font-medium">Historial</span>
+                </div>
+                <div class="glass-card p-4 flex flex-col items-center justify-center gap-3 active:scale-95 transition-transform cursor-pointer" data-action="charts">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                        <i class="ph-bold ph-chart-line text-blue-400 text-2xl"></i>
+                    </div>
+                    <span class="text-sm font-medium">Progreso</span>
+                </div>
+                <div class="glass-card p-4 flex flex-col items-center justify-center gap-3 active:scale-95 transition-transform cursor-pointer" data-action="prs">
+                    <div class="w-12 h-12 rounded-xl bg-yellow-500/10 flex items-center justify-center">
+                        <i class="ph-bold ph-trophy text-yellow-400 text-2xl"></i>
+                    </div>
+                    <span class="text-sm font-medium">PRs</span>
+                </div>
+            </section>
 
-            <!-- Select oculto para mantener compatibilidad con JavaScript -->
-            <select id="grupoSelect" class="hidden">
-                <option value="">-- Elige tu entrenamiento --</option>
-                <option value="grupo1">🦵 GRUPO 1 - Piernas + Glúteos</option>
-                <option value="grupo2">💪 GRUPO 2 - Upper Push</option>
-                <option value="grupo3">🏋️ GRUPO 3 - Piernas Quad Dominante</option>
-                <option value="grupo4">🔱 GRUPO 4 - Espalda + Bíceps</option>
-                <option value="grupo5">🏆 GRUPO 5 - Hombro + Tríceps</option>
-            </select>
+            <!-- Selector de Rutinas (Sin <select>) -->
+            <section>
+                <h3 class="text-lg font-display font-bold uppercase mb-4 tracking-wide">RUTINAS DISPONIBLES</h3>
 
-            <div class="space-y-3">
+                <!-- Select oculto para mantener compatibilidad con JavaScript -->
+                <select id="grupoSelect" class="hidden">
+                    <option value="">-- Elige tu entrenamiento --</option>
+                    <option value="grupo1">🦵 GRUPO 1 - Piernas + Glúteos</option>
+                    <option value="grupo2">💪 GRUPO 2 - Upper Push</option>
+                    <option value="grupo3">🏋️ GRUPO 3 - Piernas Quad Dominante</option>
+                    <option value="grupo4">🔱 GRUPO 4 - Espalda + Bíceps</option>
+                    <option value="grupo5">🏆 GRUPO 5 - Hombro + Tríceps</option>
+                </select>
+
+                <div class="space-y-3">
                 <div class="glass-card p-4 flex items-center justify-between active:scale-95 transition-transform cursor-pointer" data-grupo="grupo1">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-xl bg-pink-500/10 flex items-center justify-center text-2xl">
@@ -450,11 +452,20 @@
                 </div>
             </div>
         </section>
+        </div>
+        <!-- END HOME VIEW -->
 
         <!-- Hidden sections from original (kept for functionality) -->
         <div id="tabContainer" class="hidden"></div>
         <div id="aiSuggestionsBanner" class="hidden"></div>
-        <div id="workoutTab" class="tab-content active">
+
+        <!-- WORKOUT TAB -->
+        <div id="workoutTab" class="tab-content hidden">
+            <!-- Back Button -->
+            <button onclick="showHome()" class="glass-card px-4 py-2 rounded-lg text-gray-300 font-semibold text-sm border border-white/10 active:scale-95 transition-transform mb-4 flex items-center gap-2">
+                <i class="ph-bold ph-arrow-left"></i>
+                Volver al Inicio
+            </button>
             <div id="restTimerBanner" class="hidden"></div>
             <div id="trainingInfo" class="hidden"></div>
 
@@ -509,6 +520,11 @@
 
         <!-- Calculators Tab -->
         <div id="calculatorsTab" class="tab-content hidden">
+            <!-- Back Button -->
+            <button onclick="showHome()" class="glass-card px-4 py-2 rounded-lg text-gray-300 font-semibold text-sm border border-white/10 active:scale-95 transition-transform mb-4 flex items-center gap-2">
+                <i class="ph-bold ph-arrow-left"></i>
+                Volver al Inicio
+            </button>
             <div class="space-y-6">
                 <!-- 1RM Calculator -->
                 <div class="glass-card p-4 md:p-6">
@@ -670,6 +686,11 @@
 
         <!-- Charts Tab -->
         <div id="chartsTab" class="tab-content hidden">
+            <!-- Back Button -->
+            <button onclick="showHome()" class="glass-card px-4 py-2 rounded-lg text-gray-300 font-semibold text-sm border border-white/10 active:scale-95 transition-transform mb-4 flex items-center gap-2">
+                <i class="ph-bold ph-arrow-left"></i>
+                Volver al Inicio
+            </button>
             <div class="space-y-6">
                 <!-- Export Button -->
                 <div class="glass-card p-4">
@@ -719,6 +740,11 @@
 
         <!-- History Tab -->
         <div id="historyTab" class="tab-content hidden">
+            <!-- Back Button -->
+            <button onclick="showHome()" class="glass-card px-4 py-2 rounded-lg text-gray-300 font-semibold text-sm border border-white/10 active:scale-95 transition-transform mb-4 flex items-center gap-2">
+                <i class="ph-bold ph-arrow-left"></i>
+                Volver al Inicio
+            </button>
             <div class="glass-card p-4 md:p-6">
                 <h2 class="text-xl md:text-2xl font-display font-bold uppercase mb-4">📅 Historial de Entrenamientos</h2>
                 <div id="historyList" class="space-y-3">
@@ -729,6 +755,11 @@
 
         <!-- PRs Tab -->
         <div id="prsTab" class="tab-content hidden">
+            <!-- Back Button -->
+            <button onclick="showHome()" class="glass-card px-4 py-2 rounded-lg text-gray-300 font-semibold text-sm border border-white/10 active:scale-95 transition-transform mb-4 flex items-center gap-2">
+                <i class="ph-bold ph-arrow-left"></i>
+                Volver al Inicio
+            </button>
             <div class="glass-card p-4 md:p-6">
                 <h2 class="text-xl md:text-2xl font-display font-bold uppercase mb-4">🏆 Personal Records</h2>
                 <div id="prsList" class="space-y-3">
@@ -1464,7 +1495,39 @@
         // TAB NAVIGATION
         // ==========================================
 
+        function showHome() {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+                tab.classList.remove('active');
+            });
+
+            // Show home view
+            const homeView = document.getElementById('homeView');
+            if (homeView) {
+                homeView.classList.remove('hidden');
+            }
+
+            // Update bottom nav
+            document.querySelectorAll('[data-nav]').forEach(item => {
+                item.classList.remove('active');
+            });
+            const homeNavItem = document.querySelector('[data-nav="home"]');
+            if (homeNavItem) {
+                homeNavItem.classList.add('active');
+            }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         function switchTab(tabName) {
+            // Hide home view
+            const homeView = document.getElementById('homeView');
+            if (homeView) {
+                homeView.classList.add('hidden');
+            }
+
             // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.add('hidden');
@@ -1477,6 +1540,9 @@
                 selectedTab.classList.remove('hidden');
                 selectedTab.classList.add('active');
             }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
 
             // Update tab buttons
             document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1528,6 +1594,8 @@
                 const grupo = this.getAttribute('data-grupo');
                 if (grupo) {
                     loadTrainingGroup(grupo);
+                    // Cambiar a la vista de workout
+                    switchTab('workout');
                 }
             });
         });
@@ -1540,12 +1608,17 @@
 
                 // Handle navigation
                 const navType = this.getAttribute('data-nav');
-                if (navType === 'charts') {
+                if (navType === 'home') {
+                    showHome();
+                } else if (navType === 'charts') {
                     switchTab('charts');
                 } else if (navType === 'history') {
                     switchTab('history');
-                } else if (navType === 'home') {
-                    switchTab('workout');
+                } else if (navType === 'prs') {
+                    switchTab('prs');
+                } else if (navType === 'profile') {
+                    // TODO: Agregar vista de perfil
+                    showHome();
                 }
             });
         });
@@ -1553,21 +1626,18 @@
         // FAB button (central floating action button)
         if (document.getElementById('fabButton')) {
             document.getElementById('fabButton').addEventListener('click', function() {
-                // Simular click en el primer grupo de entrenamiento
-                const firstCard = document.querySelector('[data-grupo]');
-                if (firstCard) {
-                    firstCard.click();
-                }
+                // Volver al home (vista principal)
+                showHome();
             });
         }
 
-        // Start workout button
+        // Start workout button - Scroll to rutinas section
         if (document.getElementById('startWorkoutBtn')) {
             document.getElementById('startWorkoutBtn').addEventListener('click', function() {
-                // Simular click en el primer grupo de entrenamiento
-                const firstCard = document.querySelector('[data-grupo]');
-                if (firstCard) {
-                    firstCard.click();
+                // Scroll suave a la sección de rutinas
+                const rutinasSection = document.querySelector('[data-grupo]').closest('section');
+                if (rutinasSection) {
+                    rutinasSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
         }
