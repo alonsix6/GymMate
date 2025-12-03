@@ -1226,9 +1226,9 @@
             const container = document.getElementById('animationContainer');
 
             if (gifUrl) {
-                container.innerHTML = `<img src="${gifUrl}" alt="${nombre}" class="w-full max-w-md rounded-lg" onerror="this.parentElement.innerHTML='<p class=&quot;text-gray-600&quot;>Error al cargar la animación</p>'">`;
+                container.innerHTML = `<img src="${gifUrl}" alt="${nombre}" class="w-full max-w-md rounded-lg" onerror="this.parentElement.innerHTML='<p class=&quot;text-gray-400&quot;>Error al cargar la animación</p>'">`;
             } else {
-                container.innerHTML = '<p class="text-gray-600">Animación no disponible.</p>';
+                container.innerHTML = '<p class="text-gray-400">Animación no disponible.</p>';
             }
 
             document.getElementById('animationModal').classList.add('active');
@@ -1236,7 +1236,7 @@
 
         function closeAnimationModal() {
             document.getElementById('animationModal').classList.remove('active');
-            document.getElementById('animationContainer').innerHTML = '<p class="text-gray-600">Cargando animación...</p>';
+            document.getElementById('animationContainer').innerHTML = '<p class="text-gray-400">Cargando animación...</p>';
         }
 
         // ==========================================
