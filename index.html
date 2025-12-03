@@ -466,8 +466,36 @@
                 <i class="ph-bold ph-arrow-left"></i>
                 Volver al Inicio
             </button>
-            <div id="restTimerBanner" class="hidden"></div>
-            <div id="trainingInfo" class="hidden"></div>
+            <div id="restTimerBanner" class="hidden glass-card p-4 mb-4 border-l-4 border-purple-500">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="text-3xl">⏱️</div>
+                        <div>
+                            <p class="text-sm text-gray-400">Tiempo de descanso</p>
+                            <p class="text-3xl font-bold font-display text-white" id="timerDisplay">00:00</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button id="pauseTimer" class="bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/40 text-yellow-300 px-4 py-2 rounded-lg font-semibold text-sm active:scale-95 transition-transform">
+                            ⏸ Pausar
+                        </button>
+                        <button id="stopTimer" class="bg-red-500/20 hover:bg-red-500/30 border border-red-500/40 text-red-300 px-4 py-2 rounded-lg font-semibold text-sm active:scale-95 transition-transform">
+                            ⏹ Detener
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="trainingInfo" class="hidden glass-card p-4 mb-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-display font-bold uppercase text-white" id="currentTraining"></h2>
+                        <p class="text-sm text-gray-400 mt-1">📅 <span id="currentDate"></span></p>
+                    </div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-full flex items-center justify-center text-2xl shadow-lg shadow-cyan-500/30">
+                        💪
+                    </div>
+                </div>
+            </div>
 
             <!-- Quick Stats Cards -->
             <div id="quickStats" class="hidden grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
@@ -490,31 +518,31 @@
             </div>
 
             <!-- Exercises Container -->
-            <section id="ejerciciosContainer" class="hidden">
+            <section id="ejerciciosContainer" class="hidden space-y-4">
                 <div id="ejerciciosList" class="space-y-3 md:space-y-4"></div>
 
                 <!-- Optional Exercises Section -->
-                <div class="mt-6 md:mt-8 bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4 md:p-6">
-                    <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-4">📌 Ejercicios Opcionales</h3>
+                <div class="mt-6 md:mt-8 glass-card p-4 md:p-6 border-l-4 border-yellow-500">
+                    <h3 class="text-lg md:text-xl font-display font-bold uppercase text-white mb-4">📌 Ejercicios Opcionales</h3>
                     <div id="opcionalesList" class="space-y-3 md:space-y-4"></div>
                 </div>
             </section>
 
             <!-- Volume Summary -->
-            <section id="volumeSummary" class="hidden mt-6 md:mt-8 bg-white rounded-xl shadow-lg p-4 md:p-6">
-                <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-6">📊 Resumen de Volumen</h2>
+            <section id="volumeSummary" class="hidden mt-6 md:mt-8 glass-card p-4 md:p-6">
+                <h2 class="text-xl md:text-2xl font-display font-bold uppercase text-white mb-6">📊 Resumen de Volumen</h2>
                 <div id="volumeBars" class="space-y-4"></div>
-                <div class="mt-6 pt-6 border-t-2 border-gray-200">
-                    <p class="text-lg md:text-xl font-bold text-gray-900">Volumen Total: <span id="totalVolume" class="text-blue-600">0</span></p>
+                <div class="mt-6 pt-6 border-t-2 border-white/10">
+                    <p class="text-lg md:text-xl font-bold text-white">Volumen Total: <span id="totalVolume" class="text-cyan-400 font-display">0</span></p>
                 </div>
             </section>
 
             <!-- Save Button -->
             <div id="saveSection" class="hidden mt-6 md:mt-8">
-                <button id="saveButton" class="btn-primary w-full text-lg">
+                <button id="saveButton" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-semibold py-4 rounded-xl shadow-lg shadow-green-500/30 active:scale-95 transition-transform text-lg">
                     💾 Guardar Entrenamiento
                 </button>
-                <p id="saveMessage" class="mt-4 text-green-600 font-semibold text-center hidden"></p>
+                <p id="saveMessage" class="mt-4 text-green-400 font-semibold text-center hidden"></p>
             </div>
         </div>
 
@@ -547,20 +575,20 @@
                                 <div class="text-center">
                                     <p class="text-xs text-gray-400">Epley</p>
                                     <p class="text-2xl font-bold gradient-text" id="rm1Epley">-</p>
-                                    <p class="text-xs text-gray-500">kg</p>
+                                    <p class="text-xs text-gray-400">kg</p>
                                 </div>
                                 <div class="text-center">
                                     <p class="text-xs text-gray-400">Brzycki</p>
                                     <p class="text-2xl font-bold gradient-text" id="rm1Brzycki">-</p>
-                                    <p class="text-xs text-gray-500">kg</p>
+                                    <p class="text-xs text-gray-400">kg</p>
                                 </div>
                                 <div class="text-center">
                                     <p class="text-xs text-gray-400">Lombardi</p>
                                     <p class="text-2xl font-bold gradient-text" id="rm1Lombardi">-</p>
-                                    <p class="text-xs text-gray-500">kg</p>
+                                    <p class="text-xs text-gray-400">kg</p>
                                 </div>
                             </div>
-                            <p class="text-xs text-gray-500 mt-3 text-center">Promedio de 3 fórmulas científicas basadas en tu mejor rendimiento</p>
+                            <p class="text-xs text-gray-400 mt-3 text-center">Promedio de 3 fórmulas científicas basadas en tu mejor rendimiento</p>
                         </div>
                     </div>
                 </div>
@@ -612,12 +640,12 @@
                                 <div>
                                     <p class="text-sm text-gray-400">BMR (Metabolismo Basal)</p>
                                     <p class="text-2xl font-bold text-orange-400" id="bmrResult">-</p>
-                                    <p class="text-xs text-gray-500">kcal/día</p>
+                                    <p class="text-xs text-gray-400">kcal/día</p>
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-400">TDEE (Gasto Total)</p>
                                     <p class="text-2xl font-bold text-orange-400" id="tdeeResult">-</p>
-                                    <p class="text-xs text-gray-500">kcal/día</p>
+                                    <p class="text-xs text-gray-400">kcal/día</p>
                                 </div>
                             </div>
                             <div class="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-orange-500/20">
@@ -634,7 +662,7 @@
                                     <p class="text-lg font-bold text-blue-400" id="surplusResult">-</p>
                                 </div>
                             </div>
-                            <p class="text-xs text-gray-500 mt-3 text-center">Basado en fórmula de Mifflin-St Jeor y tu nivel de actividad</p>
+                            <p class="text-xs text-gray-400 mt-3 text-center">Basado en fórmula de Mifflin-St Jeor y tu nivel de actividad</p>
                         </div>
                     </div>
                 </div>
@@ -661,23 +689,23 @@
                                 <div class="bg-dark-surface/50 rounded-lg p-3 border border-green-500/20">
                                     <p class="text-sm font-semibold text-gray-200">Opción 1: Incremento Conservador</p>
                                     <p class="text-xl font-bold text-green-400 mt-1" id="progressiveConservative">-</p>
-                                    <p class="text-xs text-gray-500">+2.5kg - Ideal para principiantes</p>
+                                    <p class="text-xs text-gray-400">+2.5kg - Ideal para principiantes</p>
                                 </div>
 
                                 <div class="bg-dark-surface/50 rounded-lg p-3 border border-blue-500/20">
                                     <p class="text-sm font-semibold text-gray-200">Opción 2: Incremento Moderado</p>
                                     <p class="text-xl font-bold text-blue-400 mt-1" id="progressiveModerate">-</p>
-                                    <p class="text-xs text-gray-500">+5kg - Para intermedios</p>
+                                    <p class="text-xs text-gray-400">+5kg - Para intermedios</p>
                                 </div>
 
                                 <div class="bg-dark-surface/50 rounded-lg p-3 border border-purple-500/20">
                                     <p class="text-sm font-semibold text-gray-200">Opción 3: Incremento Agresivo</p>
                                     <p class="text-xl font-bold text-purple-400 mt-1" id="progressiveAggressive">-</p>
-                                    <p class="text-xs text-gray-500">+10kg - Para avanzados</p>
+                                    <p class="text-xs text-gray-400">+10kg - Para avanzados</p>
                                 </div>
                             </div>
 
-                            <p class="text-xs text-gray-500 mt-3 text-center">Basado en tu mejor rendimiento registrado</p>
+                            <p class="text-xs text-gray-400 mt-3 text-center">Basado en tu mejor rendimiento registrado</p>
                         </div>
                     </div>
                 </div>
@@ -1015,7 +1043,7 @@
 
             // Only show if there are muscle groups with volume
             if (Object.keys(volumenPorGrupo).length === 0) {
-                volumeBarsContainer.innerHTML = '<p class="text-gray-600 text-center py-4">Ingresa datos para ver el resumen de volumen</p>';
+                volumeBarsContainer.innerHTML = '<p class="text-gray-400 text-center py-4">Ingresa datos para ver el resumen de volumen</p>';
                 return;
             }
 
@@ -1027,11 +1055,11 @@
                 html += `
                     <div class="mb-4">
                         <div class="flex justify-between mb-2">
-                            <span class="font-semibold text-gray-900">${grupo}</span>
-                            <span class="text-gray-700">${volumen.toFixed(0)} (${percentage.toFixed(0)}%)</span>
+                            <span class="font-semibold text-white">${grupo}</span>
+                            <span class="text-gray-300">${volumen.toFixed(0)} (${percentage.toFixed(0)}%)</span>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-6">
-                            <div class="progress-bar-fill bg-blue-500 h-6 rounded-full" style="width: ${percentage}%"></div>
+                        <div class="w-full bg-dark-surface border border-white/10 rounded-full h-6">
+                            <div class="progress-bar-fill bg-gradient-to-r from-cyan-500 to-blue-500 h-6 rounded-full shadow-lg shadow-cyan-500/20" style="width: ${percentage}%"></div>
                         </div>
                     </div>
                 `;
@@ -1078,53 +1106,53 @@
             const gifUrl = exerciseGifs[ejercicio.nombre] || '';
 
             return `
-                <div class="exercise-card bg-white rounded-xl shadow-md p-4 md:p-6 ${esOpcional ? 'border-2 border-yellow-400' : ''}">
+                <div class="exercise-card glass-card p-4 md:p-6 ${esOpcional ? 'border-l-4 border-yellow-500' : ''}">
                     <div class="flex justify-between items-start mb-4">
                         <div class="flex items-start gap-3 flex-1">
                             <input type="checkbox"
                                    id="completado-${index}"
-                                   class="w-6 h-6 text-blue-600 rounded mt-1"
+                                   class="w-6 h-6 text-cyan-400 rounded mt-1 bg-dark-surface border-white/10"
                                    ${ejercicioData.completado ? 'checked' : ''}
                                    onchange="toggleCompletado(${index})">
                             <div class="flex-1">
-                                <h3 class="text-base md:text-xl font-bold text-gray-900 leading-tight">${ejercicio.nombre}</h3>
-                                <p class="text-xs md:text-sm text-gray-600 mt-1">
+                                <h3 class="text-base md:text-xl font-bold text-white leading-tight">${ejercicio.nombre}</h3>
+                                <p class="text-xs md:text-sm text-gray-400 mt-1">
                                     ${ejercicio.grupoMuscular}
-                                    ${ejercicio.esMancuerna ? ' • <span class="text-blue-600 font-semibold">💪 ×2</span>' : ''}
+                                    ${ejercicio.esMancuerna ? ' • <span class="text-cyan-400 font-semibold">💪 ×2</span>' : ''}
                                 </p>
                             </div>
                         </div>
                         <button onclick="showAnimation('${ejercicio.nombre}', '${gifUrl}')"
-                                class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-2 rounded-lg text-xs md:text-sm font-semibold whitespace-nowrap ml-2">
+                                class="bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/40 text-blue-300 px-3 py-2 rounded-lg text-xs md:text-sm font-semibold whitespace-nowrap ml-2 active:scale-95 transition-transform">
                             🎬 Ver
                         </button>
                     </div>
 
                     <div class="grid grid-cols-3 gap-2 md:gap-4 mb-4">
                         <div>
-                            <label class="block text-xs md:text-sm font-semibold text-gray-700 mb-2">Sets</label>
+                            <label class="block text-xs md:text-sm font-semibold text-gray-300 mb-2">Sets</label>
                             <input type="number"
                                    id="sets-${index}"
                                    value="${ejercicioData.sets}"
                                    min="0"
-                                   class="w-full px-2 md:px-3 py-2 border-2 border-gray-300 rounded-lg text-center"
+                                   class="w-full px-2 md:px-3 py-2 bg-dark-surface border border-white/10 rounded-lg text-center text-white focus:border-cyan-500"
                                    oninput="updateEjercicio(${index})">
                         </div>
                         <div>
-                            <label class="block text-xs md:text-sm font-semibold text-gray-700 mb-2">Reps</label>
+                            <label class="block text-xs md:text-sm font-semibold text-gray-300 mb-2">Reps</label>
                             <input type="number"
                                    id="reps-${index}"
                                    value="${ejercicioData.reps}"
                                    min="0"
-                                   class="w-full px-2 md:px-3 py-2 border-2 border-gray-300 rounded-lg text-center"
+                                   class="w-full px-2 md:px-3 py-2 bg-dark-surface border border-white/10 rounded-lg text-center text-white focus:border-cyan-500"
                                    oninput="updateEjercicio(${index})">
                         </div>
                         <div>
-                            <label class="block text-xs md:text-sm font-semibold text-gray-700 mb-2">Peso (kg)</label>
+                            <label class="block text-xs md:text-sm font-semibold text-gray-300 mb-2">Peso (kg)</label>
                             <input type="text"
                                    id="peso-${index}"
                                    value="${ejercicioData.peso}"
-                                   class="w-full px-2 md:px-3 py-2 border-2 border-gray-300 rounded-lg text-center"
+                                   class="w-full px-2 md:px-3 py-2 bg-dark-surface border border-white/10 rounded-lg text-center text-white focus:border-cyan-500"
                                    oninput="updateEjercicio(${index})"
                                    onblur="validateDecimalInput(this)">
                         </div>
@@ -1133,17 +1161,17 @@
                     <div class="flex justify-between items-center flex-wrap gap-2">
                         <div class="flex gap-2">
                             <button onclick="addSet(${index})"
-                                    class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold text-sm">
+                                    class="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white px-4 py-2 rounded-lg font-semibold text-sm shadow-lg shadow-green-500/20 active:scale-95 transition-transform">
                                 + Set
                             </button>
                             <button onclick="startRestTimer()"
-                                    class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold text-sm">
+                                    class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white px-4 py-2 rounded-lg font-semibold text-sm shadow-lg shadow-purple-500/20 active:scale-95 transition-transform">
                                 ⏱️
                             </button>
                         </div>
                         <div class="text-right">
-                            <p class="text-xs text-gray-600">Volumen</p>
-                            <p class="text-xl md:text-2xl font-bold text-blue-600" id="volumen-${index}">${volumen.toFixed(0)}</p>
+                            <p class="text-xs text-gray-400">Volumen</p>
+                            <p class="text-xl md:text-2xl font-bold text-cyan-400 font-display" id="volumen-${index}">${volumen.toFixed(0)}</p>
                         </div>
                     </div>
                 </div>
@@ -1226,9 +1254,9 @@
             const container = document.getElementById('animationContainer');
 
             if (gifUrl) {
-                container.innerHTML = `<img src="${gifUrl}" alt="${nombre}" class="w-full max-w-md rounded-lg" onerror="this.parentElement.innerHTML='<p class=&quot;text-gray-600&quot;>Error al cargar la animación</p>'">`;
+                container.innerHTML = `<img src="${gifUrl}" alt="${nombre}" class="w-full max-w-md rounded-lg" onerror="this.parentElement.innerHTML='<p class=&quot;text-gray-400&quot;>Error al cargar la animación</p>'">`;
             } else {
-                container.innerHTML = '<p class="text-gray-600">Animación no disponible.</p>';
+                container.innerHTML = '<p class="text-gray-400">Animación no disponible.</p>';
             }
 
             document.getElementById('animationModal').classList.add('active');
@@ -1236,7 +1264,7 @@
 
         function closeAnimationModal() {
             document.getElementById('animationModal').classList.remove('active');
-            document.getElementById('animationContainer').innerHTML = '<p class="text-gray-600">Cargando animación...</p>';
+            document.getElementById('animationContainer').innerHTML = '<p class="text-gray-400">Cargando animación...</p>';
         }
 
         // ==========================================
@@ -1355,21 +1383,22 @@
             const prsList = document.getElementById('prsList');
 
             if (Object.keys(prs).length === 0) {
-                prsList.innerHTML = '<p class="text-gray-600 text-center py-8">Registra tus primeros entrenamientos para ver tus PRs</p>';
+                prsList.innerHTML = '<p class="text-gray-400 text-center py-8">Registra tus primeros entrenamientos para ver tus PRs</p>';
                 return;
             }
 
             let html = '';
             for (const [nombre, data] of Object.entries(prs)) {
                 html += `
-                    <div class="bg-gradient-to-r from-yellow-100 to-yellow-200 rounded-xl p-4 border-2 border-yellow-400">
-                        <div class="flex justify-between items-start">
+                    <div class="glass-card p-4 border-l-4 border-yellow-500 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-orange-500/10"></div>
+                        <div class="flex justify-between items-start relative z-10">
                             <div>
-                                <h3 class="font-bold text-gray-900">${nombre}</h3>
-                                <p class="text-sm text-gray-700 mt-1">
-                                    <strong class="text-2xl text-yellow-700">${data.peso}kg</strong> • ${data.sets}×${data.reps}
+                                <h3 class="font-bold text-white">${nombre}</h3>
+                                <p class="text-sm text-gray-300 mt-1">
+                                    <strong class="text-2xl text-yellow-400">${data.peso}kg</strong> • ${data.sets}×${data.reps}
                                 </p>
-                                <p class="text-xs text-gray-600 mt-2">
+                                <p class="text-xs text-gray-400 mt-2">
                                     ${new Date(data.date).toLocaleDateString('es-ES')}
                                 </p>
                             </div>
@@ -1422,7 +1451,7 @@
             const historyList = document.getElementById('historyList');
 
             if (history.length === 0) {
-                historyList.innerHTML = '<p class="text-gray-600 text-center py-8">No hay entrenamientos guardados aún</p>';
+                historyList.innerHTML = '<p class="text-gray-400 text-center py-8">No hay entrenamientos guardados aún</p>';
                 return;
             }
 
@@ -1439,22 +1468,22 @@
                 const totalExercises = session.ejercicios.filter(ej => ej.volumen > 0).length;
 
                 html += `
-                    <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                    <div class="glass-card p-4">
                         <div class="flex justify-between items-start mb-2">
                             <div>
-                                <h3 class="font-bold text-gray-900">${session.grupo}</h3>
-                                <p class="text-sm text-gray-600">${date}</p>
+                                <h3 class="font-bold text-white">${session.grupo}</h3>
+                                <p class="text-sm text-gray-400">${date}</p>
                             </div>
-                            <button onclick="deleteHistoryItem(${index})" class="text-red-500 hover:text-red-700 text-xl">🗑️</button>
+                            <button onclick="deleteHistoryItem(${index})" class="text-red-400 hover:text-red-300 text-xl active:scale-95 transition-transform">🗑️</button>
                         </div>
                         <div class="grid grid-cols-2 gap-2 mt-3">
-                            <div class="bg-white rounded-lg p-2">
-                                <p class="text-xs text-gray-600">Volumen Total</p>
-                                <p class="text-lg font-bold text-blue-600">${session.volumenTotal.toFixed(0)}</p>
+                            <div class="bg-dark-surface border border-white/10 rounded-lg p-2">
+                                <p class="text-xs text-gray-400">Volumen Total</p>
+                                <p class="text-lg font-bold text-cyan-400">${session.volumenTotal.toFixed(0)}</p>
                             </div>
-                            <div class="bg-white rounded-lg p-2">
-                                <p class="text-xs text-gray-600">Completados</p>
-                                <p class="text-lg font-bold text-green-600">${completedCount}/${totalExercises}</p>
+                            <div class="bg-dark-surface border border-white/10 rounded-lg p-2">
+                                <p class="text-xs text-gray-400">Completados</p>
+                                <p class="text-lg font-bold text-green-400">${completedCount}/${totalExercises}</p>
                             </div>
                         </div>
                     </div>
