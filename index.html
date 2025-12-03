@@ -612,6 +612,10 @@
                         </div>
                     </div>
 
+                    <button onclick="prefillCaloriesFromProfile()" class="w-full bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 font-semibold py-2 rounded-xl active:scale-95 transition-transform mb-3">
+                        👤 Usar datos de mi perfil
+                    </button>
+
                     <button onclick="calculateCalories()" class="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-semibold py-3 rounded-xl shadow-lg shadow-orange-500/30 active:scale-95 transition-transform mb-4">
                         Calcular
                     </button>
@@ -652,7 +656,13 @@
                 <!-- Progressive Weight Calculator -->
                 <div class="glass-card p-4 md:p-6">
                     <h2 class="text-xl md:text-2xl font-display font-bold uppercase mb-2">📈 Calculadora de Peso Progresivo</h2>
-                    <p class="text-sm text-gray-400 mb-4">Planifica tu próximo incremento de peso basándote en tu historial</p>
+                    <p class="text-sm text-gray-400 mb-4">Recomendaciones basadas en ACSM/NSCA y la regla "2-for-2"</p>
+
+                    <div class="bg-blue-500/10 border-l-4 border-blue-500 p-3 rounded-lg mb-4">
+                        <p class="text-xs text-gray-300 leading-relaxed">
+                            <strong class="text-blue-400">📚 Regla "2-for-2" (ACSM/NSCA):</strong> Aumenta el peso cuando puedas realizar <strong>2 repeticiones extra</strong> por encima de tu objetivo durante <strong>2 entrenamientos consecutivos</strong>.
+                        </p>
+                    </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
@@ -665,29 +675,36 @@
 
                     <div id="progressiveResults" class="hidden">
                         <div class="bg-green-500/10 border-l-4 border-green-500 p-4 rounded-lg backdrop-blur-sm">
-                            <p class="text-sm text-gray-300 mb-3"><strong>Peso actual:</strong> <span id="progressiveCurrentWeight"></span></p>
+                            <p class="text-sm text-gray-300 mb-1"><strong>Peso actual:</strong> <span id="progressiveCurrentWeight"></span></p>
+                            <p class="text-xs text-gray-400 mb-3">Grupo muscular: <span id="progressiveExerciseType" class="text-cyan-400"></span></p>
 
                             <div class="space-y-3">
                                 <div class="bg-dark-surface/50 rounded-lg p-3 border border-green-500/20">
-                                    <p class="text-sm font-semibold text-gray-200">Opción 1: Incremento Conservador</p>
+                                    <p class="text-sm font-semibold text-gray-200">ACSM: Incremento Conservador (2-5%)</p>
                                     <p class="text-xl font-bold text-green-400 mt-1" id="progressiveConservative">-</p>
-                                    <p class="text-xs text-gray-400">+2.5kg - Ideal para principiantes</p>
+                                    <p class="text-xs text-gray-400">Ideal para principiantes y ejercicios técnicos</p>
                                 </div>
 
                                 <div class="bg-dark-surface/50 rounded-lg p-3 border border-blue-500/20">
-                                    <p class="text-sm font-semibold text-gray-200">Opción 2: Incremento Moderado</p>
+                                    <p class="text-sm font-semibold text-gray-200">ACSM: Incremento Estándar (5-10%)</p>
                                     <p class="text-xl font-bold text-blue-400 mt-1" id="progressiveModerate">-</p>
-                                    <p class="text-xs text-gray-400">+5kg - Para intermedios</p>
+                                    <p class="text-xs text-gray-400">Recomendado para intermedios con buena técnica</p>
                                 </div>
 
                                 <div class="bg-dark-surface/50 rounded-lg p-3 border border-purple-500/20">
-                                    <p class="text-sm font-semibold text-gray-200">Opción 3: Incremento Agresivo</p>
+                                    <p class="text-sm font-semibold text-gray-200">NSCA: Incremento Avanzado (10%+)</p>
                                     <p class="text-xl font-bold text-purple-400 mt-1" id="progressiveAggressive">-</p>
-                                    <p class="text-xs text-gray-400">+10kg - Para avanzados</p>
+                                    <p class="text-xs text-gray-400">Para avanzados en ejercicios de pierna</p>
                                 </div>
                             </div>
 
-                            <p class="text-xs text-gray-400 mt-3 text-center">Basado en tu mejor rendimiento registrado</p>
+                            <div class="mt-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                                <p class="text-xs text-yellow-300">
+                                    <strong>💡 Recomendación NSCA:</strong> Tren superior: 2.5-5kg | Tren inferior: 5-10kg
+                                </p>
+                            </div>
+
+                            <p class="text-xs text-gray-400 mt-3 text-center">Basado en estudios ACSM (2009) y NSCA Standards</p>
                         </div>
                     </div>
                 </div>
@@ -774,6 +791,76 @@
                 <h2 class="text-xl md:text-2xl font-display font-bold uppercase mb-4">🏆 Personal Records</h2>
                 <div id="prsList" class="space-y-3">
                     <p class="text-gray-400 text-center py-8">Registra tus primeros entrenamientos para ver tus PRs</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Tab -->
+        <div id="profileTab" class="tab-content hidden">
+            <!-- Back Button -->
+            <button onclick="showHome()" class="glass-card px-4 py-2 rounded-lg text-gray-300 font-semibold text-sm border border-white/10 active:scale-95 transition-transform mb-4 flex items-center gap-2">
+                <i class="ph-bold ph-arrow-left"></i>
+                Volver al Inicio
+            </button>
+            <div class="glass-card p-4 md:p-6">
+                <h2 class="text-xl md:text-2xl font-display font-bold uppercase mb-2">👤 Mi Perfil</h2>
+                <p class="text-sm text-gray-400 mb-6">Tus datos personales para cálculos precisos</p>
+
+                <form id="profileForm" class="space-y-4">
+                    <!-- Nombre -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Nombre</label>
+                        <input type="text" id="profileName" class="w-full px-4 py-2 bg-dark-surface border border-white/10 rounded-lg text-white focus:border-cyan-500" placeholder="Ej: Juan Pérez">
+                    </div>
+
+                    <!-- Fecha de Nacimiento -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Fecha de Nacimiento</label>
+                        <input type="date" id="profileBirthdate" class="w-full px-4 py-2 bg-dark-surface border border-white/10 rounded-lg text-white focus:border-cyan-500">
+                        <p class="text-xs text-gray-400 mt-1">Tu edad: <span id="calculatedAge" class="text-cyan-400 font-semibold">-</span> años</p>
+                    </div>
+
+                    <!-- Género -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Género</label>
+                        <select id="profileGender" class="w-full px-4 py-2 bg-dark-surface border border-white/10 rounded-lg text-white focus:border-cyan-500">
+                            <option value="male">Hombre</option>
+                            <option value="female">Mujer</option>
+                        </select>
+                    </div>
+
+                    <!-- Peso y Altura -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-300 mb-2">Peso (kg)</label>
+                            <input type="number" step="0.1" id="profileWeight" class="w-full px-4 py-2 bg-dark-surface border border-white/10 rounded-lg text-white focus:border-cyan-500" placeholder="70">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-300 mb-2">Altura (cm)</label>
+                            <input type="number" id="profileHeight" class="w-full px-4 py-2 bg-dark-surface border border-white/10 rounded-lg text-white focus:border-cyan-500" placeholder="175">
+                        </div>
+                    </div>
+
+                    <!-- Nivel de Actividad -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Nivel de Actividad</label>
+                        <select id="profileActivity" class="w-full px-4 py-2 bg-dark-surface border border-white/10 rounded-lg text-white focus:border-cyan-500">
+                            <option value="1.2">Sedentario (poco o ningún ejercicio)</option>
+                            <option value="1.375">Ligero (1-3 días/semana)</option>
+                            <option value="1.55" selected>Moderado (3-5 días/semana)</option>
+                            <option value="1.725">Activo (6-7 días/semana)</option>
+                            <option value="1.9">Muy Activo (2 veces al día)</option>
+                        </select>
+                    </div>
+
+                    <!-- Botón Guardar -->
+                    <button type="submit" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-cyan-500/30 active:scale-95 transition-transform">
+                        💾 Guardar Perfil
+                    </button>
+                </form>
+
+                <div id="profileSaveMessage" class="hidden mt-4 p-3 bg-green-500/10 border-l-4 border-green-500 rounded-lg">
+                    <p class="text-green-400 font-semibold">✅ Perfil guardado correctamente</p>
                 </div>
             </div>
         </div>
@@ -1432,6 +1519,104 @@
         }
 
         // ==========================================
+        // PROFILE MANAGEMENT
+        // ==========================================
+
+        function saveProfile(e) {
+            e.preventDefault();
+
+            const profile = {
+                name: document.getElementById('profileName').value,
+                birthdate: document.getElementById('profileBirthdate').value,
+                gender: document.getElementById('profileGender').value,
+                weight: parseFloat(document.getElementById('profileWeight').value) || 0,
+                height: parseFloat(document.getElementById('profileHeight').value) || 0,
+                activity: parseFloat(document.getElementById('profileActivity').value)
+            };
+
+            localStorage.setItem('gymmate_profile', JSON.stringify(profile));
+
+            // Show success message
+            const message = document.getElementById('profileSaveMessage');
+            message.classList.remove('hidden');
+            setTimeout(() => {
+                message.classList.add('hidden');
+            }, 3000);
+
+            return false;
+        }
+
+        function loadProfile() {
+            const profile = JSON.parse(localStorage.getItem('gymmate_profile') || '{}');
+
+            if (profile.name) {
+                document.getElementById('profileName').value = profile.name;
+            }
+            if (profile.birthdate) {
+                document.getElementById('profileBirthdate').value = profile.birthdate;
+                calculateAge();
+            }
+            if (profile.gender) {
+                document.getElementById('profileGender').value = profile.gender;
+            }
+            if (profile.weight) {
+                document.getElementById('profileWeight').value = profile.weight;
+            }
+            if (profile.height) {
+                document.getElementById('profileHeight').value = profile.height;
+            }
+            if (profile.activity) {
+                document.getElementById('profileActivity').value = profile.activity;
+            }
+        }
+
+        function calculateAge() {
+            const birthdate = document.getElementById('profileBirthdate').value;
+            if (!birthdate) {
+                document.getElementById('calculatedAge').textContent = '-';
+                return;
+            }
+
+            const birth = new Date(birthdate);
+            const today = new Date();
+            let age = today.getFullYear() - birth.getFullYear();
+            const monthDiff = today.getMonth() - birth.getMonth();
+
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                age--;
+            }
+
+            document.getElementById('calculatedAge').textContent = age;
+        }
+
+        function prefillCaloriesFromProfile() {
+            const profile = JSON.parse(localStorage.getItem('gymmate_profile') || '{}');
+
+            if (profile.birthdate) {
+                const birth = new Date(profile.birthdate);
+                const today = new Date();
+                let age = today.getFullYear() - birth.getFullYear();
+                const monthDiff = today.getMonth() - birth.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                    age--;
+                }
+                document.getElementById('caloriesAge').value = age;
+            }
+            if (profile.gender) {
+                document.getElementById('caloriesGender').value = profile.gender;
+            }
+            if (profile.weight) {
+                document.getElementById('caloriesWeight').value = profile.weight;
+            }
+            if (profile.height) {
+                document.getElementById('caloriesHeight').value = profile.height;
+            }
+            if (profile.activity) {
+                document.getElementById('caloriesActivity').value = profile.activity;
+            }
+        }
+
+        // ==========================================
         // HISTORY MANAGEMENT
         // ==========================================
 
@@ -1667,8 +1852,7 @@
                 } else if (navType === 'prs') {
                     switchTab('prs');
                 } else if (navType === 'profile') {
-                    // TODO: Agregar vista de perfil
-                    showHome();
+                    switchTab('profile');
                 }
             });
         });
@@ -1749,6 +1933,27 @@
 
         // Export to Excel button
         document.getElementById('exportToExcelBtn').addEventListener('click', exportToExcel);
+
+        // Profile form
+        document.getElementById('profileForm').addEventListener('submit', saveProfile);
+        document.getElementById('profileBirthdate').addEventListener('change', calculateAge);
+
+        // Load profile when switching to profile tab
+        const originalSwitchTab = switchTab;
+        switchTab = function(tabName) {
+            originalSwitchTab(tabName);
+            if (tabName === 'profile') {
+                loadProfile();
+            } else if (tabName === 'calculators') {
+                // Auto-fill calories calculator when switching to calculators
+                setTimeout(() => {
+                    const profile = JSON.parse(localStorage.getItem('gymmate_profile') || '{}');
+                    if (Object.keys(profile).length > 0) {
+                        // Profile exists - could show a button to prefill
+                    }
+                }, 100);
+            }
+        };
 
         // ==========================================
         // CHART.JS - PROGRESS GRAPHS
@@ -2252,15 +2457,39 @@
             }
 
             const currentWeight = exercisePR.peso;
-            const conservative = currentWeight + 2.5;
-            const moderate = currentWeight + 5;
-            const aggressive = currentWeight + 10;
+
+            // Detect if upper or lower body based on exercise name
+            const lowerBodyKeywords = ['squat', 'prensa', 'leg', 'pierna', 'rdl', 'hip thrust', 'zancada', 'hack', 'cuádriceps', 'femoral', 'glúteo', 'aduc', 'abduc'];
+            const isLowerBody = lowerBodyKeywords.some(keyword => exerciseName.toLowerCase().includes(keyword));
+
+            // ACSM recommendations: 2-10% increase
+            // NSCA: Upper body 2.5-5kg, Lower body 5-10kg
+            let conservative, moderate, aggressive;
+
+            if (isLowerBody) {
+                // Lower body: larger increments (NSCA: 5-10kg)
+                conservative = currentWeight * 1.025;  // 2.5% (ACSM low end)
+                moderate = currentWeight * 1.075;      // 7.5% (ACSM mid range)
+                aggressive = currentWeight * 1.10;     // 10% (NSCA aggressive)
+            } else {
+                // Upper body: smaller increments (NSCA: 2.5-5kg)
+                conservative = currentWeight * 1.025;  // 2.5% (ACSM low end)
+                moderate = currentWeight * 1.05;       // 5% (ACSM standard)
+                aggressive = currentWeight * 1.075;    // 7.5% (upper limit for upper body)
+            }
+
+            // Ensure minimum increments (2.5kg steps common in gyms)
+            const minIncrement = 2.5;
+            conservative = Math.max(currentWeight + minIncrement, Math.ceil(conservative / minIncrement) * minIncrement);
+            moderate = Math.max(currentWeight + minIncrement, Math.ceil(moderate / minIncrement) * minIncrement);
+            aggressive = Math.max(currentWeight + minIncrement, Math.ceil(aggressive / minIncrement) * minIncrement);
 
             return {
                 current: currentWeight,
                 conservative: conservative.toFixed(1),
                 moderate: moderate.toFixed(1),
-                aggressive: aggressive.toFixed(1)
+                aggressive: aggressive.toFixed(1),
+                exerciseType: isLowerBody ? 'Tren Inferior' : 'Tren Superior'
             };
         }
 
@@ -2320,6 +2549,7 @@
                     const result = calculateProgressive(e.target.value);
                     if (result) {
                         document.getElementById('progressiveCurrentWeight').textContent = `${result.current}kg`;
+                        document.getElementById('progressiveExerciseType').textContent = result.exerciseType;
                         document.getElementById('progressiveConservative').textContent = `${result.conservative}kg`;
                         document.getElementById('progressiveModerate').textContent = `${result.moderate}kg`;
                         document.getElementById('progressiveAggressive').textContent = `${result.aggressive}kg`;
