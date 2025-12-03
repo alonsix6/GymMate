@@ -1792,11 +1792,11 @@
             }
 
             // Update bottom nav
-            document.querySelectorAll('.bottom-nav-item').forEach(item => {
+            document.querySelectorAll('[data-nav]').forEach(item => {
                 item.classList.remove('active');
             });
 
-            const activeNavItem = document.querySelector(`.bottom-nav-item[data-tab="${tabName}"]`);
+            const activeNavItem = document.querySelector(`[data-nav="${tabName}"]`);
             if (activeNavItem) {
                 activeNavItem.classList.add('active');
             }
@@ -1895,11 +1895,8 @@
             });
         });
 
-        document.querySelectorAll('.bottom-nav-item').forEach(item => {
-            item.addEventListener('click', () => {
-                switchTab(item.dataset.tab);
-            });
-        });
+        // NOTE: bottom-nav-item event listeners already added above (lines 1839-1858) using data-nav
+        // Removed duplicate event listener that was using incorrect data-tab attribute
 
         // Rest timer
         document.getElementById('pauseTimer').addEventListener('click', pauseTimer);
