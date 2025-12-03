@@ -868,6 +868,124 @@
                 </div>
             </div>
         </div>
+
+        <!-- Workout Builder Tab -->
+        <div id="workoutBuilderTab" class="tab-content hidden">
+            <!-- Header -->
+            <div class="glass-card p-4 mb-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-display font-bold uppercase text-white">✨ Crear Entrenamiento</h2>
+                        <p class="text-sm text-gray-400 mt-1">Diseña tu rutina personalizada</p>
+                    </div>
+                    <button onclick="closeWorkoutBuilder()" class="text-gray-400 hover:text-white text-3xl active:scale-95 transition-transform">×</button>
+                </div>
+            </div>
+
+            <!-- Step Indicator -->
+            <div class="glass-card p-3 mb-4">
+                <div class="flex items-center justify-between text-xs">
+                    <div class="flex items-center gap-2">
+                        <div id="step1Indicator" class="w-6 h-6 rounded-full bg-cyan-500 flex items-center justify-center text-white font-bold">1</div>
+                        <span id="step1Text" class="text-cyan-400 font-semibold">Ejercicios</span>
+                    </div>
+                    <div class="flex-1 h-0.5 bg-dark-surface mx-2"></div>
+                    <div class="flex items-center gap-2">
+                        <div id="step2Indicator" class="w-6 h-6 rounded-full bg-dark-surface border border-white/20 flex items-center justify-center text-gray-500 font-bold">2</div>
+                        <span id="step2Text" class="text-gray-500">Revisar</span>
+                    </div>
+                    <div class="flex-1 h-0.5 bg-dark-surface mx-2"></div>
+                    <div class="flex items-center gap-2">
+                        <div id="step3Indicator" class="w-6 h-6 rounded-full bg-dark-surface border border-white/20 flex items-center justify-center text-gray-500 font-bold">3</div>
+                        <span id="step3Text" class="text-gray-500">Nombrar</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 1: Select Exercises -->
+            <div id="builderStep1" class="space-y-4">
+                <!-- Filter by muscle group -->
+                <div class="glass-card p-4">
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">Filtrar por grupo muscular:</label>
+                    <select id="muscleGroupFilter" class="w-full px-4 py-2 bg-dark-surface border border-white/10 rounded-lg text-white focus:border-cyan-500">
+                        <option value="all">📋 Todos los ejercicios</option>
+                        <option value="pecho">🫀 Pecho</option>
+                        <option value="espalda">🔙 Espalda</option>
+                        <option value="hombros">💪 Hombros</option>
+                        <option value="biceps">💪 Bíceps</option>
+                        <option value="triceps">💪 Tríceps</option>
+                        <option value="piernas">🦵 Piernas</option>
+                        <option value="gluteos">🍑 Glúteos</option>
+                        <option value="core">🎯 Core/Abdomen</option>
+                    </select>
+                </div>
+
+                <!-- Exercise List -->
+                <div id="exercisesList" class="space-y-2">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+
+                <!-- Selected count -->
+                <div class="glass-card p-4 border-l-4 border-cyan-500">
+                    <p class="text-sm text-gray-300">
+                        <strong class="text-cyan-400 text-lg" id="selectedCount">0</strong> ejercicios seleccionados
+                    </p>
+                </div>
+
+                <button onclick="goToStep2()" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-cyan-500/30 active:scale-95 transition-transform">
+                    Continuar →
+                </button>
+            </div>
+
+            <!-- Step 2: Review & Organize -->
+            <div id="builderStep2" class="hidden space-y-4">
+                <div class="glass-card p-4">
+                    <h3 class="text-lg font-display font-bold uppercase text-white mb-4">📋 Ejercicios Seleccionados</h3>
+                    <div id="selectedExercisesList" class="space-y-2">
+                        <!-- Will be populated -->
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="goToStep1()" class="bg-dark-surface border border-white/10 hover:bg-dark-surface/80 text-gray-300 font-bold py-3 rounded-xl active:scale-95 transition-transform">
+                        ← Atrás
+                    </button>
+                    <button onclick="goToStep3()" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-cyan-500/30 active:scale-95 transition-transform">
+                        Continuar →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Name & Save -->
+            <div id="builderStep3" class="hidden space-y-4">
+                <div class="glass-card p-4">
+                    <h3 class="text-lg font-display font-bold uppercase text-white mb-4">🏷️ Nombra tu rutina</h3>
+
+                    <!-- Suggested names -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Sugerencias basadas en grupos musculares:</label>
+                        <div id="suggestedNames" class="space-y-2">
+                            <!-- Will be populated -->
+                        </div>
+                    </div>
+
+                    <!-- Custom name -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">O escribe un nombre personalizado:</label>
+                        <input type="text" id="customWorkoutName" class="w-full px-4 py-2 bg-dark-surface border border-white/10 rounded-lg text-white focus:border-cyan-500" placeholder="Ej: Mi Rutina de Lunes">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="goToStep2()" class="bg-dark-surface border border-white/10 hover:bg-dark-surface/80 text-gray-300 font-bold py-3 rounded-xl active:scale-95 transition-transform">
+                        ← Atrás
+                    </button>
+                    <button onclick="saveCustomWorkout()" class="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-green-500/30 active:scale-95 transition-transform">
+                        💾 Guardar Rutina
+                    </button>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Bottom Navigation Bar with FAB -->
@@ -1621,6 +1739,485 @@
         }
 
         // ==========================================
+        // WORKOUT BUILDER - CUSTOM ROUTINES
+        // ==========================================
+
+        // Comprehensive exercise database
+        const exerciseDatabase = {
+            pecho: [
+                { name: "Press de banca", desc: "Ejercicio básico para pecho", variants: ["Barra", "Mancuernas", "Máquina Smith"] },
+                { name: "Press inclinado", desc: "Trabaja pecho superior", variants: ["Barra", "Mancuernas"] },
+                { name: "Press declinado", desc: "Enfoca pecho inferior", variants: ["Barra", "Mancuernas"] },
+                { name: "Aperturas", desc: "Aislamiento de pecho", variants: ["Mancuernas", "Poleas", "Máquina"] },
+                { name: "Fondos en paralelas", desc: "Compuesto para pecho y tríceps", variants: ["Peso corporal", "Con lastre"] },
+                { name: "Pullover", desc: "Expansión de caja torácica", variants: ["Mancuerna", "Polea", "Máquina"] },
+                { name: "Crossover de poleas", desc: "Aislamiento con poleas", variants: ["Alto", "Medio", "Bajo"] },
+                { name: "Press con agarre cerrado", desc: "Pecho interno y tríceps", variants: ["Barra", "Mancuernas"] }
+            ],
+            espalda: [
+                { name: "Jalón al pecho", desc: "Dorsales y ancho de espalda", variants: ["Agarre ancho", "Agarre cerrado", "Neutro"] },
+                { name: "Jalón tras nuca", desc: "Dorsales superiores", variants: ["Máquina"] },
+                { name: "Remo con barra", desc: "Grosor de espalda", variants: ["Pronado", "Supino", "Pendlay"] },
+                { name: "Remo sentado", desc: "Espalda media", variants: ["Polea", "Máquina", "Mancuerna"] },
+                { name: "Dominadas", desc: "Dorsales completos", variants: ["Peso corporal", "Asistidas", "Con lastre"] },
+                { name: "Remo con mancuerna", desc: "Unilateral para espalda", variants: ["A una mano", "Seal row"] },
+                { name: "Face pull", desc: "Trapecios y deltoides posterior", variants: ["Polea", "Banda"] },
+                { name: "Peso muerto", desc: "Espalda baja y general", variants: ["Convencional", "Sumo", "Rumano"] },
+                { name: "Pulldown de brazo recto", desc: "Dorsales con brazos extendidos", variants: ["Barra", "Cuerda"] },
+                { name: "Remo en T", desc: "Espalda media y trapecios", variants: ["Barra", "Máquina"] }
+            ],
+            hombros: [
+                { name: "Press militar", desc: "Hombros completos", variants: ["Barra", "Mancuernas", "Máquina"] },
+                { name: "Elevación lateral", desc: "Deltoides medial", variants: ["Mancuernas", "Poleas", "Máquina"] },
+                { name: "Elevación frontal", desc: "Deltoides anterior", variants: ["Mancuernas", "Barra", "Disco"] },
+                { name: "Pájaros", desc: "Deltoides posterior", variants: ["Mancuernas", "Máquina", "Polea"] },
+                { name: "Press Arnold", desc: "Rotación completa de hombro", variants: ["Mancuernas"] },
+                { name: "Remo al mentón", desc: "Trapecios y deltoides", variants: ["Barra", "Mancuernas", "Polea"] },
+                { name: "Face pull", desc: "Deltoides posterior y rotadores", variants: ["Polea", "Banda"] },
+                { name: "Press Bradford", desc: "Anterior y posterior", variants: ["Barra"] }
+            ],
+            biceps: [
+                { name: "Curl con barra", desc: "Bíceps completo", variants: ["Barra recta", "Barra Z", "Polea"] },
+                { name: "Curl con mancuernas", desc: "Trabajo bilateral", variants: ["Alternado", "Simultáneo", "Martillo"] },
+                { name: "Curl predicador", desc: "Aislamiento de bíceps", variants: ["Barra", "Mancuernas", "Máquina"] },
+                { name: "Curl concentrado", desc: "Pico del bíceps", variants: ["Mancuerna"] },
+                { name: "Curl en banco inclinado", desc: "Estiramiento completo", variants: ["Mancuernas"] },
+                { name: "Curl araña", desc: "Bíceps corto", variants: ["Barra", "Mancuernas"] },
+                { name: "Curl 21s", desc: "Técnica de intensidad", variants: ["Barra"] }
+            ],
+            triceps: [
+                { name: "Press francés", desc: "Cabeza larga del tríceps", variants: ["Barra", "Mancuernas", "Barra Z"] },
+                { name: "Extensión con cuerda", desc: "Tríceps con polea", variants: ["Cuerda", "Barra"] },
+                { name: "Fondos en banco", desc: "Tríceps con peso corporal", variants: ["Peso corporal", "Con disco"] },
+                { name: "Patada de tríceps", desc: "Aislamiento unilateral", variants: ["Mancuerna", "Polea"] },
+                { name: "Press cerrado", desc: "Tríceps y pecho", variants: ["Barra", "Mancuernas"] },
+                { name: "Jalón con agarre invertido", desc: "Cabeza lateral", variants: ["Barra", "Polea"] },
+                { name: "Extensión sobre cabeza", desc: "Cabeza larga", variants: ["Mancuerna", "Polea", "Barra"] }
+            ],
+            piernas: [
+                { name: "Sentadilla", desc: "Ejercicio rey de piernas", variants: ["Barra libre", "Smith", "Hack", "Búlgara"] },
+                { name: "Prensa", desc: "Cuádriceps y glúteos", variants: ["45°", "Horizontal", "Vertical"] },
+                { name: "Extensión de cuádriceps", desc: "Aislamiento de cuádriceps", variants: ["Máquina"] },
+                { name: "Curl femoral", desc: "Isquiotibiales", variants: ["Acostado", "Sentado", "De pie"] },
+                { name: "Zancada", desc: "Unilateral para piernas", variants: ["Con barra", "Con mancuernas", "Caminando"] },
+                { name: "Peso muerto rumano", desc: "Femorales y glúteos", variants: ["Barra", "Mancuernas"] },
+                { name: "Sentadilla hack", desc: "Cuádriceps con máquina", variants: ["Máquina hack"] },
+                { name: "Peso muerto a una pierna", desc: "Equilibrio y femorales", variants: ["Mancuerna", "Barra"] },
+                { name: "Step ups", desc: "Escalón con peso", variants: ["Con mancuernas", "Con barra"] },
+                { name: "Sissy squat", desc: "Cuádriceps intenso", variants: ["Peso corporal", "Con disco"] }
+            ],
+            gluteos: [
+                { name: "Hip thrust", desc: "Ejercicio principal para glúteos", variants: ["Barra", "Mancuerna", "Máquina"] },
+                { name: "Peso muerto rumano", desc: "Glúteos y femorales", variants: ["Barra", "Mancuernas"] },
+                { name: "Patada de glúteo", desc: "Aislamiento", variants: ["Polea", "Máquina", "Peso corporal"] },
+                { name: "Abducción de cadera", desc: "Glúteo medio", variants: ["Máquina", "Polea", "Banda"] },
+                { name: "Aducción de cadera", desc: "Aductores", variants: ["Máquina", "Polea"] },
+                { name: "Puente de glúteos", desc: "Activación de glúteos", variants: ["Peso corporal", "Con barra"] },
+                { name: "Buenos días", desc: "Cadena posterior", variants: ["Barra"] }
+            ],
+            core: [
+                { name: "Plancha", desc: "Estabilización core", variants: ["Frontal", "Lateral", "Con elevación"] },
+                { name: "Crunch", desc: "Abdomen superior", variants: ["En suelo", "En banco", "Con polea"] },
+                { name: "Elevación de piernas", desc: "Abdomen inferior", variants: ["Colgado", "En suelo", "En banco"] },
+                { name: "Russian twist", desc: "Oblicuos", variants: ["Con disco", "Con balón medicinal"] },
+                { name: "Mountain climbers", desc: "Cardio y core", variants: ["Clásico", "Cruzado"] },
+                { name: "Ab wheel", desc: "Core completo", variants: ["Rueda abdominal"] },
+                { name: "Dead bug", desc: "Control de core", variants: ["Peso corporal"] },
+                { name: "Pallof press", desc: "Anti-rotación", variants: ["Polea", "Banda"] }
+            ]
+        };
+
+        // Workout builder state
+        let selectedExercises = [];
+        let currentBuilderStep = 1;
+
+        function openWorkoutBuilder() {
+            // Reset state
+            selectedExercises = [];
+            currentBuilderStep = 1;
+
+            // Reset UI
+            updateSelectedCount();
+            renderExercisesList('all');
+            goToStep1();
+
+            // Show builder
+            switchTab('workoutBuilder');
+        }
+
+        function closeWorkoutBuilder() {
+            showHome();
+        }
+
+        function renderExercisesList(filter = 'all') {
+            const container = document.getElementById('exercisesList');
+            let html = '';
+
+            const groups = filter === 'all' ? Object.keys(exerciseDatabase) : [filter];
+
+            groups.forEach(group => {
+                const exercises = exerciseDatabase[group];
+                const groupName = {
+                    pecho: '🫀 Pecho',
+                    espalda: '🔙 Espalda',
+                    hombros: '💪 Hombros',
+                    biceps: '💪 Bíceps',
+                    triceps: '💪 Tríceps',
+                    piernas: '🦵 Piernas',
+                    gluteos: '🍑 Glúteos',
+                    core: '🎯 Core/Abdomen'
+                }[group];
+
+                html += `<div class="glass-card p-3 mb-2">
+                    <p class="text-xs font-bold text-cyan-400 uppercase mb-2">${groupName}</p>`;
+
+                exercises.forEach((exercise, idx) => {
+                    const exerciseId = `${group}_${idx}`;
+                    const isSelected = selectedExercises.some(e => e.id === exerciseId);
+
+                    html += `
+                        <div class="flex items-start gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors mb-1">
+                            <input type="checkbox"
+                                   id="ex_${exerciseId}"
+                                   ${isSelected ? 'checked' : ''}
+                                   onchange="toggleExerciseSelection('${exerciseId}', '${group}', ${idx})"
+                                   class="w-5 h-5 text-cyan-400 rounded mt-0.5 bg-dark-surface border-white/10">
+                            <div class="flex-1">
+                                <label for="ex_${exerciseId}" class="text-sm font-semibold text-white cursor-pointer">${exercise.name}</label>
+                                <p class="text-xs text-gray-400">${exercise.desc}</p>
+                                <div class="flex flex-wrap gap-1 mt-1">
+                                    ${exercise.variants.map(v => `<span class="text-xs px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300">${v}</span>`).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `</div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function toggleExerciseSelection(exerciseId, group, idx) {
+            const exercise = exerciseDatabase[group][idx];
+            const existingIndex = selectedExercises.findIndex(e => e.id === exerciseId);
+
+            if (existingIndex > -1) {
+                selectedExercises.splice(existingIndex, 1);
+            } else {
+                selectedExercises.push({
+                    id: exerciseId,
+                    name: exercise.name,
+                    group: group,
+                    grupoMuscular: {
+                        pecho: 'Pecho',
+                        espalda: 'Espalda',
+                        hombros: 'Hombros',
+                        biceps: 'Bíceps',
+                        triceps: 'Tríceps',
+                        piernas: 'Piernas',
+                        gluteos: 'Glúteos',
+                        core: 'Core'
+                    }[group]
+                });
+            }
+
+            updateSelectedCount();
+        }
+
+        function updateSelectedCount() {
+            document.getElementById('selectedCount').textContent = selectedExercises.length;
+        }
+
+        // Step navigation
+        function goToStep1() {
+            currentBuilderStep = 1;
+            document.getElementById('builderStep1').classList.remove('hidden');
+            document.getElementById('builderStep2').classList.add('hidden');
+            document.getElementById('builderStep3').classList.add('hidden');
+
+            // Update indicators
+            updateStepIndicators();
+        }
+
+        function goToStep2() {
+            if (selectedExercises.length === 0) {
+                alert('Selecciona al menos un ejercicio');
+                return;
+            }
+
+            currentBuilderStep = 2;
+            document.getElementById('builderStep1').classList.add('hidden');
+            document.getElementById('builderStep2').classList.remove('hidden');
+            document.getElementById('builderStep3').classList.add('hidden');
+
+            // Render selected exercises
+            renderSelectedExercises();
+            updateStepIndicators();
+        }
+
+        function goToStep3() {
+            currentBuilderStep = 3;
+            document.getElementById('builderStep1').classList.add('hidden');
+            document.getElementById('builderStep2').classList.add('hidden');
+            document.getElementById('builderStep3').classList.remove('hidden');
+
+            // Generate suggested names
+            generateSuggestedNames();
+            updateStepIndicators();
+        }
+
+        function updateStepIndicators() {
+            [1, 2, 3].forEach(step => {
+                const indicator = document.getElementById(`step${step}Indicator`);
+                const text = document.getElementById(`step${step}Text`);
+
+                if (step < currentBuilderStep) {
+                    // Completed
+                    indicator.className = 'w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white font-bold';
+                    indicator.textContent = '✓';
+                    text.className = 'text-green-400 font-semibold';
+                } else if (step === currentBuilderStep) {
+                    // Active
+                    indicator.className = 'w-6 h-6 rounded-full bg-cyan-500 flex items-center justify-center text-white font-bold';
+                    indicator.textContent = step;
+                    text.className = 'text-cyan-400 font-semibold';
+                } else {
+                    // Pending
+                    indicator.className = 'w-6 h-6 rounded-full bg-dark-surface border border-white/20 flex items-center justify-center text-gray-500 font-bold';
+                    indicator.textContent = step;
+                    text.className = 'text-gray-500';
+                }
+            });
+        }
+
+        function renderSelectedExercises() {
+            const container = document.getElementById('selectedExercisesList');
+            let html = '';
+
+            if (selectedExercises.length === 0) {
+                html = '<p class="text-gray-400 text-center py-4">No hay ejercicios seleccionados</p>';
+            } else {
+                selectedExercises.forEach((ex, idx) => {
+                    html += `
+                        <div class="flex items-center justify-between p-3 bg-dark-surface rounded-lg border border-white/10">
+                            <div class="flex items-center gap-3">
+                                <span class="text-cyan-400 font-bold">${idx + 1}</span>
+                                <div>
+                                    <p class="text-white font-semibold text-sm">${ex.name}</p>
+                                    <p class="text-xs text-gray-400">${ex.grupoMuscular}</p>
+                                </div>
+                            </div>
+                            <button onclick="removeExercise(${idx})" class="text-red-400 hover:text-red-300 active:scale-95 transition-transform">
+                                <i class="ph-bold ph-trash text-lg"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+            }
+
+            container.innerHTML = html;
+        }
+
+        function removeExercise(idx) {
+            selectedExercises.splice(idx, 1);
+            renderSelectedExercises();
+            updateSelectedCount();
+
+            // Re-render exercise list to update checkboxes
+            const filter = document.getElementById('muscleGroupFilter').value;
+            renderExercisesList(filter);
+        }
+
+        function generateSuggestedNames() {
+            const container = document.getElementById('suggestedNames');
+            const groups = {};
+
+            // Count exercises per group
+            selectedExercises.forEach(ex => {
+                groups[ex.grupoMuscular] = (groups[ex.grupoMuscular] || 0) + 1;
+            });
+
+            const sortedGroups = Object.entries(groups).sort((a, b) => b[1] - a[1]);
+            const suggestions = [];
+
+            // Generate suggestions
+            if (sortedGroups.length === 1) {
+                suggestions.push(`${sortedGroups[0][0]}`);
+                suggestions.push(`Día de ${sortedGroups[0][0]}`);
+            } else if (sortedGroups.length === 2) {
+                suggestions.push(`${sortedGroups[0][0]} + ${sortedGroups[1][0]}`);
+                suggestions.push(`Día ${sortedGroups[0][0]}/${sortedGroups[1][0]}`);
+            } else if (sortedGroups.length >= 3) {
+                suggestions.push('Full Body');
+                suggestions.push(`${sortedGroups[0][0]} + ${sortedGroups[1][0]} + ${sortedGroups[2][0]}`);
+                suggestions.push('Rutina Completa');
+            }
+
+            // Add day-based suggestions
+            const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+            const randomDay = days[Math.floor(Math.random() * days.length)];
+            suggestions.push(`Rutina ${randomDay}`);
+
+            let html = suggestions.map(name => `
+                <button onclick="selectSuggestedName('${name}')"
+                        class="w-full text-left p-3 bg-dark-surface hover:bg-dark-surface/80 border border-white/10 hover:border-cyan-500/30 rounded-lg text-white text-sm active:scale-95 transition-all">
+                    ${name}
+                </button>
+            `).join('');
+
+            container.innerHTML = html;
+        }
+
+        function selectSuggestedName(name) {
+            document.getElementById('customWorkoutName').value = name;
+        }
+
+        function saveCustomWorkout() {
+            const customName = document.getElementById('customWorkoutName').value.trim();
+
+            if (!customName) {
+                alert('Por favor ingresa un nombre para tu rutina');
+                return;
+            }
+
+            if (selectedExercises.length === 0) {
+                alert('No puedes guardar una rutina sin ejercicios');
+                return;
+            }
+
+            // Get existing custom workouts
+            const customWorkouts = JSON.parse(localStorage.getItem('gymmate_custom_workouts') || '[]');
+
+            // Create new workout
+            const newWorkout = {
+                id: 'custom_' + Date.now(),
+                nombre: customName,
+                ejercicios: selectedExercises.map(ex => ({
+                    nombre: ex.name,
+                    grupoMuscular: ex.grupoMuscular,
+                    esMancuerna: false
+                })),
+                opcionales: [],
+                isCustom: true,
+                createdAt: new Date().toISOString()
+            };
+
+            customWorkouts.push(newWorkout);
+            localStorage.setItem('gymmate_custom_workouts', JSON.stringify(customWorkouts));
+
+            // Show success and return to home
+            alert(`✅ Rutina "${customName}" guardada exitosamente!`);
+            showHome();
+            loadCustomWorkoutsInHome();
+        }
+
+        function loadCustomWorkoutsInHome() {
+            const customWorkouts = JSON.parse(localStorage.getItem('gymmate_custom_workouts') || '[]');
+            const container = document.querySelector('#homeView .space-y-3');
+
+            if (!container) return;
+
+            // Remove old custom workout cards
+            container.querySelectorAll('[data-custom-workout]').forEach(el => el.remove());
+
+            // Add custom workout cards
+            customWorkouts.forEach(workout => {
+                const card = document.createElement('div');
+                card.setAttribute('data-custom-workout', workout.id);
+                card.setAttribute('data-grupo', workout.id);
+                card.className = 'glass-card p-4 active:scale-95 transition-transform cursor-pointer border-l-4 border-purple-500';
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-xl">
+                                ✨
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white">${workout.nombre}</h3>
+                                <p class="text-xs text-purple-300">Rutina personalizada</p>
+                            </div>
+                        </div>
+                        <button onclick="deleteCustomWorkout('${workout.id}', event)" class="text-red-400 hover:text-red-300 active:scale-95 transition-transform">
+                            <i class="ph-bold ph-trash"></i>
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs text-gray-400 mt-2">
+                        <span>💪 ${workout.ejercicios.length} ejercicios</span>
+                        <span>•</span>
+                        <span>${new Date(workout.createdAt).toLocaleDateString('es-ES')}</span>
+                    </div>
+                `;
+
+                // Add click event
+                card.addEventListener('click', (e) => {
+                    if (!e.target.closest('button')) {
+                        loadCustomWorkout(workout);
+                    }
+                });
+
+                container.insertBefore(card, container.firstChild);
+            });
+        }
+
+        function loadCustomWorkout(workout) {
+            // Set session data
+            sessionData.grupo = workout.nombre;
+            sessionData.ejercicios = [];
+
+            // Show workout tab
+            switchTab('workout');
+
+            // Update training info
+            document.getElementById('trainingInfo').classList.remove('hidden');
+            document.getElementById('currentTraining').textContent = workout.nombre;
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-ES');
+
+            // Render exercises
+            let html = '';
+            workout.ejercicios.forEach((ej, index) => {
+                html += renderEjercicio(ej, index, false);
+            });
+            document.getElementById('ejerciciosList').innerHTML = html;
+
+            // Hide optionals section for custom workouts
+            document.getElementById('opcionalesList').innerHTML = '';
+
+            document.getElementById('ejerciciosContainer').classList.remove('hidden');
+            document.getElementById('volumeSummary').classList.remove('hidden');
+            document.getElementById('saveSection').classList.remove('hidden');
+            document.getElementById('quickStats').classList.remove('hidden');
+
+            updateVolumeDisplay();
+        }
+
+        function deleteCustomWorkout(workoutId, event) {
+            event.stopPropagation();
+
+            if (!confirm('¿Eliminar esta rutina personalizada?')) {
+                return;
+            }
+
+            const customWorkouts = JSON.parse(localStorage.getItem('gymmate_custom_workouts') || '[]');
+            const filtered = customWorkouts.filter(w => w.id !== workoutId);
+            localStorage.setItem('gymmate_custom_workouts', JSON.stringify(filtered));
+
+            loadCustomWorkoutsInHome();
+        }
+
+        // Filter exercise list
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterSelect = document.getElementById('muscleGroupFilter');
+            if (filterSelect) {
+                filterSelect.addEventListener('change', (e) => {
+                    renderExercisesList(e.target.value);
+                });
+            }
+        });
+
+        // ==========================================
         // HISTORY MANAGEMENT
         // ==========================================
 
@@ -1861,11 +2458,10 @@
             });
         });
 
-        // FAB button (central floating action button)
+        // FAB button (central floating action button) - Opens workout builder
         if (document.getElementById('fabButton')) {
             document.getElementById('fabButton').addEventListener('click', function() {
-                // Volver al home (vista principal)
-                showHome();
+                openWorkoutBuilder();
             });
         }
 
@@ -2662,6 +3258,7 @@
         loadDarkMode();
         loadHistory();
         loadPRs();
+        loadCustomWorkoutsInHome();
 
         // Style tab buttons
         document.querySelectorAll('.tab-btn').forEach(btn => {
