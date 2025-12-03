@@ -547,20 +547,20 @@
                                 <div class="text-center">
                                     <p class="text-xs text-gray-400">Epley</p>
                                     <p class="text-2xl font-bold gradient-text" id="rm1Epley">-</p>
-                                    <p class="text-xs text-gray-500">kg</p>
+                                    <p class="text-xs text-gray-400">kg</p>
                                 </div>
                                 <div class="text-center">
                                     <p class="text-xs text-gray-400">Brzycki</p>
                                     <p class="text-2xl font-bold gradient-text" id="rm1Brzycki">-</p>
-                                    <p class="text-xs text-gray-500">kg</p>
+                                    <p class="text-xs text-gray-400">kg</p>
                                 </div>
                                 <div class="text-center">
                                     <p class="text-xs text-gray-400">Lombardi</p>
                                     <p class="text-2xl font-bold gradient-text" id="rm1Lombardi">-</p>
-                                    <p class="text-xs text-gray-500">kg</p>
+                                    <p class="text-xs text-gray-400">kg</p>
                                 </div>
                             </div>
-                            <p class="text-xs text-gray-500 mt-3 text-center">Promedio de 3 fórmulas científicas basadas en tu mejor rendimiento</p>
+                            <p class="text-xs text-gray-400 mt-3 text-center">Promedio de 3 fórmulas científicas basadas en tu mejor rendimiento</p>
                         </div>
                     </div>
                 </div>
@@ -612,12 +612,12 @@
                                 <div>
                                     <p class="text-sm text-gray-400">BMR (Metabolismo Basal)</p>
                                     <p class="text-2xl font-bold text-orange-400" id="bmrResult">-</p>
-                                    <p class="text-xs text-gray-500">kcal/día</p>
+                                    <p class="text-xs text-gray-400">kcal/día</p>
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-400">TDEE (Gasto Total)</p>
                                     <p class="text-2xl font-bold text-orange-400" id="tdeeResult">-</p>
-                                    <p class="text-xs text-gray-500">kcal/día</p>
+                                    <p class="text-xs text-gray-400">kcal/día</p>
                                 </div>
                             </div>
                             <div class="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-orange-500/20">
@@ -634,7 +634,7 @@
                                     <p class="text-lg font-bold text-blue-400" id="surplusResult">-</p>
                                 </div>
                             </div>
-                            <p class="text-xs text-gray-500 mt-3 text-center">Basado en fórmula de Mifflin-St Jeor y tu nivel de actividad</p>
+                            <p class="text-xs text-gray-400 mt-3 text-center">Basado en fórmula de Mifflin-St Jeor y tu nivel de actividad</p>
                         </div>
                     </div>
                 </div>
@@ -661,23 +661,23 @@
                                 <div class="bg-dark-surface/50 rounded-lg p-3 border border-green-500/20">
                                     <p class="text-sm font-semibold text-gray-200">Opción 1: Incremento Conservador</p>
                                     <p class="text-xl font-bold text-green-400 mt-1" id="progressiveConservative">-</p>
-                                    <p class="text-xs text-gray-500">+2.5kg - Ideal para principiantes</p>
+                                    <p class="text-xs text-gray-400">+2.5kg - Ideal para principiantes</p>
                                 </div>
 
                                 <div class="bg-dark-surface/50 rounded-lg p-3 border border-blue-500/20">
                                     <p class="text-sm font-semibold text-gray-200">Opción 2: Incremento Moderado</p>
                                     <p class="text-xl font-bold text-blue-400 mt-1" id="progressiveModerate">-</p>
-                                    <p class="text-xs text-gray-500">+5kg - Para intermedios</p>
+                                    <p class="text-xs text-gray-400">+5kg - Para intermedios</p>
                                 </div>
 
                                 <div class="bg-dark-surface/50 rounded-lg p-3 border border-purple-500/20">
                                     <p class="text-sm font-semibold text-gray-200">Opción 3: Incremento Agresivo</p>
                                     <p class="text-xl font-bold text-purple-400 mt-1" id="progressiveAggressive">-</p>
-                                    <p class="text-xs text-gray-500">+10kg - Para avanzados</p>
+                                    <p class="text-xs text-gray-400">+10kg - Para avanzados</p>
                                 </div>
                             </div>
 
-                            <p class="text-xs text-gray-500 mt-3 text-center">Basado en tu mejor rendimiento registrado</p>
+                            <p class="text-xs text-gray-400 mt-3 text-center">Basado en tu mejor rendimiento registrado</p>
                         </div>
                     </div>
                 </div>
@@ -1015,7 +1015,7 @@
 
             // Only show if there are muscle groups with volume
             if (Object.keys(volumenPorGrupo).length === 0) {
-                volumeBarsContainer.innerHTML = '<p class="text-gray-600 text-center py-4">Ingresa datos para ver el resumen de volumen</p>';
+                volumeBarsContainer.innerHTML = '<p class="text-gray-400 text-center py-4">Ingresa datos para ver el resumen de volumen</p>';
                 return;
             }
 
@@ -1027,11 +1027,11 @@
                 html += `
                     <div class="mb-4">
                         <div class="flex justify-between mb-2">
-                            <span class="font-semibold text-gray-900">${grupo}</span>
-                            <span class="text-gray-700">${volumen.toFixed(0)} (${percentage.toFixed(0)}%)</span>
+                            <span class="font-semibold text-white">${grupo}</span>
+                            <span class="text-gray-300">${volumen.toFixed(0)} (${percentage.toFixed(0)}%)</span>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-6">
-                            <div class="progress-bar-fill bg-blue-500 h-6 rounded-full" style="width: ${percentage}%"></div>
+                        <div class="w-full bg-dark-surface border border-white/10 rounded-full h-6">
+                            <div class="progress-bar-fill bg-gradient-to-r from-cyan-500 to-blue-500 h-6 rounded-full shadow-lg shadow-cyan-500/20" style="width: ${percentage}%"></div>
                         </div>
                     </div>
                 `;
@@ -1355,21 +1355,22 @@
             const prsList = document.getElementById('prsList');
 
             if (Object.keys(prs).length === 0) {
-                prsList.innerHTML = '<p class="text-gray-600 text-center py-8">Registra tus primeros entrenamientos para ver tus PRs</p>';
+                prsList.innerHTML = '<p class="text-gray-400 text-center py-8">Registra tus primeros entrenamientos para ver tus PRs</p>';
                 return;
             }
 
             let html = '';
             for (const [nombre, data] of Object.entries(prs)) {
                 html += `
-                    <div class="bg-gradient-to-r from-yellow-100 to-yellow-200 rounded-xl p-4 border-2 border-yellow-400">
-                        <div class="flex justify-between items-start">
+                    <div class="glass-card p-4 border-l-4 border-yellow-500 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-orange-500/10"></div>
+                        <div class="flex justify-between items-start relative z-10">
                             <div>
-                                <h3 class="font-bold text-gray-900">${nombre}</h3>
-                                <p class="text-sm text-gray-700 mt-1">
-                                    <strong class="text-2xl text-yellow-700">${data.peso}kg</strong> • ${data.sets}×${data.reps}
+                                <h3 class="font-bold text-white">${nombre}</h3>
+                                <p class="text-sm text-gray-300 mt-1">
+                                    <strong class="text-2xl text-yellow-400">${data.peso}kg</strong> • ${data.sets}×${data.reps}
                                 </p>
-                                <p class="text-xs text-gray-600 mt-2">
+                                <p class="text-xs text-gray-400 mt-2">
                                     ${new Date(data.date).toLocaleDateString('es-ES')}
                                 </p>
                             </div>
@@ -1422,7 +1423,7 @@
             const historyList = document.getElementById('historyList');
 
             if (history.length === 0) {
-                historyList.innerHTML = '<p class="text-gray-600 text-center py-8">No hay entrenamientos guardados aún</p>';
+                historyList.innerHTML = '<p class="text-gray-400 text-center py-8">No hay entrenamientos guardados aún</p>';
                 return;
             }
 
@@ -1439,22 +1440,22 @@
                 const totalExercises = session.ejercicios.filter(ej => ej.volumen > 0).length;
 
                 html += `
-                    <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                    <div class="glass-card p-4">
                         <div class="flex justify-between items-start mb-2">
                             <div>
-                                <h3 class="font-bold text-gray-900">${session.grupo}</h3>
-                                <p class="text-sm text-gray-600">${date}</p>
+                                <h3 class="font-bold text-white">${session.grupo}</h3>
+                                <p class="text-sm text-gray-400">${date}</p>
                             </div>
-                            <button onclick="deleteHistoryItem(${index})" class="text-red-500 hover:text-red-700 text-xl">🗑️</button>
+                            <button onclick="deleteHistoryItem(${index})" class="text-red-400 hover:text-red-300 text-xl active:scale-95 transition-transform">🗑️</button>
                         </div>
                         <div class="grid grid-cols-2 gap-2 mt-3">
-                            <div class="bg-white rounded-lg p-2">
-                                <p class="text-xs text-gray-600">Volumen Total</p>
-                                <p class="text-lg font-bold text-blue-600">${session.volumenTotal.toFixed(0)}</p>
+                            <div class="bg-dark-surface border border-white/10 rounded-lg p-2">
+                                <p class="text-xs text-gray-400">Volumen Total</p>
+                                <p class="text-lg font-bold text-cyan-400">${session.volumenTotal.toFixed(0)}</p>
                             </div>
-                            <div class="bg-white rounded-lg p-2">
-                                <p class="text-xs text-gray-600">Completados</p>
-                                <p class="text-lg font-bold text-green-600">${completedCount}/${totalExercises}</p>
+                            <div class="bg-dark-surface border border-white/10 rounded-lg p-2">
+                                <p class="text-xs text-gray-400">Completados</p>
+                                <p class="text-lg font-bold text-green-400">${completedCount}/${totalExercises}</p>
                             </div>
                         </div>
                     </div>
