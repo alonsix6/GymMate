@@ -816,7 +816,11 @@
                     <!-- Fecha de Nacimiento -->
                     <div>
                         <label class="block text-sm font-semibold text-gray-300 mb-2">Fecha de Nacimiento</label>
-                        <input type="date" id="profileBirthdate" class="w-full px-4 py-2 bg-dark-surface border border-white/10 rounded-lg text-white focus:border-cyan-500">
+                        <input type="date"
+                               id="profileBirthdate"
+                               class="w-full px-3 py-2 bg-dark-surface border border-white/10 rounded-lg text-white focus:border-cyan-500 text-sm"
+                               max=""
+                               style="max-width: 100%;">
                         <p class="text-xs text-gray-400 mt-1">Tu edad: <span id="calculatedAge" class="text-cyan-400 font-semibold">-</span> años</p>
                     </div>
 
@@ -2643,6 +2647,17 @@
         // ==========================================
         // INITIALIZATION
         // ==========================================
+
+        // Set max date for birthdate input (today)
+        const today = new Date().toISOString().split('T')[0];
+        const birthdateInput = document.getElementById('profileBirthdate');
+        if (birthdateInput) {
+            birthdateInput.setAttribute('max', today);
+            // Set min to 100 years ago (reasonable limit)
+            const minDate = new Date();
+            minDate.setFullYear(minDate.getFullYear() - 100);
+            birthdateInput.setAttribute('min', minDate.toISOString().split('T')[0]);
+        }
 
         loadDarkMode();
         loadHistory();
