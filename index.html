@@ -305,6 +305,34 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
+        /* Fix date input alignment and overflow on mobile */
+        input[type="date"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            min-height: 42px;
+        }
+
+        /* Mobile-specific fixes for date input */
+        @media (max-width: 768px) {
+            input[type="date"] {
+                font-size: 14px;
+                padding-right: 0.5rem;
+            }
+
+            /* Fix for date picker controls on mobile */
+            input[type="date"]::-webkit-calendar-picker-indicator {
+                width: 20px;
+                height: 20px;
+                opacity: 0.7;
+                cursor: pointer;
+            }
+
+            input[type="date"]::-webkit-date-and-time-value {
+                text-align: left;
+            }
+        }
     </style>
 </head>
 <body class="bg-dark-bg min-h-screen pb-32 font-sans">
