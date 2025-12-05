@@ -308,6 +308,12 @@
     </style>
 </head>
 <body class="bg-dark-bg min-h-screen pb-32 font-sans">
+    <!-- Unsaved Changes Indicator -->
+    <div id="unsavedIndicator" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-yellow-500/90 text-dark-bg px-4 py-2 rounded-full font-semibold text-sm shadow-lg flex items-center gap-2 backdrop-blur-sm">
+        <span class="animate-pulse">●</span>
+        Cambios sin guardar
+    </div>
+
     <!-- Header with Profile -->
     <header class="px-6 pt-8 pb-6">
         <div class="flex justify-between items-center">
@@ -1071,6 +1077,46 @@
         </div>
     </div>
 
+    <!-- Confirm Workout Change Modal -->
+    <div id="confirmChangeModal" class="modal">
+        <div class="glass-card p-6 max-w-md w-full mx-4">
+            <h3 class="text-xl font-display font-bold uppercase mb-4 text-yellow-400">⚠️ Cambios Sin Guardar</h3>
+            <p id="confirmChangeMessage" class="text-gray-300 mb-6"></p>
+
+            <div class="space-y-3">
+                <button id="confirmSaveBtn" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 rounded-lg active:scale-95 transition-transform">
+                    💾 Guardar y continuar
+                </button>
+                <button id="confirmDiscardBtn" class="w-full bg-gradient-to-r from-red-600 to-orange-600 text-white font-semibold py-3 rounded-lg active:scale-95 transition-transform">
+                    🗑️ Descartar y continuar
+                </button>
+                <button id="confirmCancelBtn" class="w-full bg-gray-600 text-white font-semibold py-3 rounded-lg active:scale-95 transition-transform">
+                    ← Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resume Draft Modal -->
+    <div id="resumeDraftModal" class="modal">
+        <div class="glass-card p-6 max-w-md w-full mx-4">
+            <h3 class="text-xl font-display font-bold uppercase mb-4 text-cyan-400">📝 Sesión Pendiente</h3>
+            <p class="text-gray-300 mb-4">Tienes una sesión sin terminar:</p>
+
+            <div id="resumeDraftMessage" class="bg-dark-surface border border-white/10 rounded-lg p-4 mb-6 space-y-2 text-sm text-gray-300">
+            </div>
+
+            <div class="space-y-3">
+                <button id="resumeDraftBtn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-3 rounded-lg active:scale-95 transition-transform">
+                    ✅ Reanudar sesión
+                </button>
+                <button id="discardDraftBtn" class="w-full bg-gray-600 text-white font-semibold py-3 rounded-lg active:scale-95 transition-transform">
+                    🗑️ Descartar y empezar nueva
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ==========================================
         // EXERCISE GIF MAPPING (ExerciseDB API)
@@ -1199,6 +1245,12 @@
         let restTimeRemaining = 0;
         let isPaused = false;
 
+        // Draft auto-save management
+        let draftSaveTimeout = null;
+        const DRAFT_SAVE_DELAY = 15000; // 15 segundos
+        let hasUnsavedChanges = false;
+        let lastSavedState = null;
+
         // ==========================================
         // UTILITY FUNCTIONS
         // ==========================================
@@ -1254,6 +1306,187 @@
 
             sessionData.volumenPorGrupo = volumenPorGrupo;
             return volumenPorGrupo;
+        }
+
+        // ==========================================
+        // DRAFT & UNSAVED CHANGES MANAGEMENT
+        // ==========================================
+
+        function hasUnsavedData() {
+            // Chequear si hay ejercicios con datos ingresados
+            const hasData = sessionData.ejercicios.some(ej =>
+                (ej.sets && ej.sets > 0) ||
+                (ej.reps && ej.reps > 0) ||
+                (ej.peso && ej.peso > 0) ||
+                ej.completado
+            );
+            return hasData;
+        }
+
+        function saveDraft() {
+            if (!hasUnsavedData()) {
+                return; // No guardar si no hay datos
+            }
+
+            const draft = {
+                ...sessionData,
+                draftSavedAt: new Date().toISOString(),
+                draftTimestamp: Date.now()
+            };
+
+            localStorage.setItem('gymmate_draft', JSON.stringify(draft));
+            console.log('📝 Borrador guardado automáticamente');
+        }
+
+        function scheduleDraftSave() {
+            // Limpiar timeout anterior si existe
+            if (draftSaveTimeout) {
+                clearTimeout(draftSaveTimeout);
+            }
+
+            // Marcar que hay cambios sin guardar
+            hasUnsavedChanges = true;
+            updateUnsavedIndicator();
+
+            // Programar guardado después de 15 segundos de inactividad
+            draftSaveTimeout = setTimeout(() => {
+                saveDraft();
+                hasUnsavedChanges = false;
+                updateUnsavedIndicator();
+            }, DRAFT_SAVE_DELAY);
+        }
+
+        function updateUnsavedIndicator() {
+            const indicator = document.getElementById('unsavedIndicator');
+            if (!indicator) return;
+
+            if (hasUnsavedChanges && hasUnsavedData()) {
+                indicator.classList.remove('hidden');
+            } else {
+                indicator.classList.add('hidden');
+            }
+        }
+
+        function confirmWorkoutChange(callback, newWorkoutName) {
+            if (!hasUnsavedData()) {
+                // Si no hay datos, ejecutar directamente
+                callback();
+                return;
+            }
+
+            // Mostrar modal de confirmación
+            const modal = document.getElementById('confirmChangeModal');
+            const message = document.getElementById('confirmChangeMessage');
+
+            message.textContent = `Tienes cambios sin guardar en "${sessionData.grupo}". ¿Deseas cambiar a "${newWorkoutName}"?`;
+
+            modal.classList.add('active');
+
+            // Botón "Descartar y continuar"
+            document.getElementById('confirmDiscardBtn').onclick = () => {
+                modal.classList.remove('active');
+                // Limpiar draft al cambiar
+                localStorage.removeItem('gymmate_draft');
+                hasUnsavedChanges = false;
+                updateUnsavedIndicator();
+                callback();
+            };
+
+            // Botón "Cancelar"
+            document.getElementById('confirmCancelBtn').onclick = () => {
+                modal.classList.remove('active');
+            };
+
+            // Botón "Guardar y continuar"
+            document.getElementById('confirmSaveBtn').onclick = () => {
+                modal.classList.remove('active');
+                saveToLocalStorage();
+                hasUnsavedChanges = false;
+                updateUnsavedIndicator();
+                setTimeout(() => {
+                    callback();
+                }, 500);
+            };
+        }
+
+        function checkForDraft() {
+            const draft = localStorage.getItem('gymmate_draft');
+            if (!draft) return;
+
+            try {
+                const draftData = JSON.parse(draft);
+                const draftAge = Date.now() - draftData.draftTimestamp;
+
+                // Solo ofrecer recuperar si el draft tiene menos de 24 horas
+                if (draftAge > 24 * 60 * 60 * 1000) {
+                    localStorage.removeItem('gymmate_draft');
+                    return;
+                }
+
+                const draftDate = new Date(draftData.draftSavedAt).toLocaleString('es-ES');
+                const modal = document.getElementById('resumeDraftModal');
+                const message = document.getElementById('resumeDraftMessage');
+
+                message.innerHTML = `
+                    <p><strong>Rutina:</strong> ${draftData.grupo}</p>
+                    <p><strong>Guardado:</strong> ${draftDate}</p>
+                    <p><strong>Ejercicios con datos:</strong> ${draftData.ejercicios.filter(ej => ej.volumen > 0).length}</p>
+                `;
+
+                modal.classList.add('active');
+
+                // Botón "Reanudar"
+                document.getElementById('resumeDraftBtn').onclick = () => {
+                    modal.classList.remove('active');
+                    restoreDraft(draftData);
+                };
+
+                // Botón "Descartar"
+                document.getElementById('discardDraftBtn').onclick = () => {
+                    modal.classList.remove('active');
+                    localStorage.removeItem('gymmate_draft');
+                };
+
+            } catch (e) {
+                console.error('Error al cargar draft:', e);
+                localStorage.removeItem('gymmate_draft');
+            }
+        }
+
+        function restoreDraft(draftData) {
+            sessionData = {
+                date: draftData.date,
+                grupo: draftData.grupo,
+                ejercicios: draftData.ejercicios,
+                volumenTotal: draftData.volumenTotal,
+                volumenPorGrupo: draftData.volumenPorGrupo
+            };
+
+            // Cambiar a vista de workout
+            switchTab('workout');
+
+            // Mostrar información de entrenamiento
+            document.getElementById('trainingInfo').classList.remove('hidden');
+            document.getElementById('currentTraining').textContent = draftData.grupo;
+            document.getElementById('currentDate').textContent = new Date(draftData.date).toLocaleDateString('es-ES');
+
+            // Renderizar ejercicios
+            let html = '';
+            draftData.ejercicios.forEach((ej, index) => {
+                html += renderEjercicio(ej, index, false);
+            });
+            document.getElementById('ejerciciosList').innerHTML = html;
+            document.getElementById('opcionalesList').innerHTML = '';
+
+            document.getElementById('ejerciciosContainer').classList.remove('hidden');
+            document.getElementById('volumeSummary').classList.remove('hidden');
+            document.getElementById('saveSection').classList.remove('hidden');
+            document.getElementById('quickStats').classList.remove('hidden');
+
+            updateVolumeDisplay();
+
+            // Mostrar notificación
+            alert('✅ Sesión restaurada correctamente');
         }
 
         function updateVolumeDisplay() {
@@ -1398,35 +1631,39 @@
         }
 
         function loadTrainingGroup(grupoId) {
-            currentGroup = grupoId;
             const grupo = trainingGroups[grupoId];
 
-            sessionData.grupo = grupo.nombre;
-            sessionData.ejercicios = [];
+            confirmWorkoutChange(() => {
+                currentGroup = grupoId;
+                sessionData.grupo = grupo.nombre;
+                sessionData.ejercicios = [];
+                hasUnsavedChanges = false;
+                updateUnsavedIndicator();
 
-            document.getElementById('trainingInfo').classList.remove('hidden');
-            document.getElementById('currentTraining').textContent = grupo.nombre;
-            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-ES');
+                document.getElementById('trainingInfo').classList.remove('hidden');
+                document.getElementById('currentTraining').textContent = grupo.nombre;
+                document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-ES');
 
-            let html = '';
-            grupo.ejercicios.forEach((ej, index) => {
-                html += renderEjercicio(ej, index, false);
-            });
-            document.getElementById('ejerciciosList').innerHTML = html;
+                let html = '';
+                grupo.ejercicios.forEach((ej, index) => {
+                    html += renderEjercicio(ej, index, false);
+                });
+                document.getElementById('ejerciciosList').innerHTML = html;
 
-            let opcionalesHtml = '';
-            const opcionalesStartIndex = grupo.ejercicios.length;
-            grupo.opcionales.forEach((ej, index) => {
-                opcionalesHtml += renderEjercicio(ej, opcionalesStartIndex + index, true);
-            });
-            document.getElementById('opcionalesList').innerHTML = opcionalesHtml;
+                let opcionalesHtml = '';
+                const opcionalesStartIndex = grupo.ejercicios.length;
+                grupo.opcionales.forEach((ej, index) => {
+                    opcionalesHtml += renderEjercicio(ej, opcionalesStartIndex + index, true);
+                });
+                document.getElementById('opcionalesList').innerHTML = opcionalesHtml;
 
-            document.getElementById('ejerciciosContainer').classList.remove('hidden');
-            document.getElementById('volumeSummary').classList.remove('hidden');
-            document.getElementById('saveSection').classList.remove('hidden');
-            document.getElementById('quickStats').classList.remove('hidden');
+                document.getElementById('ejerciciosContainer').classList.remove('hidden');
+                document.getElementById('volumeSummary').classList.remove('hidden');
+                document.getElementById('saveSection').classList.remove('hidden');
+                document.getElementById('quickStats').classList.remove('hidden');
 
-            updateVolumeDisplay();
+                updateVolumeDisplay();
+            }, grupo.nombre);
         }
 
         function updateEjercicio(index) {
@@ -1454,6 +1691,9 @@
             checkForPR(sessionData.ejercicios[index]);
 
             updateVolumeDisplay();
+
+            // Programar auto-guardado después de 15 segundos
+            scheduleDraftSave();
         }
 
         function addSet(index) {
@@ -1466,6 +1706,11 @@
             const checked = document.getElementById(`completado-${index}`).checked;
             sessionData.ejercicios[index].completado = checked;
             updateQuickStats();
+
+            // Guardar draft inmediatamente al marcar checkbox
+            saveDraft();
+            hasUnsavedChanges = false;
+            updateUnsavedIndicator();
         }
 
         function showAnimation(nombre, gifUrl) {
@@ -2162,34 +2407,38 @@
         }
 
         function loadCustomWorkout(workout) {
-            // Set session data
-            sessionData.grupo = workout.nombre;
-            sessionData.ejercicios = [];
+            confirmWorkoutChange(() => {
+                // Set session data
+                sessionData.grupo = workout.nombre;
+                sessionData.ejercicios = [];
+                hasUnsavedChanges = false;
+                updateUnsavedIndicator();
 
-            // Show workout tab
-            switchTab('workout');
+                // Show workout tab
+                switchTab('workout');
 
-            // Update training info
-            document.getElementById('trainingInfo').classList.remove('hidden');
-            document.getElementById('currentTraining').textContent = workout.nombre;
-            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-ES');
+                // Update training info
+                document.getElementById('trainingInfo').classList.remove('hidden');
+                document.getElementById('currentTraining').textContent = workout.nombre;
+                document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-ES');
 
-            // Render exercises
-            let html = '';
-            workout.ejercicios.forEach((ej, index) => {
-                html += renderEjercicio(ej, index, false);
-            });
-            document.getElementById('ejerciciosList').innerHTML = html;
+                // Render exercises
+                let html = '';
+                workout.ejercicios.forEach((ej, index) => {
+                    html += renderEjercicio(ej, index, false);
+                });
+                document.getElementById('ejerciciosList').innerHTML = html;
 
-            // Hide optionals section for custom workouts
-            document.getElementById('opcionalesList').innerHTML = '';
+                // Hide optionals section for custom workouts
+                document.getElementById('opcionalesList').innerHTML = '';
 
-            document.getElementById('ejerciciosContainer').classList.remove('hidden');
-            document.getElementById('volumeSummary').classList.remove('hidden');
-            document.getElementById('saveSection').classList.remove('hidden');
-            document.getElementById('quickStats').classList.remove('hidden');
+                document.getElementById('ejerciciosContainer').classList.remove('hidden');
+                document.getElementById('volumeSummary').classList.remove('hidden');
+                document.getElementById('saveSection').classList.remove('hidden');
+                document.getElementById('quickStats').classList.remove('hidden');
 
-            updateVolumeDisplay();
+                updateVolumeDisplay();
+            }, workout.nombre);
         }
 
         function deleteCustomWorkout(workoutId, event) {
@@ -2221,6 +2470,14 @@
         // ==========================================
 
         function saveToLocalStorage() {
+            // Limpiar borrador y flags
+            localStorage.removeItem('gymmate_draft');
+            hasUnsavedChanges = false;
+            if (draftSaveTimeout) {
+                clearTimeout(draftSaveTimeout);
+            }
+            updateUnsavedIndicator();
+
             const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
 
             // Add current session to history
@@ -2331,6 +2588,12 @@
         // ==========================================
 
         function showHome() {
+            if (hasUnsavedData()) {
+                if (!confirm('⚠️ Tienes cambios sin guardar. ¿Volver al inicio de todas formas?')) {
+                    return; // Cancelar navegación
+                }
+            }
+
             // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.add('hidden');
@@ -2550,6 +2813,22 @@
                 }, 100);
             }
         };
+
+        // Warning al cerrar navegador con cambios sin guardar
+        window.addEventListener('beforeunload', (e) => {
+            if (hasUnsavedData()) {
+                e.preventDefault();
+                e.returnValue = ''; // Necesario para Chrome
+                return ''; // Para otros navegadores
+            }
+        });
+
+        // Verificar si hay draft al cargar
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                checkForDraft();
+            }, 1000); // Esperar 1 segundo para que cargue todo
+        });
 
         // ==========================================
         // CHART.JS - PROGRESS GRAPHS
