@@ -401,13 +401,34 @@
     <main class="px-6 space-y-6">
         <!-- HOME VIEW -->
         <div id="homeView" class="space-y-6">
-            <!-- Hero Section - Estado Actual -->
-            <section class="relative glass-card p-6 overflow-hidden">
+            <!-- Hero Section - Estado Actual (Dinámico) -->
+            <section id="heroSection" class="relative glass-card p-6 overflow-hidden">
                 <div class="glow-bg"></div>
                 <div class="relative z-10">
-                    <p class="text-gray-400 text-sm mb-2">HOY TOCA</p>
-                    <h2 class="text-2xl font-display font-bold mb-1 gradient-text">PIERNAS + GLÚTEOS</h2>
-                    <p class="text-sm text-gray-400 mb-6">Última vez: hace 3 días</p>
+                    <!-- Badge dinámico -->
+                    <div class="flex items-center gap-2 mb-2">
+                        <span id="heroIcon" class="text-2xl">💪</span>
+                        <p id="heroBadge" class="text-cyan-400 text-sm font-semibold uppercase tracking-wide">
+                            HOY TOCA
+                        </p>
+                    </div>
+
+                    <!-- Título principal -->
+                    <h2 id="heroTitle" class="text-2xl font-display font-bold mb-1 gradient-text">
+                        PIERNAS + GLÚTEOS
+                    </h2>
+
+                    <!-- Subtítulo dinámico -->
+                    <p id="heroSubtitle" class="text-sm text-gray-400 mb-4">
+                        Última vez: hace 3 días
+                    </p>
+
+                    <!-- Sugerencia de rutina (solo si aplica) -->
+                    <p id="heroRoutine" class="text-xs text-cyan-400 font-semibold mb-6 hidden">
+                        📋 Rutina sugerida: GRUPO 1
+                    </p>
+
+                    <!-- Botón -->
                     <button id="startWorkoutBtn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-4 rounded-xl shadow-lg shadow-blue-500/30 active:scale-95 transition-transform">
                         VER MIS RUTINAS
                     </button>
@@ -1188,7 +1209,7 @@
             <div class="space-y-3">
                 <button id="confirmResumeBtn" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold py-3 rounded-lg active:scale-95 transition-transform flex items-center justify-center gap-2">
                     <i class="ph-bold ph-play"></i>
-                    Reanudar después
+                    Reanudar ahora
                 </button>
                 <button id="confirmSaveBtn" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 rounded-lg active:scale-95 transition-transform">
                     💾 Guardar y continuar
@@ -1681,6 +1702,269 @@
 
             // Mostrar notificación
             alert('✅ Sesión restaurada correctamente');
+        }
+
+        // ==========================================
+        // DYNAMIC HERO SECTION
+        // ==========================================
+
+        function getMuscleGroupRecommendation() {
+            const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
+
+            if (history.length === 0) {
+                return null; // Usuario nuevo
+            }
+
+            // Grupos musculares disponibles
+            const allMuscles = ['Piernas', 'Glúteos', 'Pecho', 'Espalda', 'Hombros', 'Bíceps', 'Tríceps', 'Core'];
+
+            // Obtener los 2 últimos grupos musculares principales entrenados
+            const last2Sessions = history.slice(0, 2);
+            const last2MainMuscles = [];
+
+            last2Sessions.forEach(session => {
+                if (session.volumenPorGrupo && Object.keys(session.volumenPorGrupo).length > 0) {
+                    // Obtener el grupo muscular con más volumen en esa sesión
+                    const muscles = Object.entries(session.volumenPorGrupo);
+                    const mainMuscle = muscles.reduce((max, curr) =>
+                        curr[1] > max[1] ? curr : max
+                    );
+                    last2MainMuscles.push(mainMuscle[0]);
+                }
+            });
+
+            // Calcular días desde última vez que se entrenó cada grupo muscular
+            const muscleLastTrained = {};
+
+            allMuscles.forEach(muscle => {
+                let daysSince = Infinity;
+
+                for (let i = 0; i < history.length; i++) {
+                    const session = history[i];
+
+                    // Verificar si este grupo se entrenó en esta sesión (con volumen significativo)
+                    if (session.volumenPorGrupo && session.volumenPorGrupo[muscle] > 0) {
+                        const sessionDate = new Date(session.date);
+                        const today = new Date();
+                        daysSince = Math.floor((today - sessionDate) / (1000 * 60 * 60 * 24));
+                        break;
+                    }
+                }
+
+                muscleLastTrained[muscle] = daysSince;
+            });
+
+            // Filtrar: NO puede ser uno de los 2 últimos entrenados
+            let availableMuscles = allMuscles.filter(m => !last2MainMuscles.includes(m));
+
+            // Si todos fueron entrenados recientemente, permitir todos menos el último
+            if (availableMuscles.length === 0) {
+                availableMuscles = allMuscles.filter(m => m !== last2MainMuscles[0]);
+            }
+
+            // Ordenar por días sin entrenar (de mayor a menor)
+            availableMuscles.sort((a, b) => muscleLastTrained[b] - muscleLastTrained[a]);
+
+            const recommendedMuscle = availableMuscles[0];
+            const daysSince = muscleLastTrained[recommendedMuscle];
+
+            return {
+                muscle: recommendedMuscle,
+                daysSince: daysSince,
+                isNew: daysSince === Infinity,
+                suggestedRoutines: getSuggestedRoutines(recommendedMuscle)
+            };
+        }
+
+        function getSuggestedRoutines(muscle) {
+            // Mapeo de grupo muscular → rutinas que lo contienen
+            const muscleToRoutines = {
+                'Piernas': ['GRUPO 1', 'GRUPO 3'],
+                'Glúteos': ['GRUPO 1'],
+                'Pecho': ['GRUPO 2'],
+                'Hombros': ['GRUPO 2', 'GRUPO 5'],
+                'Tríceps': ['GRUPO 2', 'GRUPO 5'],
+                'Espalda': ['GRUPO 4'],
+                'Bíceps': ['GRUPO 4'],
+                'Core': ['Cualquier rutina']
+            };
+
+            return muscleToRoutines[muscle] || [];
+        }
+
+        function getRecentPR() {
+            const prs = JSON.parse(localStorage.getItem('gymmate_prs') || '{}');
+
+            // Filtrar PRs de últimos 3 días
+            const recentPRs = Object.entries(prs)
+                .filter(([name, data]) => {
+                    const prDate = new Date(data.date);
+                    const daysSince = (Date.now() - prDate) / (1000 * 60 * 60 * 24);
+                    return daysSince <= 3;
+                })
+                .sort((a, b) => new Date(b[1].date) - new Date(a[1].date));
+
+            return recentPRs.length > 0 ? recentPRs[0] : null;
+        }
+
+        function getStreak() {
+            const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
+
+            let streak = 0;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            for (let i = 0; i < 30; i++) {
+                const checkDate = new Date(today);
+                checkDate.setDate(checkDate.getDate() - i);
+
+                const trained = history.some(session => {
+                    const sessionDate = new Date(session.date);
+                    sessionDate.setHours(0, 0, 0, 0);
+                    return sessionDate.getTime() === checkDate.getTime();
+                });
+
+                if (trained || i === 0) { // Permitir día actual sin entrenar
+                    if (trained) streak++;
+                } else {
+                    break;
+                }
+            }
+
+            return streak >= 7 ? streak : 0;
+        }
+
+        function getMotivationForInactive() {
+            const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
+
+            if (history.length === 0) return null;
+
+            const lastSession = history[0];
+            const lastDate = new Date(lastSession.date);
+            const today = new Date();
+            const daysSince = Math.floor((today - lastDate) / (1000 * 60 * 60 * 24));
+
+            if (daysSince >= 7) {
+                // Sugerir grupo muscular menos entrenado
+                const recommendation = getMuscleGroupRecommendation();
+
+                return {
+                    daysSince,
+                    recommendation,
+                    isInactive: true
+                };
+            }
+
+            return null;
+        }
+
+        function getWelcomeMessage() {
+            // Combinación híbrida: Estadística motivadora + rotativo por día de semana
+            const dayOfWeek = new Date().getDay(); // 0 = Domingo, 1 = Lunes, etc.
+
+            const suggestions = [
+                { muscle: 'PIERNAS + GLÚTEOS', routine: 'GRUPO 1', day: 'DOMINGO' },
+                { muscle: 'PECHO + HOMBROS', routine: 'GRUPO 2', day: 'LUNES' },
+                { muscle: 'ESPALDA + BÍCEPS', routine: 'GRUPO 4', day: 'MARTES' },
+                { muscle: 'PIERNAS QUAD', routine: 'GRUPO 3', day: 'MIÉRCOLES' },
+                { muscle: 'HOMBRO + TRÍCEPS', routine: 'GRUPO 5', day: 'JUEVES' },
+                { muscle: 'PIERNAS + GLÚTEOS', routine: 'GRUPO 1', day: 'VIERNES' },
+                { muscle: 'PECHO + HOMBROS', routine: 'GRUPO 2', day: 'SÁBADO' }
+            ];
+
+            return {
+                isNewUser: true,
+                suggestion: suggestions[dayOfWeek]
+            };
+        }
+
+        function updateHeroSection() {
+            const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
+
+            // Elementos del DOM
+            const heroIcon = document.getElementById('heroIcon');
+            const heroBadge = document.getElementById('heroBadge');
+            const heroTitle = document.getElementById('heroTitle');
+            const heroSubtitle = document.getElementById('heroSubtitle');
+            const heroRoutine = document.getElementById('heroRoutine');
+
+            if (!heroIcon || !heroBadge || !heroTitle || !heroSubtitle || !heroRoutine) return;
+
+            // 1. Verificar PR reciente (últimos 3 días)
+            const recentPR = getRecentPR();
+            if (recentPR) {
+                const [exerciseName, prData] = recentPR;
+                heroIcon.textContent = '🏆';
+                heroBadge.textContent = 'NUEVO RECORD';
+                heroBadge.className = 'text-yellow-400 text-sm font-semibold uppercase tracking-wide';
+                heroTitle.textContent = `${exerciseName} → ${prData.peso}kg`;
+                heroSubtitle.textContent = `¡Superaste tu marca anterior!`;
+                heroRoutine.classList.add('hidden');
+                return;
+            }
+
+            // 2. Verificar racha >= 7 días
+            const streak = getStreak();
+            if (streak >= 7) {
+                heroIcon.textContent = '🔥';
+                heroBadge.textContent = 'RACHA ACTIVA';
+                heroBadge.className = 'text-orange-400 text-sm font-semibold uppercase tracking-wide';
+                heroTitle.textContent = `${streak} días consecutivos`;
+                heroSubtitle.textContent = '¡No la rompas hoy!';
+                heroRoutine.classList.add('hidden');
+                return;
+            }
+
+            // 3. Verificar si lleva >= 7 días sin entrenar
+            const inactive = getMotivationForInactive();
+            if (inactive) {
+                heroIcon.textContent = '⚠️';
+                heroBadge.textContent = '¡TE EXTRAÑAMOS!';
+                heroBadge.className = 'text-red-400 text-sm font-semibold uppercase tracking-wide';
+                heroTitle.textContent = `Han pasado ${inactive.daysSince} días`;
+                if (inactive.recommendation) {
+                    heroSubtitle.textContent = `Retoma con: ${inactive.recommendation.muscle}`;
+                    const routines = inactive.recommendation.suggestedRoutines.join(' o ');
+                    heroRoutine.textContent = `📋 Rutina sugerida: ${routines}`;
+                    heroRoutine.classList.remove('hidden');
+                } else {
+                    heroSubtitle.textContent = '¡Es hora de volver!';
+                    heroRoutine.classList.add('hidden');
+                }
+                return;
+            }
+
+            // 4. Verificar si es usuario nuevo
+            if (history.length === 0) {
+                const welcome = getWelcomeMessage();
+                heroIcon.textContent = '🎯';
+                heroBadge.textContent = `${welcome.suggestion.day} - COMIENZA HOY`;
+                heroBadge.className = 'text-cyan-400 text-sm font-semibold uppercase tracking-wide';
+                heroTitle.textContent = welcome.suggestion.muscle;
+                heroSubtitle.textContent = 'Tu viaje fitness empieza aquí';
+                heroRoutine.textContent = `📋 Rutina sugerida: ${welcome.suggestion.routine}`;
+                heroRoutine.classList.remove('hidden');
+                return;
+            }
+
+            // 5. Default: Recomendar grupo muscular
+            const recommendation = getMuscleGroupRecommendation();
+            if (recommendation) {
+                heroIcon.textContent = '💪';
+                heroBadge.textContent = 'HOY TOCA';
+                heroBadge.className = 'text-cyan-400 text-sm font-semibold uppercase tracking-wide';
+                heroTitle.textContent = recommendation.muscle;
+
+                if (recommendation.isNew) {
+                    heroSubtitle.textContent = '¡Aún no lo has entrenado!';
+                } else {
+                    heroSubtitle.textContent = `Última vez: hace ${recommendation.daysSince} ${recommendation.daysSince === 1 ? 'día' : 'días'}`;
+                }
+
+                const routines = recommendation.suggestedRoutines.join(' o ');
+                heroRoutine.textContent = `📋 Rutina sugerida: ${routines}`;
+                heroRoutine.classList.remove('hidden');
+            }
         }
 
         function updateVolumeDisplay() {
@@ -2701,6 +2985,9 @@
             setTimeout(() => {
                 generateAISuggestions();
             }, 1000);
+
+            // Actualizar Hero Section (puede haber nuevo PR)
+            updateHeroSection();
         }
 
         function loadHistory() {
@@ -2814,6 +3101,9 @@
 
             // Actualizar carta flotante de reanudar
             updateResumeWorkoutCard();
+
+            // Actualizar Hero Section dinámico
+            updateHeroSection();
         }
 
         function switchTab(tabName) {
@@ -3024,6 +3314,7 @@
         window.addEventListener('load', () => {
             setTimeout(() => {
                 checkForDraft();
+                updateHeroSection(); // Actualizar Hero Section al cargar
             }, 1000); // Esperar 1 segundo para que cargue todo
         });
 
