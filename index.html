@@ -305,6 +305,67 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
+        /* Unsaved indicator animations */
+        @keyframes slideDown {
+            from {
+                transform: translate(-50%, -100%);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+            to {
+                transform: translate(-50%, -100%);
+                opacity: 0;
+            }
+        }
+
+        @keyframes colorToGreen {
+            from {
+                background-color: rgba(234, 179, 8, 0.9);
+            }
+            to {
+                background-color: rgba(34, 197, 94, 0.9);
+            }
+        }
+
+        .unsaved-indicator-show {
+            animation: slideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .unsaved-indicator-hide {
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .unsaved-indicator-saved {
+            animation: colorToGreen 0.5s ease forwards;
+            background-color: rgba(34, 197, 94, 0.9) !important;
+        }
+
+        /* Resume workout card animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .resume-card-enter {
+            animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
     </style>
 </head>
 <body class="bg-dark-bg min-h-screen pb-32 font-sans">
@@ -352,6 +413,47 @@
                     </button>
                 </div>
             </section>
+
+            <!-- Resume Workout Card - Shown when there's an unfinished workout -->
+            <div id="resumeWorkoutCard" class="hidden glass-card p-5 border-l-4 border-cyan-400 relative overflow-hidden resume-card-enter">
+                <div class="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-blue-500/10"></div>
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-2xl shadow-lg shadow-cyan-500/30">
+                                💪
+                            </div>
+                            <div>
+                                <p class="text-xs text-cyan-400 font-semibold uppercase tracking-wide">Sesión en progreso</p>
+                                <h3 class="text-lg font-bold text-white" id="resumeWorkoutName">-</h3>
+                            </div>
+                        </div>
+                        <button onclick="discardResumeWorkout()" class="text-gray-400 hover:text-red-400 transition-colors active:scale-95">
+                            <i class="ph-bold ph-x text-xl"></i>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 mb-4">
+                        <div class="bg-dark-surface/50 rounded-lg p-2 text-center">
+                            <p class="text-xs text-gray-400">Ejercicios</p>
+                            <p class="text-lg font-bold text-cyan-400" id="resumeWorkoutExercises">0</p>
+                        </div>
+                        <div class="bg-dark-surface/50 rounded-lg p-2 text-center">
+                            <p class="text-xs text-gray-400">Volumen</p>
+                            <p class="text-lg font-bold text-cyan-400" id="resumeWorkoutVolume">0</p>
+                        </div>
+                        <div class="bg-dark-surface/50 rounded-lg p-2 text-center">
+                            <p class="text-xs text-gray-400">Sets</p>
+                            <p class="text-lg font-bold text-cyan-400" id="resumeWorkoutSets">0</p>
+                        </div>
+                    </div>
+
+                    <button onclick="resumeWorkoutFromCard()" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold py-3 rounded-lg shadow-lg shadow-cyan-500/20 active:scale-95 transition-transform flex items-center justify-center gap-2">
+                        <i class="ph-bold ph-play"></i>
+                        Continuar Entrenamiento
+                    </button>
+                </div>
+            </div>
 
             <!-- Grid de Herramientas - Quick Actions -->
             <section class="grid grid-cols-2 gap-4">
@@ -1084,6 +1186,10 @@
             <p id="confirmChangeMessage" class="text-gray-300 mb-6"></p>
 
             <div class="space-y-3">
+                <button id="confirmResumeBtn" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold py-3 rounded-lg active:scale-95 transition-transform flex items-center justify-center gap-2">
+                    <i class="ph-bold ph-play"></i>
+                    Reanudar después
+                </button>
                 <button id="confirmSaveBtn" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 rounded-lg active:scale-95 transition-transform">
                     💾 Guardar y continuar
                 </button>
@@ -1352,7 +1458,8 @@
             draftSaveTimeout = setTimeout(() => {
                 saveDraft();
                 hasUnsavedChanges = false;
-                updateUnsavedIndicator();
+                // Mostrar indicador de guardado exitoso
+                showSavedIndicator();
             }, DRAFT_SAVE_DELAY);
         }
 
@@ -1361,9 +1468,88 @@
             if (!indicator) return;
 
             if (hasUnsavedChanges && hasUnsavedData()) {
-                indicator.classList.remove('hidden');
+                // Mostrar indicador con animación
+                if (indicator.classList.contains('hidden')) {
+                    indicator.classList.remove('hidden');
+                    indicator.classList.add('unsaved-indicator-show');
+                    indicator.classList.remove('unsaved-indicator-hide');
+                }
             } else {
-                indicator.classList.add('hidden');
+                // Ocultar con animación hacia arriba
+                if (!indicator.classList.contains('hidden')) {
+                    indicator.classList.remove('unsaved-indicator-show');
+                    indicator.classList.add('unsaved-indicator-hide');
+                    setTimeout(() => {
+                        indicator.classList.add('hidden');
+                        indicator.classList.remove('unsaved-indicator-hide');
+                    }, 400); // Duración de la animación
+                }
+            }
+        }
+
+        function showSavedIndicator() {
+            const indicator = document.getElementById('unsavedIndicator');
+            if (!indicator) return;
+
+            // Cambiar texto a "Guardado"
+            indicator.innerHTML = `
+                <span>✓</span>
+                Guardado
+            `;
+
+            // Animar cambio de color a verde
+            indicator.classList.add('unsaved-indicator-saved');
+
+            // Después de 1.5 segundos, ocultar con animación hacia arriba
+            setTimeout(() => {
+                indicator.classList.remove('unsaved-indicator-show');
+                indicator.classList.add('unsaved-indicator-hide');
+
+                setTimeout(() => {
+                    indicator.classList.add('hidden');
+                    indicator.classList.remove('unsaved-indicator-hide', 'unsaved-indicator-saved');
+                    // Restaurar contenido original
+                    indicator.innerHTML = `
+                        <span class="animate-pulse">●</span>
+                        Cambios sin guardar
+                    `;
+                }, 400);
+            }, 1500);
+        }
+
+        function updateResumeWorkoutCard() {
+            const card = document.getElementById('resumeWorkoutCard');
+            if (!card) return;
+
+            if (hasUnsavedData()) {
+                // Calcular estadísticas
+                const exercisesWithData = sessionData.ejercicios.filter(ej => ej.volumen > 0).length;
+                const totalSets = sessionData.ejercicios.reduce((sum, ej) => sum + (ej.sets || 0), 0);
+
+                // Actualizar información
+                document.getElementById('resumeWorkoutName').textContent = sessionData.grupo || 'Rutina sin nombre';
+                document.getElementById('resumeWorkoutExercises').textContent = exercisesWithData;
+                document.getElementById('resumeWorkoutVolume').textContent = sessionData.volumenTotal.toFixed(0);
+                document.getElementById('resumeWorkoutSets').textContent = totalSets;
+
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+        }
+
+        function resumeWorkoutFromCard() {
+            switchTab('workout');
+        }
+
+        function discardResumeWorkout() {
+            if (confirm('¿Estás seguro de que quieres descartar esta sesión?')) {
+                sessionData.ejercicios = [];
+                sessionData.volumenTotal = 0;
+                localStorage.removeItem('gymmate_draft');
+                hasUnsavedChanges = false;
+                updateUnsavedIndicator();
+                updateResumeWorkoutCard();
             }
         }
 
@@ -1382,6 +1568,25 @@
 
             modal.classList.add('active');
 
+            // Botón "Reanudar después"
+            document.getElementById('confirmResumeBtn').onclick = () => {
+                modal.classList.remove('active');
+                // No hacer nada, mantener draft y ejecutar callback
+                callback();
+                // Asegurarse de que la carta se actualice cuando vuelva a home
+            };
+
+            // Botón "Guardar y continuar"
+            document.getElementById('confirmSaveBtn').onclick = () => {
+                modal.classList.remove('active');
+                saveToLocalStorage();
+                hasUnsavedChanges = false;
+                updateUnsavedIndicator();
+                setTimeout(() => {
+                    callback();
+                }, 500);
+            };
+
             // Botón "Descartar y continuar"
             document.getElementById('confirmDiscardBtn').onclick = () => {
                 modal.classList.remove('active');
@@ -1395,17 +1600,6 @@
             // Botón "Cancelar"
             document.getElementById('confirmCancelBtn').onclick = () => {
                 modal.classList.remove('active');
-            };
-
-            // Botón "Guardar y continuar"
-            document.getElementById('confirmSaveBtn').onclick = () => {
-                modal.classList.remove('active');
-                saveToLocalStorage();
-                hasUnsavedChanges = false;
-                updateUnsavedIndicator();
-                setTimeout(() => {
-                    callback();
-                }, 500);
             };
         }
 
@@ -2617,6 +2811,9 @@
 
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Actualizar carta flotante de reanudar
+            updateResumeWorkoutCard();
         }
 
         function switchTab(tabName) {
