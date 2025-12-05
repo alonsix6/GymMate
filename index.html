@@ -653,6 +653,9 @@
                 <button id="saveButton" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-semibold py-4 rounded-xl shadow-lg shadow-green-500/30 active:scale-95 transition-transform text-lg">
                     💾 Guardar Entrenamiento
                 </button>
+                <button onclick="endSession()" class="w-full mt-3 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-semibold py-4 rounded-xl shadow-lg shadow-red-500/30 active:scale-95 transition-transform text-lg">
+                    🏁 Terminar Sesión
+                </button>
                 <p id="saveMessage" class="mt-4 text-green-400 font-semibold text-center hidden"></p>
             </div>
         </div>
@@ -1378,6 +1381,11 @@
         let hasUnsavedChanges = false;
         let lastSavedState = null;
 
+        // Session state tracking (prevent duplicate saves)
+        let sessionSaved = false; // Flag to track if current session has been saved
+        let lastSavedData = null; // Snapshot of data when last saved
+        let sessionId = null; // Unique ID for current workout session
+
         // ==========================================
         // UTILITY FUNCTIONS
         // ==========================================
@@ -1536,6 +1544,84 @@
                     `;
                 }, 400);
             }, 1500);
+        }
+
+        // ==========================================
+        // SESSION STATE MANAGEMENT (Prevent Duplicate Saves)
+        // ==========================================
+
+        function hasChangesToSave() {
+            // Si nunca se ha guardado, cualquier dato cuenta como cambio
+            if (!sessionSaved || !lastSavedData) {
+                return hasUnsavedData();
+            }
+
+            // Comparar snapshot actual con el último guardado
+            const currentSnapshot = JSON.stringify(sessionData.ejercicios);
+            const savedSnapshot = JSON.stringify(lastSavedData);
+
+            return currentSnapshot !== savedSnapshot;
+        }
+
+        function updateSaveButtonState() {
+            const saveButton = document.getElementById('saveButton');
+            if (!saveButton) return;
+
+            const hasChanges = hasChangesToSave();
+
+            if (!hasChanges && sessionSaved) {
+                // Todo está guardado, sin cambios
+                saveButton.innerHTML = '✅ Todo Guardado';
+                saveButton.disabled = true;
+                saveButton.classList.add('opacity-50', 'cursor-not-allowed');
+            } else if (sessionSaved && hasChanges) {
+                // Ya se guardó una vez, pero hay cambios nuevos
+                saveButton.innerHTML = '💾 Actualizar Entrenamiento';
+                saveButton.disabled = false;
+                saveButton.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                // Primera vez guardando
+                saveButton.innerHTML = '💾 Guardar Entrenamiento';
+                saveButton.disabled = false;
+                saveButton.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        function endSession() {
+            // Si hay cambios sin guardar, preguntar
+            if (hasChangesToSave() && hasUnsavedData()) {
+                const confirmEnd = confirm('⚠️ Tienes cambios sin guardar. ¿Estás seguro de que quieres terminar la sesión sin guardar?');
+                if (!confirmEnd) {
+                    return; // No terminar si cancela
+                }
+            }
+
+            // Limpiar todo el estado de la sesión
+            localStorage.removeItem('gymmate_draft');
+            localStorage.removeItem('gymmate_session');
+
+            // Resetear flags
+            sessionSaved = false;
+            lastSavedData = null;
+            sessionId = null;
+            hasUnsavedChanges = false;
+
+            if (draftSaveTimeout) {
+                clearTimeout(draftSaveTimeout);
+            }
+
+            // Resetear sessionData
+            sessionData.grupo = '';
+            sessionData.date = new Date().toISOString();
+            sessionData.ejercicios = [];
+            sessionData.volumenTotal = 0;
+            sessionData.volumenPorGrupo = {};
+
+            // Volver al home
+            showView('home');
+
+            // Actualizar hero section (puede haber cambios después de guardar)
+            updateHeroSection();
         }
 
         function updateResumeWorkoutCard() {
@@ -2118,6 +2204,11 @@
                 hasUnsavedChanges = false;
                 updateUnsavedIndicator();
 
+                // Resetear flags de sesión (nueva sesión)
+                sessionSaved = false;
+                lastSavedData = null;
+                sessionId = null;
+
                 document.getElementById('trainingInfo').classList.remove('hidden');
                 document.getElementById('currentTraining').textContent = grupo.nombre;
                 document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-ES');
@@ -2172,6 +2263,9 @@
 
             // Programar auto-guardado después de 15 segundos
             scheduleDraftSave();
+
+            // Actualizar estado del botón de guardar
+            updateSaveButtonState();
         }
 
         function addSet(index) {
@@ -2189,6 +2283,9 @@
             saveDraft();
             hasUnsavedChanges = false;
             updateUnsavedIndicator();
+
+            // Actualizar estado del botón de guardar
+            updateSaveButtonState();
         }
 
         function showAnimation(nombre, gifUrl) {
@@ -2892,6 +2989,11 @@
                 hasUnsavedChanges = false;
                 updateUnsavedIndicator();
 
+                // Resetear flags de sesión (nueva sesión)
+                sessionSaved = false;
+                lastSavedData = null;
+                sessionId = null;
+
                 // Show workout tab
                 switchTab('workout');
 
@@ -2948,8 +3050,12 @@
         // ==========================================
 
         function saveToLocalStorage() {
-            // Limpiar borrador y flags
-            localStorage.removeItem('gymmate_draft');
+            // Generar sessionId único si no existe
+            if (!sessionId) {
+                sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            }
+
+            // Limpiar flags de auto-save (pero mantener draft hasta endSession)
             hasUnsavedChanges = false;
             if (draftSaveTimeout) {
                 clearTimeout(draftSaveTimeout);
@@ -2958,10 +3064,23 @@
 
             const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
 
-            // Add current session to history
+            // Preparar copia de la sesión
             const sessionCopy = JSON.parse(JSON.stringify(sessionData));
             sessionCopy.savedAt = new Date().toISOString();
-            history.unshift(sessionCopy); // Add to beginning
+            sessionCopy.sessionId = sessionId; // Agregar ID único
+
+            // Verificar si esta sesión ya fue guardada (buscar por sessionId)
+            const existingIndex = history.findIndex(s => s.sessionId === sessionId);
+
+            if (existingIndex !== -1) {
+                // Sobrescribir la entrada existente (no duplicar)
+                history[existingIndex] = sessionCopy;
+                console.log('🔄 Entrenamiento actualizado (no duplicado)');
+            } else {
+                // Primera vez guardando esta sesión
+                history.unshift(sessionCopy); // Agregar al inicio
+                console.log('💾 Nuevo entrenamiento guardado');
+            }
 
             // Keep only last 30 sessions
             if (history.length > 30) {
@@ -2971,8 +3090,14 @@
             localStorage.setItem('gymmate_history', JSON.stringify(history));
             localStorage.setItem('gymmate_session', JSON.stringify(sessionData));
 
+            // Actualizar estado de sesión guardada
+            sessionSaved = true;
+            lastSavedData = JSON.parse(JSON.stringify(sessionData.ejercicios));
+
             const saveMessage = document.getElementById('saveMessage');
-            saveMessage.textContent = '✅ Entrenamiento guardado correctamente';
+            saveMessage.textContent = existingIndex !== -1
+                ? '✅ Entrenamiento actualizado correctamente'
+                : '✅ Entrenamiento guardado correctamente';
             saveMessage.classList.remove('hidden');
 
             setTimeout(() => {
@@ -2988,6 +3113,9 @@
 
             // Actualizar Hero Section (puede haber nuevo PR)
             updateHeroSection();
+
+            // Actualizar estado del botón de guardar
+            updateSaveButtonState();
         }
 
         function loadHistory() {
