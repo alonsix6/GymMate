@@ -3452,6 +3452,12 @@
                 tab.classList.remove('active');
             });
 
+            // Hide all cardio views
+            document.getElementById('cardioSelectorView').classList.add('hidden');
+            document.getElementById('cardioConfigView').classList.add('hidden');
+            document.getElementById('cardioTimerView').classList.add('hidden');
+            document.getElementById('cardioSummaryView').classList.add('hidden');
+
             // Show home view
             const homeView = document.getElementById('homeView');
             if (homeView) {
@@ -3483,6 +3489,12 @@
             if (homeView) {
                 homeView.classList.add('hidden');
             }
+
+            // Hide all cardio views
+            document.getElementById('cardioSelectorView').classList.add('hidden');
+            document.getElementById('cardioConfigView').classList.add('hidden');
+            document.getElementById('cardioTimerView').classList.add('hidden');
+            document.getElementById('cardioSummaryView').classList.add('hidden');
 
             // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(tab => {
@@ -4461,6 +4473,8 @@
             cardioState.mode = mode;
             document.getElementById('cardioSelectorView').classList.add('hidden');
             document.getElementById('cardioConfigView').classList.remove('hidden');
+            document.getElementById('cardioTimerView').classList.add('hidden');
+            document.getElementById('cardioSummaryView').classList.add('hidden');
 
             // Configurar UI según el modo
             const title = document.getElementById('cardioConfigTitle');
@@ -4755,8 +4769,10 @@
             cardioState.startTime = Date.now();
 
             // Mostrar vista de timer
+            document.getElementById('cardioSelectorView').classList.add('hidden');
             document.getElementById('cardioConfigView').classList.add('hidden');
             document.getElementById('cardioTimerView').classList.remove('hidden');
+            document.getElementById('cardioSummaryView').classList.add('hidden');
 
             // Iniciar primera fase
             startNextPhase();
@@ -5075,6 +5091,8 @@
             }
 
             // Mostrar resumen
+            document.getElementById('cardioSelectorView').classList.add('hidden');
+            document.getElementById('cardioConfigView').classList.add('hidden');
             document.getElementById('cardioTimerView').classList.add('hidden');
             document.getElementById('cardioSummaryView').classList.remove('hidden');
 
