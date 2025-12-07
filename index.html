@@ -581,6 +581,25 @@
                 </div>
             </div>
         </section>
+
+            <!-- Cardio HIIT Section -->
+            <section class="mt-8">
+                <h3 class="text-lg font-display font-bold uppercase mb-4 tracking-wide">CARDIO & HIIT</h3>
+
+                <div onclick="showCardioSelector()" class="glass-card p-5 flex items-center justify-between active:scale-95 transition-transform cursor-pointer border-l-4 border-orange-500 bg-gradient-to-r from-orange-500/5 to-red-500/5 hover:from-orange-500/10 hover:to-red-500/10">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-3xl shadow-lg shadow-orange-500/30">
+                            🔥
+                        </div>
+                        <div>
+                            <p class="font-bold text-lg">Entrenamientos Cardio</p>
+                            <p class="text-sm text-gray-400">EMOM, Tabata, Circuitos y más</p>
+                        </div>
+                    </div>
+                    <i class="ph-bold ph-caret-right text-orange-400 text-xl"></i>
+                </div>
+            </section>
+
         </div>
         <!-- END HOME VIEW -->
 
@@ -1120,6 +1139,194 @@
                 </div>
             </div>
         </div>
+
+        <!-- CARDIO HIIT SYSTEM -->
+        <!-- Vista Selector de Modos -->
+        <div id="cardioSelectorView" class="hidden space-y-6">
+            <button onclick="showHome()" class="glass-card px-4 py-2 rounded-lg text-gray-300 font-semibold text-sm border border-white/10 active:scale-95 transition-transform flex items-center gap-2">
+                <i class="ph-bold ph-arrow-left"></i>
+                Volver al Inicio
+            </button>
+
+            <h2 class="text-2xl font-display font-bold uppercase text-orange-400">🔥 Cardio & HIIT</h2>
+            <p class="text-gray-300">Elige tu tipo de entrenamiento cardiovascular</p>
+
+            <div class="space-y-4">
+                <div onclick="showCardioConfig('emom')" class="glass-card p-5 cursor-pointer active:scale-95 transition-transform border-l-4 border-orange-500 hover:bg-white/5">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2">⏱️ EMOM</h3>
+                            <p class="text-sm text-gray-300 font-semibold mb-2">Every Minute On the Minute</p>
+                            <p class="text-sm text-gray-400">Haz X repeticiones al inicio de cada minuto. El resto del tiempo descansas. Perfecto para mantener ritmo constante.</p>
+                        </div>
+                        <i class="ph-bold ph-caret-right text-orange-400 text-xl ml-4"></i>
+                    </div>
+                </div>
+
+                <div onclick="showCardioConfig('tabata')" class="glass-card p-5 cursor-pointer active:scale-95 transition-transform border-l-4 border-red-500 hover:bg-white/5">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2">🔥 TABATA</h3>
+                            <p class="text-sm text-gray-300 font-semibold mb-2">20 segundos ON / 10 segundos OFF</p>
+                            <p class="text-sm text-gray-400">El clásico: 20s trabajo, 10s descanso, 8 rondas (4 min total). Intensidad máxima para quemar calorías rápido.</p>
+                        </div>
+                        <i class="ph-bold ph-caret-right text-red-400 text-xl ml-4"></i>
+                    </div>
+                </div>
+
+                <div onclick="showCardioConfig('circuit')" class="glass-card p-5 cursor-pointer active:scale-95 transition-transform border-l-4 border-yellow-500 hover:bg-white/5">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2">🔄 CIRCUITO</h3>
+                            <p class="text-sm text-gray-300 font-semibold mb-2">Múltiples ejercicios en secuencia</p>
+                            <p class="text-sm text-gray-400">Haz varios ejercicios seguidos, descansa y repite X rondas. Control total sobre tu rutina funcional.</p>
+                        </div>
+                        <i class="ph-bold ph-caret-right text-yellow-400 text-xl ml-4"></i>
+                    </div>
+                </div>
+
+                <div onclick="showCardioConfig('pyramid')" class="glass-card p-5 cursor-pointer active:scale-95 transition-transform border-l-4 border-purple-500 hover:bg-white/5">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2">📊 PIRÁMIDE</h3>
+                            <p class="text-sm text-gray-300 font-semibold mb-2">Sube y baja en intensidad</p>
+                            <p class="text-sm text-gray-400">Incrementa el tiempo/reps, llega al pico y baja gradualmente. Ejemplo: 20-30-40-30-20. Progresión controlada.</p>
+                        </div>
+                        <i class="ph-bold ph-caret-right text-purple-400 text-xl ml-4"></i>
+                    </div>
+                </div>
+
+                <div onclick="showCardioConfig('custom')" class="glass-card p-5 cursor-pointer active:scale-95 transition-transform border-l-4 border-cyan-500 hover:bg-white/5">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2">⚙️ HIIT PERSONALIZADO</h3>
+                            <p class="text-sm text-gray-300 font-semibold mb-2">Configura todo a tu medida</p>
+                            <p class="text-sm text-gray-400">Define tus propios intervalos, ejercicios y tiempos. Máxima flexibilidad para tu rutina única.</p>
+                        </div>
+                        <i class="ph-bold ph-caret-right text-cyan-400 text-xl ml-4"></i>
+                    </div>
+                </div>
+
+                <div onclick="showCardioConfig('amrap')" class="glass-card p-5 cursor-pointer active:scale-95 transition-transform border-l-4 border-green-500 hover:bg-white/5">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2">🎯 AMRAP</h3>
+                            <p class="text-sm text-gray-300 font-semibold mb-2">As Many Rounds As Possible</p>
+                            <p class="text-sm text-gray-400">Temporizador cuenta regresiva. Haz tantas rondas como puedas en X minutos. Desafíate a ti mismo.</p>
+                        </div>
+                        <i class="ph-bold ph-caret-right text-green-400 text-xl ml-4"></i>
+                    </div>
+                </div>
+
+                <div onclick="showCardioConfig('fortime')" class="glass-card p-5 cursor-pointer active:scale-95 transition-transform border-l-4 border-pink-500 hover:bg-white/5">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2">🏁 FOR TIME</h3>
+                            <p class="text-sm text-gray-300 font-semibold mb-2">Completa X rondas lo más rápido posible</p>
+                            <p class="text-sm text-gray-400">Tienes un número fijo de rondas. El reloj corre. ¿Cuánto tardas en terminar? Compite contigo mismo.</p>
+                        </div>
+                        <i class="ph-bold ph-caret-right text-pink-400 text-xl ml-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vista de Configuración (Multi-modo) -->
+        <div id="cardioConfigView" class="hidden space-y-6">
+            <button onclick="showCardioSelector()" class="glass-card px-4 py-2 rounded-lg text-gray-300 font-semibold text-sm border border-white/10 active:scale-95 transition-transform flex items-center gap-2">
+                <i class="ph-bold ph-arrow-left"></i>
+                Volver
+            </button>
+
+            <h2 id="cardioConfigTitle" class="text-2xl font-display font-bold uppercase text-orange-400"></h2>
+
+            <div id="cardioConfigContent" class="space-y-4">
+                <!-- El contenido se genera dinámicamente según el modo -->
+            </div>
+
+            <button onclick="startCardioTimer()" id="btnStartCardio" class="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-orange-500/30 active:scale-95 transition-transform text-lg">
+                🚀 Iniciar Entrenamiento
+            </button>
+        </div>
+
+        <!-- Vista de Ejecución/Timer -->
+        <div id="cardioTimerView" class="hidden space-y-6">
+            <div class="glass-card p-6 text-center">
+                <p id="timerRoundInfo" class="text-sm text-gray-400 mb-2">Ronda 1/3</p>
+                <h2 id="timerPhase" class="text-3xl font-bold text-orange-400 mb-4">🔥 TRABAJO</h2>
+
+                <div id="timerDisplay" class="text-7xl font-display font-bold text-white my-6">00:00</div>
+
+                <div id="timerProgress" class="w-full bg-dark-surface border border-white/10 rounded-full h-4 mb-4">
+                    <div id="timerProgressBar" class="bg-gradient-to-r from-orange-500 to-red-500 h-4 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                </div>
+
+                <h3 id="timerExercise" class="text-2xl font-bold text-white mb-2">Burpees</h3>
+                <p id="timerExerciseTarget" class="text-gray-400">30 repeticiones</p>
+                <p id="timerNextInfo" class="text-sm text-cyan-400 mt-4">Siguiente: Descanso 15s</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="pauseCardioTimer()" id="btnPauseTimer" class="glass-card p-4 text-yellow-400 font-semibold rounded-xl active:scale-95 transition-transform">
+                    <i class="ph-bold ph-pause text-2xl"></i><br>
+                    Pausar
+                </button>
+                <button onclick="stopCardioTimer()" class="glass-card p-4 text-red-400 font-semibold rounded-xl active:scale-95 transition-transform">
+                    <i class="ph-bold ph-stop text-2xl"></i><br>
+                    Terminar
+                </button>
+            </div>
+        </div>
+
+        <!-- Vista de Resumen -->
+        <div id="cardioSummaryView" class="hidden space-y-6">
+            <div class="text-center mb-6">
+                <div class="text-6xl mb-4">🏆</div>
+                <h2 class="text-3xl font-bold text-white mb-2">¡Sesión Completada!</h2>
+                <p class="text-gray-400">Excelente trabajo</p>
+            </div>
+
+            <div class="glass-card p-6">
+                <h3 class="text-lg font-bold text-white mb-4">📊 Estadísticas</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">⏱️ Tiempo total:</span>
+                        <span id="summaryTotalTime" class="text-white font-bold">0:00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">🔥 Tiempo trabajo:</span>
+                        <span id="summaryWorkTime" class="text-white font-bold">0:00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">😮‍💨 Descanso:</span>
+                        <span id="summaryRestTime" class="text-white font-bold">0:00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">🔄 Rondas:</span>
+                        <span id="summaryRounds" class="text-white font-bold">0/0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">🔥 Calorías (est.):</span>
+                        <span id="summaryCalories" class="text-orange-400 font-bold">0 kcal</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="summaryExercises" class="glass-card p-6">
+                <!-- Se llena dinámicamente con los ejercicios realizados -->
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="showHome()" class="glass-card p-4 text-gray-300 font-semibold rounded-xl active:scale-95 transition-transform">
+                    🏠 Inicio
+                </button>
+                <button onclick="saveCardioSession()" class="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-green-500/30 active:scale-95 transition-transform">
+                    💾 Guardar
+                </button>
+            </div>
+        </div>
+        <!-- END CARDIO HIIT SYSTEM -->
+
     </main>
 
     <!-- Bottom Navigation Bar with FAB -->
@@ -4201,6 +4408,737 @@
                 btn.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
             }
         });
+
+        // ==========================================
+        // CARDIO HIIT SYSTEM
+        // ==========================================
+
+        // Biblioteca de ejercicios cardio
+        const cardioExercises = {
+            'Burpees': { difficulty: 5, calories: 12, muscles: ['Todo el cuerpo'], desc: 'De pie → plancha → push-up → salto. Máxima intensidad.' },
+            'Mountain Climbers': { difficulty: 4, calories: 10, muscles: ['Core', 'Hombros'], desc: 'Plancha alta, lleva rodillas al pecho alternadas rápido.' },
+            'Jumping Jacks': { difficulty: 3, calories: 8, muscles: ['Cardio', 'Piernas'], desc: 'Salta abriendo piernas y brazos arriba simultáneamente.' },
+            'High Knees': { difficulty: 3, calories: 9, muscles: ['Piernas', 'Cardio'], desc: 'Corre en el lugar elevando rodillas al máximo.' },
+            'Kettlebell Swings': { difficulty: 4, calories: 12, muscles: ['Glúteos', 'Core', 'Hombros'], desc: 'Balanceo explosivo desde cadera hasta altura de hombros. Usa las caderas.' },
+            'Russian Twists': { difficulty: 3, calories: 6, muscles: ['Oblicuos', 'Core'], desc: 'Sentado, torso inclinado, rota de lado a lado. Pies arriba para más dificultad.' },
+            'Plank': { difficulty: 3, calories: 4, muscles: ['Core completo'], desc: 'Posición push-up sobre antebrazos. Cuerpo recto, core apretado.' },
+            'Jump Squats': { difficulty: 4, calories: 11, muscles: ['Piernas', 'Glúteos'], desc: 'Sentadilla profunda + salto explosivo. Aterriza suave.' },
+            'Box Jumps': { difficulty: 4, calories: 10, muscles: ['Piernas', 'Explosividad'], desc: 'Salta sobre una caja/plataforma. Aterriza suave, baja controlado.' },
+            'Battle Ropes': { difficulty: 4, calories: 11, muscles: ['Hombros', 'Core', 'Cardio'], desc: 'Ondas alternadas con cuerdas. Mantén ritmo constante.' },
+            'Sprints': { difficulty: 4, calories: 13, muscles: ['Piernas', 'Cardio'], desc: 'Carrera a máxima velocidad.' },
+            'Bicycle Crunches': { difficulty: 3, calories: 5, muscles: ['Core', 'Oblicuos'], desc: 'Acostado, lleva codo a rodilla opuesta alternando.' }
+        };
+
+        // Estado global del sistema cardio
+        let cardioState = {
+            mode: null, // 'emom', 'tabata', 'circuit', 'pyramid', 'custom', 'amrap', 'fortime'
+            config: {},
+            timer: null,
+            isPaused: false,
+            currentPhase: 'work', // 'work', 'rest', 'roundRest'
+            currentRound: 1,
+            currentExerciseIndex: 0,
+            timeRemaining: 0,
+            totalTimeElapsed: 0,
+            workTimeTotal: 0,
+            restTimeTotal: 0,
+            startTime: null
+        };
+
+        // ==========================================
+        // NAVEGACIÓN ENTRE VISTAS
+        // ==========================================
+
+        function showCardioSelector() {
+            document.getElementById('homeView').classList.add('hidden');
+            document.getElementById('cardioSelectorView').classList.remove('hidden');
+            document.getElementById('cardioConfigView').classList.add('hidden');
+            document.getElementById('cardioTimerView').classList.add('hidden');
+            document.getElementById('cardioSummaryView').classList.add('hidden');
+        }
+
+        function showCardioConfig(mode) {
+            cardioState.mode = mode;
+            document.getElementById('cardioSelectorView').classList.add('hidden');
+            document.getElementById('cardioConfigView').classList.remove('hidden');
+
+            // Configurar UI según el modo
+            const title = document.getElementById('cardioConfigTitle');
+            const content = document.getElementById('cardioConfigContent');
+
+            const modeConfigs = {
+                'emom': { title: '⏱️ CONFIGURAR EMOM', html: generateEMOMConfig() },
+                'tabata': { title: '🔥 CONFIGURAR TABATA', html: generateTabataConfig() },
+                'circuit': { title: '🔄 CONFIGURAR CIRCUITO', html: generateCircuitConfig() },
+                'pyramid': { title: '📊 CONFIGURAR PIRÁMIDE', html: generatePyramidConfig() },
+                'custom': { title: '⚙️ CONFIGURAR HIIT CUSTOM', html: generateCustomConfig() },
+                'amrap': { title: '🎯 CONFIGURAR AMRAP', html: generateAMRAPConfig() },
+                'fortime': { title: '🏁 CONFIGURAR FOR TIME', html: generateForTimeConfig() }
+            };
+
+            const config = modeConfigs[mode];
+            title.textContent = config.title;
+            content.innerHTML = config.html;
+        }
+
+        // ==========================================
+        // GENERADORES DE CONFIGURACIÓN
+        // ==========================================
+
+        function generateCircuitConfig() {
+            return `
+                <div class="glass-card p-5">
+                    <h3 class="text-lg font-bold text-white mb-4">⚙️ Configuración</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">🔄 Número de Rondas</label>
+                            <input type="number" id="circuitRounds" value="3" min="1" max="10" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">😮‍💨 Descanso entre Rondas (segundos)</label>
+                            <input type="number" id="circuitRest" value="90" min="0" max="300" step="15" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-5">
+                    <h3 class="text-lg font-bold text-white mb-4">🎯 Ejercicios del Circuito</h3>
+                    <div id="circuitExercisesList" class="space-y-3">
+                        ${generateExerciseItem(0, 'Kettlebell Swings', 30, 'reps')}
+                        ${generateExerciseItem(1, 'Russian Twists', 20, 'reps')}
+                        ${generateExerciseItem(2, 'Plank', 30, 'time')}
+                    </div>
+                    <button onclick="addCircuitExercise()" class="w-full mt-3 glass-card p-3 text-cyan-400 font-semibold rounded-lg active:scale-95 transition-transform">
+                        + Agregar Ejercicio
+                    </button>
+                </div>
+            `;
+        }
+
+        function generateTabataConfig() {
+            return `
+                <div class="glass-card p-5">
+                    <h3 class="text-lg font-bold text-white mb-4">⚙️ Configuración</h3>
+                    <p class="text-sm text-gray-400 mb-4">Tabata Clásico: 20s trabajo / 10s descanso</p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">🔥 Trabajo (segundos)</label>
+                            <input type="number" id="tabataWork" value="20" min="10" max="60" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">😮‍💨 Descanso (segundos)</label>
+                            <input type="number" id="tabataRest" value="10" min="5" max="30" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">🔄 Número de Rondas</label>
+                            <input type="number" id="tabataRounds" value="8" min="4" max="12" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-5">
+                    <h3 class="text-lg font-bold text-white mb-4">🎯 Ejercicio</h3>
+                    <select id="tabataExercise" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                        ${Object.keys(cardioExercises).map(ex => `<option value="${ex}">${ex}</option>`).join('')}
+                    </select>
+                </div>
+            `;
+        }
+
+        function generateCustomConfig() {
+            return `
+                <div class="glass-card p-5">
+                    <h3 class="text-lg font-bold text-white mb-4">⚙️ Intervalos</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">🔥 Trabajo (segundos)</label>
+                            <input type="number" id="customWork" value="45" min="10" max="120" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">😮‍💨 Descanso (segundos)</label>
+                            <input type="number" id="customRest" value="15" min="5" max="60" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">🔄 Rondas</label>
+                            <input type="number" id="customRounds" value="6" min="3" max="20" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-5">
+                    <h3 class="text-lg font-bold text-white mb-4">🎯 Ejercicios</h3>
+                    <div id="customExercisesList">
+                        <select class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white mb-2">
+                            ${Object.keys(cardioExercises).map(ex => `<option value="${ex}">${ex}</option>`).join('')}
+                        </select>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generatePyramidConfig() {
+            return `
+                <div class="glass-card p-5">
+                    <h3 class="text-lg font-bold text-white mb-4">📊 Diseño de Pirámide</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">Valor inicial (segundos)</label>
+                            <input type="number" id="pyramidStart" value="40" min="20" max="60" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">Incremento (segundos)</label>
+                            <input type="number" id="pyramidIncrement" value="10" min="5" max="20" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">Pico máximo (segundos)</label>
+                            <input type="number" id="pyramidPeak" value="60" min="30" max="120" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">Descanso entre niveles</label>
+                            <input type="number" id="pyramidRest" value="15" min="10" max="30" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-5">
+                    <h3 class="text-lg font-bold text-white mb-4">🎯 Ejercicio</h3>
+                    <select id="pyramidExercise" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                        ${Object.keys(cardioExercises).map(ex => `<option value="${ex}">${ex}</option>`).join('')}
+                    </select>
+                </div>
+            `;
+        }
+
+        function generateEMOMConfig() {
+            return `
+                <div class="glass-card p-5">
+                    <h3 class="text-lg font-bold text-white mb-4">⚙️ Configuración</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">⏱️ Duración del intervalo (segundos)</label>
+                            <input type="number" id="emomInterval" value="60" min="30" max="120" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">🔄 Número de rondas</label>
+                            <input type="number" id="emomRounds" value="10" min="5" max="20" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-5">
+                    <h3 class="text-lg font-bold text-white mb-4">🎯 Ejercicio</h3>
+                    <select id="emomExercise" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white mb-3">
+                        ${Object.keys(cardioExercises).map(ex => `<option value="${ex}">${ex}</option>`).join('')}
+                    </select>
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-2">Repeticiones objetivo</label>
+                        <input type="number" id="emomReps" value="15" min="5" max="50" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateAMRAPConfig() {
+            return `
+                <div class="glass-card p-5">
+                    <h3 class="text-lg font-bold text-white mb-4">⚙️ Configuración</h3>
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-2">⏱️ Duración total (minutos)</label>
+                        <input type="number" id="amrapDuration" value="10" min="5" max="30" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                    </div>
+                </div>
+
+                <div class="glass-card p-5">
+                    <h3 class="text-lg font-bold text-white mb-4">🎯 Circuito (Repetir tantas veces como sea posible)</h3>
+                    <div id="amrapExercisesList" class="space-y-3">
+                        ${generateExerciseItem(0, 'Burpees', 10, 'reps')}
+                        ${generateExerciseItem(1, 'Mountain Climbers', 20, 'reps')}
+                    </div>
+                    <button onclick="addAMRAPExercise()" class="w-full mt-3 glass-card p-3 text-cyan-400 font-semibold rounded-lg active:scale-95 transition-transform">
+                        + Agregar Ejercicio
+                    </button>
+                </div>
+            `;
+        }
+
+        function generateForTimeConfig() {
+            return `
+                <div class="glass-card p-5">
+                    <h3 class="text-lg font-bold text-white mb-4">⚙️ Configuración</h3>
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-2">🔄 Rondas a completar</label>
+                        <input type="number" id="fortimeRounds" value="5" min="3" max="10" class="w-full px-4 py-3 bg-dark-surface border border-white/10 rounded-lg text-white">
+                    </div>
+                </div>
+
+                <div class="glass-card p-5">
+                    <h3 class="text-lg font-bold text-white mb-4">🎯 Ejercicios por ronda</h3>
+                    <div id="fortimeExercisesList" class="space-y-3">
+                        ${generateExerciseItem(0, 'Burpees', 15, 'reps')}
+                        ${generateExerciseItem(1, 'Jump Squats', 20, 'reps')}
+                    </div>
+                    <button onclick="addForTimeExercise()" class="w-full mt-3 glass-card p-3 text-cyan-400 font-semibold rounded-lg active:scale-95 transition-transform">
+                        + Agregar Ejercicio
+                    </button>
+                </div>
+            `;
+        }
+
+        function generateExerciseItem(index, name, target, type) {
+            const exerciseOptions = Object.keys(cardioExercises).map(ex =>
+                `<option value="${ex}" ${ex === name ? 'selected' : ''}>${ex}</option>`
+            ).join('');
+
+            return `
+                <div class="glass-card p-4 border border-white/10">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-white font-bold">${index + 1}.</span>
+                        <button onclick="removeExercise(${index})" class="text-red-400 hover:text-red-300">
+                            <i class="ph-bold ph-x text-xl"></i>
+                        </button>
+                    </div>
+                    <select class="w-full px-3 py-2 bg-dark-surface border border-white/10 rounded-lg text-white mb-2" data-exercise-index="${index}">
+                        ${exerciseOptions}
+                    </select>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="number" value="${target}" min="5" max="100" placeholder="Cantidad" class="px-3 py-2 bg-dark-surface border border-white/10 rounded-lg text-white" data-target-index="${index}">
+                        <select class="px-3 py-2 bg-dark-surface border border-white/10 rounded-lg text-white" data-type-index="${index}">
+                            <option value="reps" ${type === 'reps' ? 'selected' : ''}>Reps</option>
+                            <option value="time" ${type === 'time' ? 'selected' : ''}>Segundos</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+        }
+
+        function addCircuitExercise() {
+            const container = document.getElementById('circuitExercisesList');
+            const count = container.children.length;
+            container.insertAdjacentHTML('beforeend', generateExerciseItem(count, 'Jumping Jacks', 20, 'reps'));
+        }
+
+        function addAMRAPExercise() {
+            const container = document.getElementById('amrapExercisesList');
+            const count = container.children.length;
+            container.insertAdjacentHTML('beforeend', generateExerciseItem(count, 'High Knees', 30, 'reps'));
+        }
+
+        function addForTimeExercise() {
+            const container = document.getElementById('fortimeExercisesList');
+            const count = container.children.length;
+            container.insertAdjacentHTML('beforeend', generateExerciseItem(count, 'Mountain Climbers', 25, 'reps'));
+        }
+
+        function removeExercise(index) {
+            // Implementar lógica de eliminación si es necesario
+            console.log('Remove exercise', index);
+        }
+
+        // ==========================================
+        // SISTEMA DE TIMER
+        // ==========================================
+
+        function startCardioTimer() {
+            // Recoger configuración según el modo
+            const config = collectConfiguration();
+            if (!config) {
+                alert('⚠️ Por favor completa la configuración');
+                return;
+            }
+
+            cardioState.config = config;
+            cardioState.currentRound = 1;
+            cardioState.currentExerciseIndex = 0;
+            cardioState.totalTimeElapsed = 0;
+            cardioState.workTimeTotal = 0;
+            cardioState.restTimeTotal = 0;
+            cardioState.startTime = Date.now();
+
+            // Mostrar vista de timer
+            document.getElementById('cardioConfigView').classList.add('hidden');
+            document.getElementById('cardioTimerView').classList.remove('hidden');
+
+            // Iniciar primera fase
+            startNextPhase();
+        }
+
+        function collectConfiguration() {
+            const mode = cardioState.mode;
+
+            if (mode === 'circuit') {
+                const exercises = [];
+                const container = document.getElementById('circuitExercisesList');
+                for (let i = 0; i < container.children.length; i++) {
+                    const card = container.children[i];
+                    const exerciseName = card.querySelector('[data-exercise-index]').value;
+                    const target = parseInt(card.querySelector('[data-target-index]').value);
+                    const type = card.querySelector('[data-type-index]').value;
+                    exercises.push({ name: exerciseName, target, type });
+                }
+
+                return {
+                    rounds: parseInt(document.getElementById('circuitRounds').value),
+                    roundRest: parseInt(document.getElementById('circuitRest').value),
+                    exercises
+                };
+            }
+
+            if (mode === 'tabata') {
+                return {
+                    work: parseInt(document.getElementById('tabataWork').value),
+                    rest: parseInt(document.getElementById('tabataRest').value),
+                    rounds: parseInt(document.getElementById('tabataRounds').value),
+                    exercise: document.getElementById('tabataExercise').value
+                };
+            }
+
+            if (mode === 'custom') {
+                return {
+                    work: parseInt(document.getElementById('customWork').value),
+                    rest: parseInt(document.getElementById('customRest').value),
+                    rounds: parseInt(document.getElementById('customRounds').value),
+                    exercise: document.querySelector('#customExercisesList select').value
+                };
+            }
+
+            if (mode === 'pyramid') {
+                const start = parseInt(document.getElementById('pyramidStart').value);
+                const increment = parseInt(document.getElementById('pyramidIncrement').value);
+                const peak = parseInt(document.getElementById('pyramidPeak').value);
+                const rest = parseInt(document.getElementById('pyramidRest').value);
+
+                // Generar niveles de pirámide
+                const levels = [];
+                for (let t = start; t <= peak; t += increment) levels.push(t);
+                for (let t = peak - increment; t >= start; t -= increment) levels.push(t);
+
+                return {
+                    levels,
+                    rest,
+                    exercise: document.getElementById('pyramidExercise').value
+                };
+            }
+
+            if (mode === 'emom') {
+                return {
+                    interval: parseInt(document.getElementById('emomInterval').value),
+                    rounds: parseInt(document.getElementById('emomRounds').value),
+                    exercise: document.getElementById('emomExercise').value,
+                    reps: parseInt(document.getElementById('emomReps').value)
+                };
+            }
+
+            if (mode === 'amrap') {
+                const exercises = [];
+                const container = document.getElementById('amrapExercisesList');
+                for (let i = 0; i < container.children.length; i++) {
+                    const card = container.children[i];
+                    const exerciseName = card.querySelector('[data-exercise-index]').value;
+                    const target = parseInt(card.querySelector('[data-target-index]').value);
+                    const type = card.querySelector('[data-type-index]').value;
+                    exercises.push({ name: exerciseName, target, type });
+                }
+
+                return {
+                    duration: parseInt(document.getElementById('amrapDuration').value) * 60,
+                    exercises
+                };
+            }
+
+            if (mode === 'fortime') {
+                const exercises = [];
+                const container = document.getElementById('fortimeExercisesList');
+                for (let i = 0; i < container.children.length; i++) {
+                    const card = container.children[i];
+                    const exerciseName = card.querySelector('[data-exercise-index]').value;
+                    const target = parseInt(card.querySelector('[data-target-index]').value);
+                    const type = card.querySelector('[data-type-index]').value;
+                    exercises.push({ name: exerciseName, target, type });
+                }
+
+                return {
+                    rounds: parseInt(document.getElementById('fortimeRounds').value),
+                    exercises
+                };
+            }
+
+            return null;
+        }
+
+        function startNextPhase() {
+            const mode = cardioState.mode;
+            const config = cardioState.config;
+
+            if (mode === 'circuit') {
+                if (cardioState.currentPhase === 'work') {
+                    const exercise = config.exercises[cardioState.currentExerciseIndex];
+                    if (exercise.type === 'time') {
+                        runTimerPhase('work', exercise.target, exercise.name, exercise.target + ' segundos');
+                    } else {
+                        runManualPhase('work', exercise.name, exercise.target + ' repeticiones');
+                    }
+                } else if (cardioState.currentPhase === 'roundRest') {
+                    runTimerPhase('rest', config.roundRest, 'Descanso entre rondas', '');
+                }
+            } else if (mode === 'tabata' || mode === 'custom') {
+                if (cardioState.currentPhase === 'work') {
+                    runTimerPhase('work', config.work, config.exercise, config.work + 's');
+                } else {
+                    runTimerPhase('rest', config.rest, 'Descanso', '');
+                }
+            } else if (mode === 'pyramid') {
+                const levelIndex = cardioState.currentRound - 1;
+                if (cardioState.currentPhase === 'work') {
+                    runTimerPhase('work', config.levels[levelIndex], config.exercise, config.levels[levelIndex] + 's');
+                } else {
+                    runTimerPhase('rest', config.rest, 'Descanso', '');
+                }
+            } else if (mode === 'emom') {
+                runTimerPhase('emom', config.interval, config.exercise, config.reps + ' reps');
+            } else if (mode === 'amrap') {
+                const exercise = config.exercises[cardioState.currentExerciseIndex];
+                runManualPhase('work', exercise.name, exercise.target + (exercise.type === 'reps' ? ' reps' : 's'));
+            } else if (mode === 'fortime') {
+                const exercise = config.exercises[cardioState.currentExerciseIndex];
+                runManualPhase('work', exercise.name, exercise.target + (exercise.type === 'reps' ? ' reps' : 's'));
+            }
+        }
+
+        function runTimerPhase(phase, duration, exerciseName, target) {
+            cardioState.timeRemaining = duration;
+            cardioState.currentPhase = phase;
+
+            updateTimerUI(exerciseName, target, phase);
+
+            cardioState.timer = setInterval(() => {
+                cardioState.timeRemaining--;
+                cardioState.totalTimeElapsed++;
+
+                if (phase === 'work' || phase === 'emom') {
+                    cardioState.workTimeTotal++;
+                } else {
+                    cardioState.restTimeTotal++;
+                }
+
+                updateTimerDisplay();
+
+                if (cardioState.timeRemaining <= 0) {
+                    clearInterval(cardioState.timer);
+                    advanceToNextPhase();
+                }
+            }, 1000);
+        }
+
+        function runManualPhase(phase, exerciseName, target) {
+            cardioState.currentPhase = phase;
+            updateTimerUI(exerciseName, target, phase);
+            document.getElementById('timerDisplay').textContent = 'Manual';
+
+            // Agregar botón de completar
+            const nextBtn = document.createElement('button');
+            nextBtn.textContent = '✅ Marcar como completado';
+            nextBtn.className = 'w-full bg-green-600 text-white font-bold py-4 rounded-xl mt-4';
+            nextBtn.onclick = () => {
+                advanceToNextPhase();
+                nextBtn.remove();
+            };
+            document.getElementById('timerDisplay').parentElement.appendChild(nextBtn);
+        }
+
+        function updateTimerUI(exercise, target, phase) {
+            document.getElementById('timerExercise').textContent = exercise;
+            document.getElementById('timerExerciseTarget').textContent = target;
+            document.getElementById('timerPhase').textContent = phase === 'work' ? '🔥 TRABAJO' : '😮‍💨 DESCANSO';
+
+            const config = cardioState.config;
+            let totalRounds = config.rounds || config.levels?.length || 1;
+            document.getElementById('timerRoundInfo').textContent = `Ronda ${cardioState.currentRound}/${totalRounds}`;
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(cardioState.timeRemaining / 60);
+            const secs = cardioState.timeRemaining % 60;
+            document.getElementById('timerDisplay').textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+            const totalDuration = cardioState.currentPhase === 'work' ? (cardioState.config.work || cardioState.config.interval || cardioState.config.levels?.[cardioState.currentRound - 1] || 60) : (cardioState.config.rest || cardioState.config.roundRest || 10);
+            const progress = ((totalDuration - cardioState.timeRemaining) / totalDuration) * 100;
+            document.getElementById('timerProgressBar').style.width = progress + '%';
+        }
+
+        function advanceToNextPhase() {
+            const mode = cardioState.mode;
+            const config = cardioState.config;
+
+            if (mode === 'circuit') {
+                if (cardioState.currentPhase === 'work') {
+                    cardioState.currentExerciseIndex++;
+                    if (cardioState.currentExerciseIndex >= config.exercises.length) {
+                        // Ronda completada
+                        cardioState.currentExerciseIndex = 0;
+                        if (cardioState.currentRound < config.rounds) {
+                            cardioState.currentRound++;
+                            cardioState.currentPhase = 'roundRest';
+                            startNextPhase();
+                        } else {
+                            finishCardioSession();
+                        }
+                    } else {
+                        startNextPhase();
+                    }
+                } else {
+                    cardioState.currentPhase = 'work';
+                    startNextPhase();
+                }
+            } else if (mode === 'tabata' || mode === 'custom') {
+                if (cardioState.currentPhase === 'work') {
+                    cardioState.currentPhase = 'rest';
+                    startNextPhase();
+                } else {
+                    cardioState.currentRound++;
+                    if (cardioState.currentRound > config.rounds) {
+                        finishCardioSession();
+                    } else {
+                        cardioState.currentPhase = 'work';
+                        startNextPhase();
+                    }
+                }
+            } else if (mode === 'pyramid') {
+                if (cardioState.currentPhase === 'work') {
+                    if (cardioState.currentRound < config.levels.length) {
+                        cardioState.currentPhase = 'rest';
+                        startNextPhase();
+                    } else {
+                        finishCardioSession();
+                    }
+                } else {
+                    cardioState.currentRound++;
+                    cardioState.currentPhase = 'work';
+                    startNextPhase();
+                }
+            } else if (mode === 'emom') {
+                cardioState.currentRound++;
+                if (cardioState.currentRound > config.rounds) {
+                    finishCardioSession();
+                } else {
+                    startNextPhase();
+                }
+            }
+            // Otros modos se manejan de forma similar
+        }
+
+        function pauseCardioTimer() {
+            if (cardioState.timer) {
+                clearInterval(cardioState.timer);
+                cardioState.isPaused = true;
+                document.getElementById('btnPauseTimer').textContent = '▶️ Reanudar';
+                document.getElementById('btnPauseTimer').onclick = resumeCardioTimer;
+            }
+        }
+
+        function resumeCardioTimer() {
+            cardioState.isPaused = false;
+            document.getElementById('btnPauseTimer').textContent = '⏸️ Pausar';
+            document.getElementById('btnPauseTimer').onclick = pauseCardioTimer;
+
+            // Reiniciar timer
+            cardioState.timer = setInterval(() => {
+                cardioState.timeRemaining--;
+                cardioState.totalTimeElapsed++;
+
+                if (cardioState.currentPhase === 'work') {
+                    cardioState.workTimeTotal++;
+                } else {
+                    cardioState.restTimeTotal++;
+                }
+
+                updateTimerDisplay();
+
+                if (cardioState.timeRemaining <= 0) {
+                    clearInterval(cardioState.timer);
+                    advanceToNextPhase();
+                }
+            }, 1000);
+        }
+
+        function stopCardioTimer() {
+            if (confirm('¿Estás seguro de que quieres terminar la sesión?')) {
+                if (cardioState.timer) {
+                    clearInterval(cardioState.timer);
+                }
+                finishCardioSession();
+            }
+        }
+
+        function finishCardioSession() {
+            if (cardioState.timer) {
+                clearInterval(cardioState.timer);
+            }
+
+            // Mostrar resumen
+            document.getElementById('cardioTimerView').classList.add('hidden');
+            document.getElementById('cardioSummaryView').classList.remove('hidden');
+
+            // Llenar estadísticas
+            const totalMins = Math.floor(cardioState.totalTimeElapsed / 60);
+            const totalSecs = cardioState.totalTimeElapsed % 60;
+            const workMins = Math.floor(cardioState.workTimeTotal / 60);
+            const workSecs = cardioState.workTimeTotal % 60;
+            const restMins = Math.floor(cardioState.restTimeTotal / 60);
+            const restSecs = cardioState.restTimeTotal % 60;
+
+            document.getElementById('summaryTotalTime').textContent = `${totalMins}:${totalSecs.toString().padStart(2, '0')}`;
+            document.getElementById('summaryWorkTime').textContent = `${workMins}:${workSecs.toString().padStart(2, '0')}`;
+            document.getElementById('summaryRestTime').textContent = `${restMins}:${restSecs.toString().padStart(2, '0')}`;
+
+            const config = cardioState.config;
+            const totalRounds = config.rounds || config.levels?.length || cardioState.currentRound;
+            document.getElementById('summaryRounds').textContent = `${cardioState.currentRound}/${totalRounds}`;
+
+            // Estimación de calorías (aproximada)
+            const estimatedCalories = Math.round((cardioState.workTimeTotal / 60) * 10);
+            document.getElementById('summaryCalories').textContent = `${estimatedCalories} kcal`;
+
+            // Mostrar ejercicios realizados
+            const exercisesContainer = document.getElementById('summaryExercises');
+            let exercisesHTML = '<h3 class="text-lg font-bold text-white mb-3">Ejercicios realizados:</h3><ul class="space-y-2 text-gray-300">';
+
+            if (config.exercises) {
+                config.exercises.forEach(ex => {
+                    exercisesHTML += `<li>• ${ex.name} (${ex.target} ${ex.type === 'reps' ? 'reps' : 's'})</li>`;
+                });
+            } else if (config.exercise) {
+                exercisesHTML += `<li>• ${config.exercise}</li>`;
+            }
+
+            exercisesHTML += '</ul>';
+            exercisesContainer.innerHTML = exercisesHTML;
+        }
+
+        function saveCardioSession() {
+            // Guardar en historial
+            const session = {
+                type: 'cardio',
+                mode: cardioState.mode,
+                date: new Date().toISOString(),
+                config: cardioState.config,
+                stats: {
+                    totalTime: cardioState.totalTimeElapsed,
+                    workTime: cardioState.workTimeTotal,
+                    restTime: cardioState.restTimeTotal,
+                    roundsCompleted: cardioState.currentRound,
+                    calories: Math.round((cardioState.workTimeTotal / 60) * 10)
+                }
+            };
+
+            const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
+            history.unshift(session);
+            if (history.length > 50) history.length = 50;
+            localStorage.setItem('gymmate_history', JSON.stringify(history));
+
+            alert('✅ Sesión de cardio guardada en el historial');
+            showHome();
+            loadHistory();
+        }
 
         console.log('🚀 GymMate v2.0 Initialized');
         console.log('✅ Mobile-first responsive design');
