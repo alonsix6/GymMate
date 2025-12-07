@@ -645,6 +645,9 @@
                 <div id="volumeBars" class="space-y-4"></div>
                 <div class="mt-6 pt-6 border-t-2 border-white/10">
                     <p class="text-lg md:text-xl font-bold text-white">Volumen Total: <span id="totalVolume" class="text-cyan-400 font-display">0</span></p>
+                    <p class="text-sm text-gray-400 mt-2">
+                        💡 <span class="font-semibold">¿Qué es el volumen?</span> Es la cantidad total de trabajo realizado, calculado como: <span class="text-cyan-400">Series × Repeticiones × Peso</span>. Las barras muestran el % que cada grupo muscular representa del volumen total de tu sesión.
+                    </p>
                 </div>
             </section>
 
@@ -1560,7 +1563,16 @@
             const currentSnapshot = JSON.stringify(sessionData.ejercicios);
             const savedSnapshot = JSON.stringify(lastSavedData);
 
-            return currentSnapshot !== savedSnapshot;
+            const hasChanges = currentSnapshot !== savedSnapshot;
+
+            // Debug: descomentar para ver cambios
+            // if (hasChanges) {
+            //     console.log('🔍 Cambios detectados');
+            //     console.log('Current:', currentSnapshot);
+            //     console.log('Saved:', savedSnapshot);
+            // }
+
+            return hasChanges;
         }
 
         function updateSaveButtonState() {
@@ -1596,6 +1608,12 @@
                 }
             }
 
+            // Mostrar mensaje de feedback
+            const saveMessage = document.getElementById('saveMessage');
+            saveMessage.textContent = '🏁 Sesión terminada correctamente';
+            saveMessage.classList.remove('hidden', 'text-green-400');
+            saveMessage.classList.add('text-orange-400');
+
             // Limpiar todo el estado de la sesión
             localStorage.removeItem('gymmate_draft');
             localStorage.removeItem('gymmate_session');
@@ -1617,11 +1635,21 @@
             sessionData.volumenTotal = 0;
             sessionData.volumenPorGrupo = {};
 
-            // Volver al home
-            showView('home');
+            // Esperar 1 segundo para mostrar feedback, luego ir al home
+            setTimeout(() => {
+                saveMessage.classList.add('hidden');
+                saveMessage.classList.remove('text-orange-400');
+                saveMessage.classList.add('text-green-400');
 
-            // Actualizar hero section (puede haber cambios después de guardar)
-            updateHeroSection();
+                // Volver al home
+                showView('home');
+
+                // Actualizar hero section (puede haber cambios después de guardar)
+                updateHeroSection();
+
+                // Actualizar tarjeta de reanudar
+                updateResumeWorkoutCard();
+            }, 1000);
         }
 
         function updateResumeWorkoutCard() {
@@ -2063,11 +2091,13 @@
                 return;
             }
 
-            const maxVolume = Math.max(...Object.values(volumenPorGrupo));
+            // Calcular volumen total para usar como 100%
+            const totalVolume = Object.values(volumenPorGrupo).reduce((sum, vol) => sum + vol, 0);
 
             let html = '';
             for (const [grupo, volumen] of Object.entries(volumenPorGrupo)) {
-                const percentage = maxVolume > 0 ? (volumen / maxVolume) * 100 : 0;
+                // Cada barra representa el % que ese grupo muscular aporta al volumen total
+                const percentage = totalVolume > 0 ? (volumen / totalVolume) * 100 : 0;
                 html += `
                     <div class="mb-4">
                         <div class="flex justify-between mb-2">
@@ -2083,7 +2113,7 @@
 
             volumeBarsContainer.innerHTML = html;
 
-            const totalVolume = Object.values(volumenPorGrupo).reduce((sum, vol) => sum + vol, 0);
+            // Actualizar volumen total en sessionData y UI
             sessionData.volumenTotal = totalVolume;
             document.getElementById('totalVolume').textContent = totalVolume.toFixed(0);
 
@@ -2232,6 +2262,9 @@
                 document.getElementById('quickStats').classList.remove('hidden');
 
                 updateVolumeDisplay();
+
+                // Actualizar estado del botón de guardar (nuevo workout, nada guardado aún)
+                updateSaveButtonState();
             }, grupo.nombre);
         }
 
@@ -3018,6 +3051,9 @@
                 document.getElementById('quickStats').classList.remove('hidden');
 
                 updateVolumeDisplay();
+
+                // Actualizar estado del botón de guardar (nuevo workout, nada guardado aún)
+                updateSaveButtonState();
             }, workout.nombre);
         }
 
@@ -3969,11 +4005,13 @@
                 aggressive = currentWeight * 1.075;    // 7.5% (upper limit for upper body)
             }
 
-            // Ensure minimum increments (2.5kg steps common in gyms)
-            const minIncrement = 2.5;
-            conservative = Math.max(currentWeight + minIncrement, Math.ceil(conservative / minIncrement) * minIncrement);
-            moderate = Math.max(currentWeight + minIncrement, Math.ceil(moderate / minIncrement) * minIncrement);
-            aggressive = Math.max(currentWeight + minIncrement, Math.ceil(aggressive / minIncrement) * minIncrement);
+            // Redondear a múltiplos de 2.5kg (común en gimnasios)
+            // Pero sin forzar mínimo, para que los porcentajes se reflejen correctamente
+            const roundTo2_5 = (weight) => Math.ceil(weight / 2.5) * 2.5;
+
+            conservative = roundTo2_5(conservative);
+            moderate = roundTo2_5(moderate);
+            aggressive = roundTo2_5(aggressive);
 
             return {
                 current: currentWeight,
