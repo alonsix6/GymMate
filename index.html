@@ -4463,14 +4463,6 @@
 
         function showCardioSelector() {
             document.getElementById('homeView').classList.add('hidden');
-
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.add('hidden');
-                tab.classList.remove('active');
-            });
-
-            // Show cardio selector and hide other cardio views
             document.getElementById('cardioSelectorView').classList.remove('hidden');
             document.getElementById('cardioConfigView').classList.add('hidden');
             document.getElementById('cardioTimerView').classList.add('hidden');
@@ -4479,14 +4471,6 @@
 
         function showCardioConfig(mode) {
             cardioState.mode = mode;
-
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.add('hidden');
-                tab.classList.remove('active');
-            });
-
-            // Show config view and hide other cardio views
             document.getElementById('cardioSelectorView').classList.add('hidden');
             document.getElementById('cardioConfigView').classList.remove('hidden');
             document.getElementById('cardioTimerView').classList.add('hidden');
@@ -4783,12 +4767,6 @@
             cardioState.workTimeTotal = 0;
             cardioState.restTimeTotal = 0;
             cardioState.startTime = Date.now();
-
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.add('hidden');
-                tab.classList.remove('active');
-            });
 
             // Mostrar vista de timer
             document.getElementById('cardioSelectorView').classList.add('hidden');
@@ -5111,12 +5089,6 @@
             if (cardioState.timer) {
                 clearInterval(cardioState.timer);
             }
-
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.add('hidden');
-                tab.classList.remove('active');
-            });
 
             // Mostrar resumen
             document.getElementById('cardioSelectorView').classList.add('hidden');
