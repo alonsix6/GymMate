@@ -1360,7 +1360,7 @@
                 <button id="closeModal" class="text-gray-400 hover:text-white text-3xl font-bold transition-colors">&times;</button>
             </div>
             <div id="animationContainer" class="bg-dark-surface rounded-xl p-4 min-h-[300px] md:min-h-[400px] flex items-center justify-center border border-white/10">
-                <p class="text-gray-400">Cargando animación...</p>
+                <p class="text-gray-400">Cargando imagen de referencia...</p>
             </div>
         </div>
     </div>
@@ -1462,32 +1462,33 @@
         // EXERCISE GIF MAPPING (ExerciseDB API)
         // ==========================================
         const exerciseGifs = {
-            // Using royalty-free exercise GIFs from ExerciseDB
-            "Hip Thrust (core lift)": "https://v2.exercisedb.io/image/ZKKb6Z4EGfvjjt",
-            "RDL": "https://v2.exercisedb.io/image/dKO2KpmNxnSzA8",
-            "Prensa": "https://v2.exercisedb.io/image/yS6X5TtfxGUTc5",
-            "Abducciones": "https://v2.exercisedb.io/image/zzgAAGg97d9JXR",
-            "Aducciones": "https://v2.exercisedb.io/image/OAOqDpCw5ck0Sf",
-            "Extensión de cuádriceps": "https://v2.exercisedb.io/image/iJaSj1CpvL0HrM",
-            "Press militar": "https://v2.exercisedb.io/image/qcDSkbQrRbJ-WG",
-            "Elevación lateral": "https://v2.exercisedb.io/image/o4M0r8zJMpUFZ5",
-            "Press de pecho": "https://v2.exercisedb.io/image/xV3AFOKp73FXBD",
-            "Elevación frontal / Y-Raise": "https://v2.exercisedb.io/image/tVwcF-w-JzpUqb",
-            "Tríceps cuerda": "https://v2.exercisedb.io/image/KjV4JdQn-iSCar",
-            "Extensión o fondos": "https://v2.exercisedb.io/image/UItWB8wKvO09ym",
-            "Face pull (opcional)": "https://v2.exercisedb.io/image/vHqvRdO9TgNYPb",
-            "Hack squat": "https://v2.exercisedb.io/image/kqeXy9u9r0PEqB",
-            "Zancada estacionaria": "https://v2.exercisedb.io/image/2-5kfvlGI3nN0p",
-            "Prensa quad-dominante": "https://v2.exercisedb.io/image/yS6X5TtfxGUTc5",
-            "Jalón pecho": "https://v2.exercisedb.io/image/4wPc8Y4m0jF5l6",
-            "Remo sentado": "https://v2.exercisedb.io/image/Fc64ZUEJh4mU1C",
-            "Remo mancuerna": "https://v2.exercisedb.io/image/DPwPVGFmHdNPKM",
-            "Curl barra": "https://v2.exercisedb.io/image/bZ7Wi5SJgFJ5Jm",
-            "Curl martillo": "https://v2.exercisedb.io/image/1oqh7xzIU2t0Cg",
-            "Curl martillo cross-body": "https://v2.exercisedb.io/image/PwgVqy3k5O6Bev",
-            "Tríceps aislado": "https://v2.exercisedb.io/image/TN8xBxkVYfQ5e9",
-            "Hip Thrust ligero": "https://v2.exercisedb.io/image/ZKKb6Z4EGfvjjt",
-            "Abs en máquina": "https://v2.exercisedb.io/image/QE-5xfWhjuWVj7"
+            // Using free exercise images from Wger Workout Manager API
+            // Note: These are static images, not animated GIFs
+            "Hip Thrust (core lift)": "https://wger.de/media/exercise-images/70/Reverse-grip-bent-over-rows-1.png",
+            "RDL": "https://wger.de/media/exercise-images/70/Reverse-grip-bent-over-rows-1.png",
+            "Prensa": "https://wger.de/media/exercise-images/16/Incline-press-1.png",
+            "Abducciones": "https://wger.de/media/exercise-images/999/d0931eb3-8db0-4049-bb08-aa4036072056.jfif",
+            "Aducciones": "https://wger.de/media/exercise-images/999/d0931eb3-8db0-4049-bb08-aa4036072056.jfif",
+            "Extensión de cuádriceps": "https://wger.de/media/exercise-images/16/Incline-press-1.png",
+            "Press militar": "https://wger.de/media/exercise-images/192/Bench-press-1.png",
+            "Elevación lateral": "https://wger.de/media/exercise-images/822/74affc0d-03b6-4f33-b5f4-a822a2615f68.png",
+            "Press de pecho": "https://wger.de/media/exercise-images/192/Bench-press-1.png",
+            "Elevación frontal / Y-Raise": "https://wger.de/media/exercise-images/71/Cable-crossover-2.png",
+            "Tríceps cuerda": "https://wger.de/media/exercise-images/109/Barbell-rear-delt-row-1.png",
+            "Extensión o fondos": "https://wger.de/media/exercise-images/109/Barbell-rear-delt-row-1.png",
+            "Face pull (opcional)": "https://wger.de/media/exercise-images/822/74affc0d-03b6-4f33-b5f4-a822a2615f68.png",
+            "Hack squat": "https://wger.de/media/exercise-images/98/Butterfly-machine-2.png",
+            "Zancada estacionaria": "https://wger.de/media/exercise-images/999/d0931eb3-8db0-4049-bb08-aa4036072056.jfif",
+            "Prensa quad-dominante": "https://wger.de/media/exercise-images/16/Incline-press-1.png",
+            "Jalón pecho": "https://wger.de/media/exercise-images/41/Incline-bench-press-1.png",
+            "Remo sentado": "https://wger.de/media/exercise-images/143/Cable-seated-rows-2.png",
+            "Remo mancuerna": "https://wger.de/media/exercise-images/143/Cable-seated-rows-2.png",
+            "Curl barra": "https://wger.de/media/exercise-images/74/Bicep-curls-1.png",
+            "Curl martillo": "https://wger.de/media/exercise-images/74/Bicep-curls-1.png",
+            "Curl martillo cross-body": "https://wger.de/media/exercise-images/74/Bicep-curls-1.png",
+            "Tríceps aislado": "https://wger.de/media/exercise-images/109/Barbell-rear-delt-row-1.png",
+            "Hip Thrust ligero": "https://wger.de/media/exercise-images/70/Reverse-grip-bent-over-rows-1.png",
+            "Abs en máquina": "https://wger.de/media/exercise-images/91/Crunches-1.png"
         };
 
         // ==========================================
@@ -2533,9 +2534,39 @@
             const container = document.getElementById('animationContainer');
 
             if (gifUrl) {
-                container.innerHTML = `<img src="${gifUrl}" alt="${nombre}" class="w-full max-w-md rounded-lg" onerror="this.parentElement.innerHTML='<p class=&quot;text-gray-400&quot;>Error al cargar la animación</p>'">`;
+                // Show loading indicator first
+                container.innerHTML = '<div class="flex flex-col items-center gap-3"><div class="animate-pulse text-4xl">⏳</div><p class="text-gray-400">Cargando imagen...</p></div>';
+
+                // Create image element with better error handling
+                const img = new Image();
+                img.crossOrigin = 'anonymous'; // Enable CORS
+                img.className = 'w-full max-w-md rounded-lg shadow-lg';
+                img.alt = nombre;
+
+                img.onload = function() {
+                    container.innerHTML = '';
+                    container.appendChild(img);
+                };
+
+                img.onerror = function() {
+                    container.innerHTML = `
+                        <div class="flex flex-col items-center gap-3 text-center p-4">
+                            <div class="text-4xl">❌</div>
+                            <p class="text-gray-300 font-semibold">Error al cargar la imagen</p>
+                            <p class="text-gray-400 text-sm">La imagen de referencia no está disponible en este momento.</p>
+                            <p class="text-gray-500 text-xs mt-2">Fuente: Wger Workout Manager</p>
+                        </div>
+                    `;
+                };
+
+                img.src = gifUrl;
             } else {
-                container.innerHTML = '<p class="text-gray-400">Animación no disponible.</p>';
+                container.innerHTML = `
+                    <div class="flex flex-col items-center gap-3 text-center p-4">
+                        <div class="text-4xl">📋</div>
+                        <p class="text-gray-400">Referencia visual no disponible para este ejercicio.</p>
+                    </div>
+                `;
             }
 
             document.getElementById('animationModal').classList.add('active');
@@ -2543,7 +2574,7 @@
 
         function closeAnimationModal() {
             document.getElementById('animationModal').classList.remove('active');
-            document.getElementById('animationContainer').innerHTML = '<p class="text-gray-400">Cargando animación...</p>';
+            document.getElementById('animationContainer').innerHTML = '<p class="text-gray-400">Cargando imagen de referencia...</p>';
         }
 
         // ==========================================
