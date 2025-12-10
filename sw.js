@@ -1,5 +1,5 @@
 // Service Worker for GymMate PWA
-const CACHE_NAME = 'gymmate-v4.0';
+const CACHE_NAME = 'gymmate-v4.1';
 const urlsToCache = [
   '/',
   '/index.html',

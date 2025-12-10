@@ -1462,33 +1462,33 @@
         // EXERCISE GIF MAPPING (ExerciseDB API)
         // ==========================================
         const exerciseGifs = {
-            // Using free exercise images from Wger Workout Manager API
-            // Note: These are static images, not animated GIFs
-            "Hip Thrust (core lift)": "https://wger.de/media/exercise-images/70/Reverse-grip-bent-over-rows-1.png",
-            "RDL": "https://wger.de/media/exercise-images/70/Reverse-grip-bent-over-rows-1.png",
-            "Prensa": "https://wger.de/media/exercise-images/16/Incline-press-1.png",
-            "Abducciones": "https://wger.de/media/exercise-images/999/d0931eb3-8db0-4049-bb08-aa4036072056.jfif",
-            "Aducciones": "https://wger.de/media/exercise-images/999/d0931eb3-8db0-4049-bb08-aa4036072056.jfif",
-            "Extensión de cuádriceps": "https://wger.de/media/exercise-images/16/Incline-press-1.png",
-            "Press militar": "https://wger.de/media/exercise-images/192/Bench-press-1.png",
-            "Elevación lateral": "https://wger.de/media/exercise-images/822/74affc0d-03b6-4f33-b5f4-a822a2615f68.png",
-            "Press de pecho": "https://wger.de/media/exercise-images/192/Bench-press-1.png",
-            "Elevación frontal / Y-Raise": "https://wger.de/media/exercise-images/71/Cable-crossover-2.png",
-            "Tríceps cuerda": "https://wger.de/media/exercise-images/109/Barbell-rear-delt-row-1.png",
-            "Extensión o fondos": "https://wger.de/media/exercise-images/109/Barbell-rear-delt-row-1.png",
-            "Face pull (opcional)": "https://wger.de/media/exercise-images/822/74affc0d-03b6-4f33-b5f4-a822a2615f68.png",
-            "Hack squat": "https://wger.de/media/exercise-images/98/Butterfly-machine-2.png",
-            "Zancada estacionaria": "https://wger.de/media/exercise-images/999/d0931eb3-8db0-4049-bb08-aa4036072056.jfif",
-            "Prensa quad-dominante": "https://wger.de/media/exercise-images/16/Incline-press-1.png",
-            "Jalón pecho": "https://wger.de/media/exercise-images/41/Incline-bench-press-1.png",
-            "Remo sentado": "https://wger.de/media/exercise-images/143/Cable-seated-rows-2.png",
-            "Remo mancuerna": "https://wger.de/media/exercise-images/143/Cable-seated-rows-2.png",
-            "Curl barra": "https://wger.de/media/exercise-images/74/Bicep-curls-1.png",
-            "Curl martillo": "https://wger.de/media/exercise-images/74/Bicep-curls-1.png",
-            "Curl martillo cross-body": "https://wger.de/media/exercise-images/74/Bicep-curls-1.png",
-            "Tríceps aislado": "https://wger.de/media/exercise-images/109/Barbell-rear-delt-row-1.png",
-            "Hip Thrust ligero": "https://wger.de/media/exercise-images/70/Reverse-grip-bent-over-rows-1.png",
-            "Abs en máquina": "https://wger.de/media/exercise-images/91/Crunches-1.png"
+            // Using free exercise images from GitHub (free-exercise-db) - Public Domain
+            // These images are hosted on GitHub's raw CDN with proper CORS support
+            "Hip Thrust (core lift)": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Hip_Thrust/0.jpg",
+            "RDL": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Deadlift/0.jpg",
+            "Prensa": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/0.jpg",
+            "Abducciones": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Band_Hip_Adductions/0.jpg",
+            "Aducciones": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Adductor/0.jpg",
+            "Extensión de cuádriceps": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Hack_Squat/0.jpg",
+            "Press militar": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Shoulder_Press/0.jpg",
+            "Elevación lateral": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Alternating_Deltoid_Raise/0.jpg",
+            "Press de pecho": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/0.jpg",
+            "Elevación frontal / Y-Raise": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Incline_Shoulder_Raise/0.jpg",
+            "Tríceps cuerda": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Band_Skull_Crusher/0.jpg",
+            "Extensión o fondos": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bench_Dips/0.jpg",
+            "Face pull (opcional)": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent_Over_Low-Pulley_Side_Lateral/0.jpg",
+            "Hack squat": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Hack_Squat/0.jpg",
+            "Zancada estacionaria": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Lunge/0.jpg",
+            "Prensa quad-dominante": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/0.jpg",
+            "Jalón pecho": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Band_Assisted_Pull-Up/0.jpg",
+            "Remo sentado": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent_Over_Barbell_Row/0.jpg",
+            "Remo mancuerna": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent_Over_Two-Dumbbell_Row/0.jpg",
+            "Curl barra": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Curl/0.jpg",
+            "Curl martillo": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Alternate_Hammer_Curl/0.jpg",
+            "Curl martillo cross-body": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Alternate_Hammer_Curl/0.jpg",
+            "Tríceps aislado": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Band_Skull_Crusher/0.jpg",
+            "Hip Thrust ligero": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Hip_Thrust/0.jpg",
+            "Abs en máquina": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Ab_Crunch_Machine/0.jpg"
         };
 
         // ==========================================
@@ -2539,7 +2539,7 @@
 
                 // Create image element with better error handling
                 const img = new Image();
-                img.crossOrigin = 'anonymous'; // Enable CORS
+                // Don't use crossOrigin - causes CORS issues with some CDNs
                 img.className = 'w-full max-w-md rounded-lg shadow-lg';
                 img.alt = nombre;
 
