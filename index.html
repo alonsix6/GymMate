@@ -3410,30 +3410,62 @@
                     day: 'numeric'
                 });
 
-                const completedCount = session.ejercicios.filter(ej => ej.completado).length;
-                const totalExercises = session.ejercicios.filter(ej => ej.volumen > 0).length;
+                // Diferenciar entre sesión de cardio y de pesas
+                if (session.type === 'cardio') {
+                    // Sesión de CARDIO
+                    const modeEmoji = session.mode === 'tabata' ? '⚡' : session.mode === 'amrap' ? '🔥' : '⏱️';
+                    const modeName = session.mode === 'tabata' ? 'Tabata' : session.mode === 'amrap' ? 'AMRAP' : 'EMOM';
 
-                html += `
-                    <div class="glass-card p-4">
-                        <div class="flex justify-between items-start mb-2">
-                            <div>
-                                <h3 class="font-bold text-white">${session.grupo}</h3>
-                                <p class="text-sm text-gray-400">${date}</p>
+                    html += `
+                        <div class="glass-card p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 class="font-bold text-white">${modeEmoji} ${modeName}</h3>
+                                    <p class="text-sm text-gray-400">${date}</p>
+                                </div>
+                                <button onclick="deleteHistoryItem(${index})" class="text-red-400 hover:text-red-300 text-xl active:scale-95 transition-transform">🗑️</button>
                             </div>
-                            <button onclick="deleteHistoryItem(${index})" class="text-red-400 hover:text-red-300 text-xl active:scale-95 transition-transform">🗑️</button>
+                            <div class="grid grid-cols-2 gap-2 mt-3">
+                                <div class="bg-dark-surface border border-white/10 rounded-lg p-2">
+                                    <p class="text-xs text-gray-400">Tiempo Total</p>
+                                    <p class="text-lg font-bold text-orange-400">${Math.floor(session.stats.totalTime / 60)}:${String(session.stats.totalTime % 60).padStart(2, '0')}</p>
+                                </div>
+                                <div class="bg-dark-surface border border-white/10 rounded-lg p-2">
+                                    <p class="text-xs text-gray-400">Rondas</p>
+                                    <p class="text-lg font-bold text-purple-400">${session.stats.roundsCompleted}</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-2 mt-3">
-                            <div class="bg-dark-surface border border-white/10 rounded-lg p-2">
-                                <p class="text-xs text-gray-400">Volumen Total</p>
-                                <p class="text-lg font-bold text-cyan-400">${session.volumenTotal.toFixed(0)}</p>
+                    `;
+                } else {
+                    // Sesión de PESAS
+                    // Verificar que session.ejercicios existe antes de acceder
+                    const completedCount = session.ejercicios ? session.ejercicios.filter(ej => ej.completado).length : 0;
+                    const totalExercises = session.ejercicios ? session.ejercicios.filter(ej => ej.volumen > 0).length : 0;
+                    const volumenTotal = session.volumenTotal || 0;
+
+                    html += `
+                        <div class="glass-card p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 class="font-bold text-white">💪 ${session.grupo || 'Entrenamiento'}</h3>
+                                    <p class="text-sm text-gray-400">${date}</p>
+                                </div>
+                                <button onclick="deleteHistoryItem(${index})" class="text-red-400 hover:text-red-300 text-xl active:scale-95 transition-transform">🗑️</button>
                             </div>
-                            <div class="bg-dark-surface border border-white/10 rounded-lg p-2">
-                                <p class="text-xs text-gray-400">Completados</p>
-                                <p class="text-lg font-bold text-green-400">${completedCount}/${totalExercises}</p>
+                            <div class="grid grid-cols-2 gap-2 mt-3">
+                                <div class="bg-dark-surface border border-white/10 rounded-lg p-2">
+                                    <p class="text-xs text-gray-400">Volumen Total</p>
+                                    <p class="text-lg font-bold text-cyan-400">${volumenTotal.toFixed(0)} kg</p>
+                                </div>
+                                <div class="bg-dark-surface border border-white/10 rounded-lg p-2">
+                                    <p class="text-xs text-gray-400">Completados</p>
+                                    <p class="text-lg font-bold text-green-400">${completedCount}/${totalExercises}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                }
             });
             historyList.innerHTML = html;
         }
@@ -3857,14 +3889,17 @@
             const dropdown = document.getElementById('exerciseChartSelect');
             if (!dropdown) return;
 
-            // Get all unique exercises
+            // Get all unique exercises - filtrar solo sesiones de pesas
             const exercises = new Set();
             history.forEach(session => {
-                session.ejercicios.forEach(ej => {
-                    if (ej.peso > 0) {
-                        exercises.add(ej.nombre);
-                    }
-                });
+                // Solo procesar sesiones que tienen ejercicios (pesas, no cardio)
+                if (session.ejercicios && Array.isArray(session.ejercicios)) {
+                    session.ejercicios.forEach(ej => {
+                        if (ej.peso > 0) {
+                            exercises.add(ej.nombre);
+                        }
+                    });
+                }
             });
 
             dropdown.innerHTML = '<option value="">-- Elige un ejercicio --</option>';
@@ -3888,17 +3923,20 @@
 
             if (weightProgressChart) weightProgressChart.destroy();
 
-            // Get weight data for this exercise
+            // Get weight data for this exercise - solo sesiones con ejercicios
             const exerciseData = [];
             history.slice(0, 30).reverse().forEach(session => {
-                const exercise = session.ejercicios.find(ej => ej.nombre === exerciseName);
-                if (exercise && exercise.peso > 0) {
-                    exerciseData.push({
-                        date: new Date(session.savedAt || session.date).toLocaleDateString('es-ES', { month: 'short', day: 'numeric' }),
-                        peso: exercise.peso,
-                        sets: exercise.sets,
-                        reps: exercise.reps
-                    });
+                // Solo procesar sesiones de pesas que tienen ejercicios
+                if (session.ejercicios && Array.isArray(session.ejercicios)) {
+                    const exercise = session.ejercicios.find(ej => ej.nombre === exerciseName);
+                    if (exercise && exercise.peso > 0) {
+                        exerciseData.push({
+                            date: new Date(session.savedAt || session.date).toLocaleDateString('es-ES', { month: 'short', day: 'numeric' }),
+                            peso: exercise.peso,
+                            sets: exercise.sets,
+                            reps: exercise.reps
+                        });
+                    }
                 }
             });
 
@@ -4050,18 +4088,21 @@
         }
 
         function checkWeightStagnation(history) {
-            // Get last 3 sessions for each exercise
+            // Get last 3 sessions for each exercise - solo sesiones de pesas
             const exerciseProgress = {};
 
             history.slice(0, 5).forEach(session => {
-                session.ejercicios.forEach(ej => {
-                    if (!exerciseProgress[ej.nombre]) {
-                        exerciseProgress[ej.nombre] = [];
-                    }
-                    if (ej.peso > 0) {
-                        exerciseProgress[ej.nombre].push(ej.peso);
-                    }
-                });
+                // Solo procesar sesiones que tienen ejercicios (pesas, no cardio)
+                if (session.ejercicios && Array.isArray(session.ejercicios)) {
+                    session.ejercicios.forEach(ej => {
+                        if (!exerciseProgress[ej.nombre]) {
+                            exerciseProgress[ej.nombre] = [];
+                        }
+                        if (ej.peso > 0) {
+                            exerciseProgress[ej.nombre].push(ej.peso);
+                        }
+                    });
+                }
             });
 
             // Find stagnant exercises (same weight for 3+ sessions)
@@ -4156,17 +4197,20 @@
         function calculate1RM(exerciseName) {
             const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
 
-            // Find best performance for this exercise
+            // Find best performance for this exercise - solo sesiones de pesas
             let bestPerformance = null;
             let maxWeight = 0;
 
             history.forEach(session => {
-                const exercise = session.ejercicios.find(ej => ej.nombre === exerciseName);
-                if (exercise && exercise.peso > 0) {
-                    if (exercise.peso > maxWeight ||
-                        (exercise.peso === maxWeight && exercise.reps > (bestPerformance?.reps || 0))) {
-                        maxWeight = exercise.peso;
-                        bestPerformance = exercise;
+                // Solo procesar sesiones que tienen ejercicios
+                if (session.ejercicios && Array.isArray(session.ejercicios)) {
+                    const exercise = session.ejercicios.find(ej => ej.nombre === exerciseName);
+                    if (exercise && exercise.peso > 0) {
+                        if (exercise.peso > maxWeight ||
+                            (exercise.peso === maxWeight && exercise.reps > (bestPerformance?.reps || 0))) {
+                            maxWeight = exercise.peso;
+                            bestPerformance = exercise;
+                        }
                     }
                 }
             });
@@ -4276,14 +4320,17 @@
         function populateCalculatorDropdowns() {
             const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
 
-            // Get all unique exercises
+            // Get all unique exercises - solo de sesiones de pesas
             const exercises = new Set();
             history.forEach(session => {
-                session.ejercicios.forEach(ej => {
-                    if (ej.peso > 0) {
-                        exercises.add(ej.nombre);
-                    }
-                });
+                // Solo procesar sesiones que tienen ejercicios (pesas, no cardio)
+                if (session.ejercicios && Array.isArray(session.ejercicios)) {
+                    session.ejercicios.forEach(ej => {
+                        if (ej.peso > 0) {
+                            exercises.add(ej.nombre);
+                        }
+                    });
+                }
             });
 
             const exerciseArray = Array.from(exercises).sort();
@@ -4356,29 +4403,32 @@
             // Headers
             excelData.push(['Fecha', 'Grupo', 'Ejercicio', 'Sets', 'Reps', 'Peso (kg)', 'Es Mancuerna', 'Grupo Muscular', 'Volumen', 'Completado', 'Volumen Total Sesión']);
 
-            // Data rows
+            // Data rows - solo exportar sesiones de pesas
             history.forEach(session => {
-                const fecha = new Date(session.savedAt || session.date).toLocaleDateString('es-ES');
-                const grupo = session.grupo;
-                const volumenTotalSesion = session.volumenTotal;
+                // Solo exportar sesiones que tienen ejercicios (pesas, no cardio)
+                if (session.ejercicios && Array.isArray(session.ejercicios)) {
+                    const fecha = new Date(session.savedAt || session.date).toLocaleDateString('es-ES');
+                    const grupo = session.grupo;
+                    const volumenTotalSesion = session.volumenTotal;
 
-                session.ejercicios.forEach(ej => {
-                    if (ej.volumen > 0) {
-                        excelData.push([
-                            fecha,
-                            grupo,
-                            ej.nombre,
-                            ej.sets,
-                            ej.reps,
-                            ej.peso,
-                            ej.esMancuerna ? 'Sí' : 'No',
-                            ej.grupoMuscular,
-                            ej.volumen,
-                            ej.completado ? 'Sí' : 'No',
-                            volumenTotalSesion
-                        ]);
-                    }
-                });
+                    session.ejercicios.forEach(ej => {
+                        if (ej.volumen > 0) {
+                            excelData.push([
+                                fecha,
+                                grupo,
+                                ej.nombre,
+                                ej.sets,
+                                ej.reps,
+                                ej.peso,
+                                ej.esMancuerna ? 'Sí' : 'No',
+                                ej.grupoMuscular,
+                                ej.volumen,
+                                ej.completado ? 'Sí' : 'No',
+                                volumenTotalSesion
+                            ]);
+                        }
+                    });
+                }
             });
 
             // Create workbook and worksheet
