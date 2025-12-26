@@ -30,6 +30,11 @@ export let lastSavedData: ExerciseData[] | null = null;
 export let sessionId: string | null = null;
 
 let draftSaveTimeout: ReturnType<typeof setTimeout> | null = null;
+let onDraftSavedCallback: (() => void) | null = null;
+
+export function setOnDraftSavedCallback(callback: () => void): void {
+  onDraftSavedCallback = callback;
+}
 
 // ==========================================
 // FUNCIONES DE ESTADO DE SESIÓN
@@ -176,6 +181,10 @@ export function saveDraftNow(): void {
     saveDraft(sessionData);
     hasUnsavedChanges = false;
     console.log('Draft saved');
+    // Notify UI to update indicator
+    if (onDraftSavedCallback) {
+      onDraftSavedCallback();
+    }
   }
 }
 

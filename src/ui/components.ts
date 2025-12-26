@@ -180,7 +180,7 @@ export function renderExercise(
           />
         </div>
         <div>
-          <label class="block text-xs text-slate-500 mb-1.5 text-center">Kg</label>
+          <label class="block text-xs text-slate-500 mb-1.5 text-center">${ejercicio.esMancuerna ? 'Kg ×1' : 'Kg'}</label>
           <input
             type="number"
             id="peso-${index}"
@@ -189,8 +189,9 @@ export function renderExercise(
             min="0"
             step="0.5"
             onchange="window.updateEjercicio(${index})"
-            class="w-full h-12 text-center bg-slate-900 border-2 border-slate-700 rounded-xl text-white text-xl font-bold focus:border-blue-500 focus:ring-0 placeholder-slate-600"
+            class="w-full h-12 text-center ${ejercicio.esMancuerna ? 'bg-purple-900/50 border-purple-600/50' : 'bg-slate-900 border-slate-700'} border-2 rounded-xl text-white text-xl font-bold focus:border-blue-500 focus:ring-0 placeholder-slate-600"
           />
+          ${ejercicio.esMancuerna ? '<p class="text-[10px] text-purple-400 text-center mt-1">1 mancuerna</p>' : ''}
         </div>
       </div>
 
