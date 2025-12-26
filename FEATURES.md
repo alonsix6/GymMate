@@ -1,390 +1,177 @@
-# 🚀 GymMate v2.0 - Características Implementadas y Futuras
+# GymMate v3.1 - Caracteristicas Implementadas
 
-## ✅ CARACTERÍSTICAS IMPLEMENTADAS
+## Caracteristicas Implementadas
 
-### 1. 📱 Mobile-First & PWA
-- ✅ Diseño completamente responsive
-- ✅ Navegación inferior (bottom navigation) para móviles
-- ✅ Touch targets optimizados (min 44px)
-- ✅ PWA manifest configurado
-- ✅ Service Worker para funcionalidad offline
-- ✅ Instalable como app nativa
-- ✅ iOS Safari compatible
-- ✅ Previene zoom en iOS (font-size: 16px)
+### 1. Arquitectura Moderna
 
-### 2. 🎬 Animaciones de Ejercicios
-- ✅ Integración con ExerciseDB API
-- ✅ GIFs de demostración para cada ejercicio
-- ✅ Modal optimizado para visualización
-- ✅ Fallback para errores de carga
-- ✅ 20+ ejercicios con animaciones
+- Vite 5.x como build tool
+- TypeScript 5.x para tipado estatico
+- 16+ modulos TypeScript organizados
+- Tailwind CSS 3.4 (local, no CDN)
+- Lucide Icons (94+ iconos mapeados)
+- Vitest para unit testing (21+ tests)
 
-### 3. 📊 Resumen Dinámico de Volumen
-- ✅ **SOLO muestra grupos musculares de la rutina seleccionada**
-- ✅ Barra al 100% = mayor volumen del día
-- ✅ Escalado proporcional automático
-- ✅ Se oculta hasta que hay datos
+### 2. Mobile-First y PWA
 
-### 4. ⏱️ Temporizador de Descanso
-- ✅ 6 opciones predefinidas (1-5 minutos)
-- ✅ Pausar/Reanudar
-- ✅ Notificación al finalizar
-- ✅ Sonido de alerta (Web Audio API)
-- ✅ Banner visible durante cuenta regresiva
+- Diseno completamente responsive
+- Navegacion inferior con FAB central
+- Touch targets optimizados (min 44px)
+- PWA con vite-plugin-pwa
+- Workbox para cache inteligente
+- Auto-update de versiones
+- Instalable como app nativa
+- Funciona offline
 
-### 5. 🏆 Tracking de Personal Records
-- ✅ Detección automática de nuevos PRs
-- ✅ Notificación al batir récord
-- ✅ Vista dedicada de PRs
-- ✅ Persistencia en localStorage
-- ✅ Histórico de mejor peso por ejercicio
+### 3. Entrenamiento de Pesas
 
-### 6. 📅 Historial de Entrenamientos
-- ✅ Últimos 30 entrenamientos guardados
-- ✅ Vista con resumen de volumen
-- ✅ Contador de ejercicios completados
-- ✅ Función de eliminar entrenos
-- ✅ Fecha formateada en español
+- 5 Grupos de entrenamiento predefinidos:
+  - Grupo 1: Piernas + Gluteos
+  - Grupo 2: Upper Push
+  - Grupo 3: Piernas Quad Dominante
+  - Grupo 4: Espalda + Biceps
+  - Grupo 5: Hombro + Triceps
+- Calculo automatico de volumen
+- Regla de mancuernas (peso x2)
+- Ejercicios opcionales diferenciados
+- Resumen dinamico por grupo muscular
+- Sistema de drafts con auto-guardado
 
-### 7. 📈 Estadísticas en Tiempo Real
-- ✅ 4 tarjetas de stats rápidas:
-  - Volumen Total
-  - Ejercicios activos
-  - Sets totales
-  - Ejercicios completados
-- ✅ Actualización instantánea
-- ✅ Diseño con gradientes coloridos
+### 4. Cardio y HIIT (7 modos)
 
-### 8. 🌙 Dark Mode
-- ✅ Toggle de modo oscuro
-- ✅ Persistencia de preferencia
-- ✅ Todos los componentes adaptados
-- ✅ Colores CSS variables
+- **Tabata**: 20s trabajo / 10s descanso x 8 rondas
+- **EMOM**: Every Minute On the Minute
+- **AMRAP**: As Many Reps As Possible
+- **Circuit**: Ejercicios en secuencia
+- **Pyramid**: Intervalos ascendentes/descendentes
+- **Custom**: Configura tu propio intervalo
+- **ForTime**: Completa lo mas rapido posible
 
-### 9. 🎯 Funcionalidades Core
-- ✅ Cálculo automático volumen (mancuernas ×2)
-- ✅ Validación de decimales (punto, no coma)
-- ✅ Botón "+ Set" rápido
-- ✅ Checkbox de completado
-- ✅ Ejercicios opcionales diferenciados
-- ✅ 5 grupos de entrenamiento completos
+Caracteristicas del timer:
+- Visualizacion de fase (trabajo/descanso)
+- Sonido y vibracion al cambiar fase
+- Contador de rondas/niveles
+- Tiempo total acumulado
+- Pausar/Reanudar/Detener
+- Resumen de sesion al finalizar
 
-### 10. 💾 Persistencia de Datos
-- ✅ localStorage para sesiones
-- ✅ localStorage para historial
-- ✅ localStorage para PRs
-- ✅ localStorage para dark mode
-- ✅ Sin necesidad de backend
+### 5. Temporizador de Descanso
 
----
+- 6 opciones predefinidas (1-5 min)
+- Tiempos rapidos (30s, 45s, 90s)
+- Tiempo maximo (5 min)
+- Pausar/Reanudar
+- Banner visible durante cuenta
+- Sonido Web Audio API al finalizar
+- Boton rapido en cada ejercicio
 
-## 🎨 IDEAS PARA CONVERTIR GYMMATE EN EL MEJOR COMPAÑERO
+### 6. Personal Records (PRs)
 
-### 🔥 NIVEL 1 - Mejoras Inmediatas (Fáciles de Implementar)
+- Deteccion automatica de nuevos records
+- Notificacion visual al batir PR
+- Vista dedicada de PRs
+- Persistencia en localStorage
+- Historico de mejor peso por ejercicio
 
-#### 1. **🎙️ Entrada por Voz**
-```javascript
-// "Tres sets de diez con veinticinco kilos"
-- Usar Web Speech API
-- Dictar datos sin tocar la pantalla
-- Ideal para entrenar sin interrupciones
-```
+### 7. Historial de Entrenamientos
 
-#### 2. **📸 Notas Fotográficas**
-```javascript
-- Agregar fotos de progreso por ejercicio
-- Comparar posturas/técnica en el tiempo
-- Selfies de progreso muscular
-```
+- Ultimos 30 entrenamientos guardados
+- Historial unificado de pesas y cardio
+- Vista con resumen de volumen
+- Contador de ejercicios completados
+- Fecha formateada en espanol
+- Funcion de eliminar entrenos
+- Exportacion a Excel
 
-#### 3. **🎵 Integración con Spotify**
-```javascript
-- Controles de música desde la app
-- Playlists para diferentes entrenamientos
-- Cambiar canción sin salir de GymMate
-```
+### 8. Graficos (Chart.js)
 
-#### 4. **🔔 Recordatorios Inteligentes**
-```javascript
-- "No has entrenado piernas esta semana"
-- "Han pasado 3 días desde tu último entreno"
-- Notificaciones push configurables
-```
+4 graficos interactivos:
 
-#### 5. **⚡ Quick Actions**
-```javascript
-- Repetir último entrenamiento (1 click)
-- Copiar datos de entreno anterior
-- Templates de rutinas favoritas
-- Incremento automático de peso (+2.5kg)
-```
+1. **Tendencia de Volumen**: Linea temporal
+2. **Distribucion Muscular**: Dona/Pie
+3. **Progreso de Peso**: Por ejercicio seleccionado
+4. **Comparativa Semanal**: Barras semana actual vs anterior
 
-#### 6. **📐 Calculadoras Fitness**
-```javascript
-- Calculadora de 1RM (One Rep Max)
-- Calculadora de calorías/macros
-- Calculadora de peso progresivo
-- Conversor lb ↔ kg
-```
+### 9. Calculadoras Fitness
 
-#### 7. **🎨 Temas Personalizables**
-```javascript
-- Colores personalizados
-- Fondos de pantalla fitness
-- Esquemas de color por rutina
-- Modo alto contraste
-```
+- **1RM Calculator**: 3 formulas (Epley, Brzycki, Lombardi)
+- **Calorias**: TDEE con Mifflin-St Jeor
+- **Peso Progresivo**: Sugerencias ACSM/NSCA
+
+### 10. Sistema de Diseno
+
+- Dark Mode profesional
+- CERO gradientes (colores solidos)
+- CERO emojis (solo Lucide icons)
+- Alto contraste para legibilidad
+- Feedback tactil (active:scale-95)
+- Tipografia Inter + Oswald
+
+### 11. Persistencia de Datos
+
+- localStorage para sesiones
+- localStorage para historial (30 max)
+- localStorage para PRs
+- localStorage para perfil
+- Sistema de drafts con expiracion 24h
+- Sin necesidad de backend
 
 ---
 
-### 🚀 NIVEL 2 - Funcionalidades Avanzadas
+## Ideas Futuras (Roadmap)
 
-#### 8. **📊 Gráficos de Progreso**
-```javascript
-import Chart.js
+### Fase 1 - Corto Plazo
 
-- Volumen por semana (línea)
-- Distribución muscular (dona)
-- Progresión de peso (área)
-- Comparativa mes vs mes
-```
+- [ ] Entrada por voz (Web Speech API)
+- [ ] Gamificacion (achievements, XP, niveles)
+- [ ] Notas por ejercicio
+- [ ] Plate calculator
 
-#### 9. **🤖 IA - Sugerencias Inteligentes**
-```javascript
-- "Basándote en tus datos, incrementa +5kg en RDL"
-- Detectar desequilibrios musculares
-- Sugerir descansos por sobreentrenamiento
-- Predicción de 1RM
-```
+### Fase 2 - Medio Plazo
 
-#### 10. **👥 Social & Competición**
-```javascript
-- Compartir PRs en redes sociales
-- Ranking con amigos
-- Desafíos semanales
-- Grupos de entrenamiento
-```
+- [ ] Backend con Firebase/Supabase
+- [ ] Sincronizacion multi-dispositivo
+- [ ] Planificacion periodizada
+- [ ] Modo entrenador
+- [ ] Integracion con wearables
 
-#### 11. **📹 Análisis de Forma (Video)**
-```javascript
-- Grabar sets y comparar con técnica correcta
-- IA que detecta errores de postura
-- Slow-motion para análisis
-- Overlay con ejercicio ideal
-```
+### Fase 3 - Largo Plazo
 
-#### 12. **🧘 Warm-up & Cooldown**
-```javascript
-- Rutinas de calentamiento específicas
-- Estiramientos post-entreno
-- Foam rolling guidance
-- Movilidad dirigida
-```
-
-#### 13. **💧 Hydration & Nutrition Tracking**
-```javascript
-- Recordatorio de hidratación
-- Contador de vasos de agua
-- Log de comida pre/post
-- Integración con MyFitnessPal
-```
-
-#### 14. **🏋️ Plate Calculator**
-```javascript
-- "Necesitas cargar: 2×20kg + 2×10kg + 2×2.5kg"
-- Visualización de discos en barra
-- Soporte para barras olímpicas/estándar
-- Cálculo automático de distribución
-```
-
-#### 15. **⌚ Integración con Wearables**
-```javascript
-- Apple Watch / Fitbit
-- Pulsaciones en tiempo real
-- Calorías quemadas (real)
-- Auto-detección de sets completados
-```
+- [ ] IA para sugerencias
+- [ ] Analisis de video/postura
+- [ ] Social features
+- [ ] Programas integrados (5/3/1, nSuns, etc.)
 
 ---
 
-### 🌟 NIVEL 3 - Game Changers
-
-#### 16. **🎮 Gamificación Total**
-```javascript
-Achievements:
-- 🏅 "Primera Semana" - 3 entrenos
-- 🔥 "Streak de Fuego" - 30 días seguidos
-- 💪 "Monstruo de Volumen" - 10,000 volumen/mes
-- 🦵 "Rey de Piernas" - 50 sesiones de pierna
-- 🏆 "PR Machine" - 20 records batidos
-
-Sistema de XP:
-- Entrenar = +100 XP
-- Completar todos ejercicios = +50 XP
-- Batir PR = +200 XP
-- Streak diario = +25 XP
-
-Niveles:
-- Novato (0-500 XP)
-- Intermedio (500-2000 XP)
-- Avanzado (2000-5000 XP)
-- Elite (5000-10000 XP)
-- Leyenda (10000+ XP)
-```
-
-#### 17. **🧬 Planificación Periodizada**
-```javascript
-- Crear mesociclos (4-6 semanas)
-- Fases: Hipertrofia → Fuerza → Potencia
-- Auto-ajuste de volumen/intensidad
-- Deloads programados
-- Progresión lineal/ondulatoria
-```
-
-#### 18. **🏥 Injury Prevention & Recovery**
-```javascript
-- Log de dolores/molestias
-- Ejercicios contraindicados por lesión
-- Sustituciones automáticas
-- Días de recuperación obligatorios
-- Alertas de sobreuso
-```
-
-#### 19. **📱 Modo Entrenador**
-```javascript
-- Crear y asignar rutinas a clientes
-- Ver progreso de múltiples usuarios
-- Chat integrado
-- Cobros/suscripciones
-- Dashboard de entrenador
-```
-
-#### 20. **🔄 Sincronización Multi-Dispositivo**
-```javascript
-- Backend con Firebase/Supabase
-- Sync en tiempo real
-- Login con Google/Apple
-- Backup automático en la nube
-- Acceso desde web/móvil/tablet
-```
-
-#### 21. **📽️ Modo Cine (Workout Player)**
-```javascript
-- Lista de ejercicios en modo reproductor
-- Auto-avance con timer
-- Pantalla completa
-- Voz que anuncia: "Próximo: RDL, 3x10"
-- Cuenta regresiva entre ejercicios
-```
-
-#### 22. **🧪 Análisis Científico**
-```javascript
-- Volumen Landmark (Volumen efectivo)
-- MEV/MRV por grupo muscular
-- Stimulus to Fatigue Ratio
-- RIR (Reps in Reserve) tracking
-- Frecuencia óptima sugerida
-```
-
-#### 23. **🌍 Modo Gym Buddy Finder**
-```javascript
-- Encontrar gente que entrena en tu gym
-- Matching por horarios
-- Chat para coordinar entrenos
-- Compartir rutinas
-- Entrenar en grupo
-```
-
-#### 24. **🎯 Retos & Programas**
-```javascript
-Programas integrados:
-- "5/3/1 de Wendler"
-- "nSuns"
-- "PPL Clásico"
-- "Starting Strength"
-- "PHUL/PHAT"
-
-Retos:
-- "30 días de sentadillas"
-- "100 flexiones diarias"
-- "Dobla tu Hip Thrust en 12 semanas"
-```
-
-#### 25. **🔬 Modo Científico**
-```javascript
-- Export a Excel/CSV para análisis
-- API para integrar con Python/R
-- Estadísticas avanzadas
-- Regresión lineal de progresión
-- Predicciones basadas en datos
-- Correlaciones (sueño vs rendimiento)
-```
-
----
-
-## 🎯 PRIORIZACIÓN SUGERIDA
-
-### FASE 1 (Corto Plazo - 1 mes)
-1. ✅ Gráficos de progreso (Chart.js)
-2. ✅ Quick actions & templates
-3. ✅ Calculadora de 1RM
-4. ✅ Plate calculator
-5. ✅ Gamificación básica (achievements)
-
-### FASE 2 (Medio Plazo - 3 meses)
-1. Backend + sincronización cloud
-2. Entrada por voz
-3. Planificación periodizada
-4. Modo entrenador
-5. Integración con wearables
-
-### FASE 3 (Largo Plazo - 6 meses)
-1. IA para sugerencias
-2. Análisis de video
-3. Social features
-4. Gym Buddy Finder
-5. Programas integrados
-
----
-
-## 💡 FILOSOFÍA DE DISEÑO
+## Filosofia de Desarrollo
 
 ### Mobile-First
-- Diseñado para uso en el gimnasio
+
+- Disenado para uso en gimnasio
 - Una mano, pulgar-friendly
-- Mínimos clicks
+- Minimos clicks
 - Feedback visual inmediato
 
 ### Sin Fricciones
-- Auto-save constante
+
+- Auto-save con drafts
 - Offline-first
-- Carga instantánea
+- Carga instantanea
 - Cero loading screens
 
 ### Motivador
-- Celebrar logros
+
+- Celebrar PRs
 - Visualizar progreso
-- Gamificación sana
-- Comunidad positiva
+- Estadisticas claras
 
 ### Basado en Ciencia
-- Métodos probados
+
+- Calculos validados (1RM, TDEE)
+- MEV/MRV guidelines
 - Recomendaciones con evidencia
-- Flexibilidad para experimentar
-- Datos, no opiniones
 
 ---
 
-## 🚀 SIGUIENTE NIVEL: ¿QUÉ IMPLEMENTAMOS PRIMERO?
-
-**Las 5 características que harían de GymMate una app PREMIUM:**
-
-1. **📊 Gráficos Interactivos** - Ver tu progreso visualmente
-2. **⚡ Templates & Quick Actions** - Eficiencia máxima
-3. **🏆 Gamificación Completa** - Mantener motivación
-4. **🔄 Cloud Sync** - Nunca perder datos
-5. **🎙️ Voice Input** - Entrenar sin interrupciones
-
----
-
-¿Cuál de estas features quieres que implemente primero? 🚀
+**Version:** 3.1.0
+**Ultima actualizacion:** Diciembre 2025

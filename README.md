@@ -1,345 +1,293 @@
-# 💪 GymMate v2.1 - Tu Compañero Personal de Entrenamiento
+# GymMate v3.1 - Tu Compañero Personal de Entrenamiento
 
-**Progressive Web App para gestionar entrenamientos con seguimiento completo de volumen, PRs, historial y progreso.**
+**Progressive Web App profesional para gestionar entrenamientos con seguimiento completo de volumen, PRs, historial, cardio y progreso.**
 
-🚀 **NUEVO EN v2.1:**
-- 🎨 **Dark Mode Premium Redesign** - Interfaz completamente renovada
-- ✨ Efectos Glassmorphism y gradientes vibrantes
-- 🔤 Tipografía premium (Inter + Oswald)
-- 🎯 Iconografía moderna con Phosphor Icons
-- 🎭 FAB central flotante en navegación
-- 💫 Feedback táctil en todos los elementos
-- 📐 Sistema de diseño documentado
+## Novedades en v3.1
 
-🎯 **v2.0 Características:**
-- 📱 Mobile-First Design con PWA
-- 🎬 Animaciones reales de ejercicios (ExerciseDB)
-- ⏱️ Temporizador de descanso integrado
-- 🏆 Tracking automático de Personal Records
-- 📅 Historial de últimos 30 entrenamientos
-- 📊 Estadísticas en tiempo real
-- 📊 Gráficos de progreso con Chart.js
-- 📥 Exportación a Excel con datos reales
+- **Arquitectura Moderna** - Vite + TypeScript con 16+ módulos
+- **Diseño Profesional** - Sin gradientes, colores sólidos, alto contraste
+- **Lucide Icons** - Iconografía SVG profesional (94+ iconos)
+- **Cardio Completo** - 7 modos: Tabata, EMOM, AMRAP, Circuit, Pyramid, Custom, ForTime
+- **PWA Mejorado** - vite-plugin-pwa con cache inteligente
+- **Tests Unitarios** - 21+ tests con Vitest
 
 ---
 
-## 🎯 Características Principales
+## Características Principales
 
-### 💪 **Core Features**
+### Entrenamiento de Pesas
 
-✅ **5 Grupos de Entrenamiento Completos:**
-- 🦵 GRUPO 1: Piernas + Glúteos
-- 💪 GRUPO 2: Upper Push
-- 🏋️ GRUPO 3: Piernas Quad Dominante
-- 🔱 GRUPO 4: Espalda + Bíceps
-- 🏆 GRUPO 5: Hombro + Tríceps (aislamiento)
+- 5 Grupos de entrenamiento completos (Piernas, Upper Push/Pull, etc.)
+- Cálculo automático de volumen (`sets × reps × peso`)
+- Regla de mancuernas: peso × 2 automático
+- Resumen dinámico por grupo muscular
+- Ejercicios opcionales diferenciados
+- Timer de descanso integrado (1-5 minutos)
+- Tracking automático de Personal Records
+- Guardado automático de borradores (draft)
 
-✅ **Cálculo Automático de Volumen:**
-- Fórmula base: `volumen = sets × reps × peso`
-- **Regla especial para mancuernas:** peso se multiplica por 2 automáticamente
-- Ejemplo: 3 sets × 10 reps × 10kg (mancuerna) = **600 volumen**
+### Cardio & HIIT
 
-✅ **Validación de Decimales:**
-- Solo permite punto (.) para decimales
-- Bloquea comas (,) con mensaje de error y animación
+- **Tabata**: 20s trabajo / 10s descanso × 8 rondas
+- **EMOM**: Every Minute On the Minute
+- **AMRAP**: As Many Reps As Possible
+- **Circuit**: Ejercicios en secuencia con descansos
+- **Pyramid**: Intervalos ascendentes y descendentes (20s → 30s → 40s → 30s → 20s)
+- **Custom**: Configura tu propio intervalo
+- **ForTime**: Completa el workout lo más rápido posible
 
-✅ **Resumen Dinámico de Volumen:**
-- **Solo muestra grupos musculares de la rutina seleccionada**
-- El músculo con mayor volumen del día = 100%
-- Todas las demás barras escalan proporcionalmente
-- Visualización clara del progreso por grupo muscular
+### Historial y Estadísticas
 
-✅ **Ejercicios Opcionales:**
-- Hip Thrust ligero (disponible en todos los grupos)
-- Abs en máquina (disponible en todos los grupos)
-
----
-
-### 📱 **Mobile-First & PWA**
-
-✅ **Progressive Web App:**
-- Instalable como app nativa en móvil
-- Funciona offline con Service Worker
-- Navegación inferior optimizada para móvil
-- Touch targets de 44px mínimo
-- Previene zoom accidental en iOS
-- Compatible con iOS Safari
-
-✅ **Diseño Responsive:**
-- Mobile-first approach
-- Adaptativo para tablet y desktop
-- Sticky header en scroll
-- Bottom navigation en móviles
-- Gestos táctiles optimizados
-
----
-
-### 🎬 **Animaciones de Ejercicios**
-
-✅ **ExerciseDB Integration:**
-- GIFs de demostración para 20+ ejercicios
-- Modal de visualización optimizado
-- Carga lazy de imágenes
-- Fallback para errores de red
-- Royalty-free exercise animations
-
----
-
-### ⏱️ **Temporizador de Descanso**
-
-✅ **Rest Timer Completo:**
-- 6 opciones predefinidas (1-5 minutos)
-- Pausar/Reanudar funcionalidad
-- Banner visible durante countdown
-- Notificación al finalizar
-- Sonido de alerta (Web Audio API)
-- Botón rápido en cada ejercicio
-
----
-
-### 🏆 **Personal Records Tracking**
-
-✅ **Sistema de PRs:**
-- Detección automática de nuevos récords
-- Notificación push al batir PR
-- Vista dedicada con historial de PRs
-- Tracking de mejor peso por ejercicio
-- Persistencia en localStorage
-- Badge visual para nuevos PRs
-
----
-
-### 📅 **Historial de Entrenamientos**
-
-✅ **Workout History:**
 - Últimos 30 entrenamientos guardados
-- Resumen de volumen total
-- Contador de ejercicios completados
-- Fecha formateada en español
-- Función de eliminar entrenos
-- Vista organizada por fecha
+- Historial unificado de pesas y cardio
+- Exportación a Excel con datos completos
+- 4 gráficos interactivos con Chart.js:
+  - Tendencia de volumen
+  - Distribución muscular
+  - Progreso de peso
+  - Comparativa semanal
+
+### Calculadoras Fitness
+
+- **1RM Calculator**: Epley, Brzycki, Lombardi (promedio)
+- **Calorías**: TDEE con Mifflin-St Jeor
+- **Peso Progresivo**: Sugerencias ACSM/NSCA
 
 ---
 
-### 📊 **Estadísticas en Tiempo Real**
+## Tecnologías
 
-✅ **Quick Stats Dashboard:**
-- Volumen Total del día
-- Número de ejercicios activos
-- Sets totales realizados
-- Ejercicios completados
-- Tarjetas con gradientes coloridos
-- Actualización instantánea
-
----
-
-### 🎨 **Dark Mode Premium Design System**
-
-✅ **Estética Dark Mode Premium:**
-- Glassmorphism effects con backdrop-filter
-- Gradientes vibrantes (Blue → Purple)
-- Alto contraste para legibilidad
-- Tipografía premium (Inter + Oswald)
-- Iconografía Phosphor Icons
-- FAB central flotante en navegación
-- Feedback táctil en todos los elementos (active:scale-95)
-- Sistema de diseño completamente documentado
-
-📖 **[Ver Sistema de Diseño Completo →](DESIGN_SYSTEM.md)**
-
-El archivo `DESIGN_SYSTEM.md` contiene:
-- Paleta de colores completa
-- Guía de tipografía
-- Componentes reutilizables
-- Efectos visuales (glassmorphism, glow, gradients)
-- Buenas prácticas
-- Checklist de implementación
-
-**IMPORTANTE:** Para mantener la consistencia visual en futuras actualizaciones, siempre consulta el `DESIGN_SYSTEM.md` antes de agregar nuevos componentes o funcionalidades.
+| Categoría | Tecnología |
+|-----------|------------|
+| Build Tool | Vite 5.x |
+| Lenguaje | TypeScript 5.x |
+| Estilos | Tailwind CSS 3.4 (local, no CDN) |
+| Iconos | Lucide Icons |
+| Gráficos | Chart.js 4.x |
+| Excel | SheetJS (xlsx) |
+| PWA | vite-plugin-pwa + Workbox |
+| Tests | Vitest |
+| Fonts | Inter + Oswald (Google Fonts) |
 
 ---
 
-## 🚀 Uso
+## Instalación
 
-1. **Abre `index.html` en tu navegador**
+```bash
+# Clonar repositorio
+git clone https://github.com/alonsix6/GymMate.git
+cd GymMate
 
-2. **Selecciona el grupo de entrenamiento del día**
+# Instalar dependencias
+npm install
 
-3. **Ingresa los datos de cada ejercicio:**
-   - Sets realizados
-   - Reps por set
-   - Peso utilizado (kg)
+# Desarrollo
+npm run dev
 
-4. **El sistema calculará automáticamente:**
-   - Volumen total por ejercicio
-   - Volumen por grupo muscular
-   - Volumen total del día
-   - Barras de progreso dinámicas
+# Build producción
+npm run build
 
-5. **Marca ejercicios completados** con el checkbox
+# Preview build
+npm run preview
 
-6. **Guarda tu entrenamiento** con el botón "Guardar"
-
----
-
-## 📐 Reglas Matemáticas Críticas
-
-### Ejercicios con Mancuernas
-**Todos los ejercicios con mancuernas multiplican el peso × 2:**
-
-```
-Curl martillo: 3 sets × 10 reps × 10kg
-= 3 × 10 × (10 × 2)
-= 600 volumen
-```
-
-**Ejercicios afectados:**
-- Elevación lateral
-- Elevación frontal / Y-Raise
-- Remo mancuerna
-- Curl martillo
-- Curl martillo cross-body
-
-### Ejercicios con Barra o Máquinas
-**No multiplican por 2:**
-
-```
-Press militar: 3 sets × 10 reps × 40kg
-= 3 × 10 × 40
-= 1200 volumen
+# Tests
+npm test
 ```
 
 ---
 
-## 🎨 Tecnologías
+## Estructura del Proyecto
 
-- **HTML5** - Estructura semántica
-- **JavaScript (Vanilla)** - Lógica y cálculos
-- **Tailwind CSS** - Framework CSS utility-first
-- **Google Fonts** - Tipografía (Inter + Oswald)
-- **Phosphor Icons** - Iconografía moderna
-- **Chart.js** - Gráficos y visualización de datos
-- **SheetJS (XLSX)** - Exportación a Excel
-- **ExerciseDB** - GIFs de ejercicios
-- **Lottie** - Animaciones vectoriales (opcional)
-- **localStorage** - Persistencia de datos local
-
----
-
-## 📱 Compatibilidad
-
-- ✅ Chrome/Edge (recomendado)
-- ✅ Firefox
-- ✅ Safari
-- ✅ Navegadores móviles
-
----
-
-## 🔧 Personalización
-
-### Añadir Videos de Ejercicios
-
-En el objeto `trainingGroups` de `index.html`, actualiza:
-
-```javascript
-{
-    nombre: "Hip Thrust",
-    esMancuerna: false,
-    grupoMuscular: "Glúteos",
-    animationType: "video",
-    animationSrc: "ruta/al/video.mp4"  // ← Actualiza aquí
-}
 ```
-
-### Añadir Animaciones Lottie
-
-```javascript
-{
-    nombre: "Press militar",
-    animationType: "lottie",
-    animationSrc: "ruta/al/archivo.json"  // ← Archivo Lottie
-}
+GymMate/
+├── src/
+│   ├── main.ts              # Entry point
+│   ├── styles/main.css      # Tailwind + custom CSS
+│   ├── types/index.ts       # TypeScript types
+│   ├── constants/index.ts   # App constants
+│   ├── state/session.ts     # Session state management
+│   ├── data/
+│   │   ├── training-groups.ts  # Rutinas predefinidas
+│   │   └── cardio-exercises.ts # Ejercicios cardio
+│   ├── features/
+│   │   ├── workout.ts       # Lógica de entrenamiento
+│   │   ├── cardio.ts        # Módulo cardio completo
+│   │   ├── timer.ts         # Timer de descanso
+│   │   ├── history.ts       # Historial y stats
+│   │   ├── charts.ts        # Gráficos Chart.js
+│   │   ├── calculators.ts   # Calculadoras fitness
+│   │   └── profile.ts       # Perfil de usuario
+│   ├── ui/
+│   │   ├── navigation.ts    # Navegación y tabs
+│   │   ├── modals.ts        # Sistema de modales
+│   │   └── components.ts    # Componentes reutilizables
+│   ├── utils/
+│   │   ├── storage.ts       # localStorage helpers
+│   │   ├── icons.ts         # Lucide icons system
+│   │   └── calculations.ts  # Cálculos matemáticos
+│   └── tests/
+│       └── calculations.test.ts
+├── public/
+│   ├── icon-192.png
+│   └── icon-512.png
+├── index.html
+├── vite.config.ts
+├── tailwind.config.js
+├── tsconfig.json
+└── package.json
 ```
 
 ---
 
-## 📊 Estructura de Datos (localStorage)
+## Estructura de Datos (localStorage)
 
+### Sesión de Pesas
 ```json
 {
-  "date": "2025-12-01",
-  "grupo": "GRUPO 4 - Espalda + Bíceps",
+  "date": "2025-12-26",
+  "type": "weights",
+  "grupo": "GRUPO 1 - Piernas + Glúteos",
   "ejercicios": [
     {
-      "nombre": "Curl martillo",
+      "nombre": "Hip Thrust",
       "sets": 3,
       "reps": 10,
-      "peso": 10,
-      "esMancuerna": true,
-      "grupoMuscular": "Bíceps",
-      "volumen": 600,
+      "peso": 80,
+      "esMancuerna": false,
+      "grupoMuscular": "Glúteos",
+      "volumen": 2400,
       "completado": true
     }
   ],
-  "volumenTotal": 1980,
-  "volumenPorGrupo": {
-    "Bíceps": 1488,
-    "Espalda": 3160
+  "volumenTotal": 5400,
+  "volumenPorGrupo": { "Glúteos": 2400, "Piernas": 3000 }
+}
+```
+
+### Sesión de Cardio
+```json
+{
+  "date": "2025-12-26",
+  "type": "cardio",
+  "mode": "pyramid",
+  "stats": {
+    "totalTime": 185,
+    "roundsCompleted": 5,
+    "workTime": 150,
+    "restTime": 35
   }
 }
 ```
 
 ---
 
-## 📝 Documento Madre
+## Sistema de Diseño
 
-Esta implementación sigue fielmente el **Documento Madre Definitivo** que define:
-- ✅ Todas las reglas matemáticas
-- ✅ Estructura de grupos y ejercicios
-- ✅ Comportamiento del UI
-- ✅ Validaciones de input
-- ✅ Sistema de barras dinámicas
-- ✅ Persistencia de datos
+### Paleta de Colores (Sin Gradientes)
 
----
+```css
+/* Background */
+--dark-bg: #0f172a;
+--dark-surface: #1e293b;
+--dark-border: rgba(255, 255, 255, 0.05);
 
-## 👨‍💻 Desarrollado para Alonso
+/* Acento Principal */
+--accent: #3b82f6;
+--accent-hover: #2563eb;
 
-Sistema diseñado específicamente para el seguimiento de entrenamientos personalizados.
+/* Texto */
+--text-primary: #f1f5f9;
+--text-secondary: #94a3b8;
+--text-muted: #64748b;
 
-**Fecha de creación:** Diciembre 2025
-**Versión:** 2.1.0
+/* Estados */
+--success: #22c55e;
+--warning: #f59e0b;
+--error: #ef4444;
+--info: #06b6d4;
+```
 
-### 📋 Changelog
+### Iconos (Lucide)
 
-#### v2.1.0 (Diciembre 2025)
-- 🎨 Rediseño completo con Dark Mode Premium
-- ✨ Glassmorphism y efectos visuales modernos
-- 🔤 Nueva tipografía (Inter + Oswald)
-- 🎯 Phosphor Icons en toda la interfaz
-- 🎭 FAB central en bottom navigation
-- 📐 Sistema de diseño documentado (DESIGN_SYSTEM.md)
+```typescript
+import { icon } from '@/utils/icons';
 
-#### v2.0.0 (Diciembre 2025)
-- 📊 Gráficos con Chart.js
-- 📥 Exportación a Excel
-- 🤖 Sugerencias de IA
-- 🎬 Integración con ExerciseDB
-- ⏱️ Temporizador de descanso
-- 🏆 Tracking de PRs
-
-#### v1.0.0 (Diciembre 2025)
-- 💪 Lanzamiento inicial
-- 📱 PWA Mobile-First
-- 📊 Tracking de volumen
-- 📅 Historial de entrenamientos
+// Uso
+icon('workout', 'md', 'text-accent')  // → <i data-lucide="dumbbell" class="w-5 h-5 text-accent"></i>
+icon('trophy', 'lg', 'text-status-warning')
+```
 
 ---
 
-## 🆘 Soporte
+## Scripts Disponibles
 
-Para cualquier problema o sugerencia, revisa el código JavaScript en `index.html` donde están todos los comentarios y documentación.
+| Script | Descripción |
+|--------|-------------|
+| `npm run dev` | Servidor de desarrollo |
+| `npm run build` | Build de producción |
+| `npm run preview` | Preview del build |
+| `npm test` | Ejecutar tests |
+| `npm run test:ui` | Tests con UI |
+| `npm run test:coverage` | Coverage report |
 
 ---
 
-**¡Buen entrenamiento! 💪🔥**
+## PWA Features
+
+- Instalable como app nativa
+- Funciona offline con Service Worker
+- Cache inteligente con Workbox
+- Auto-update de versiones
+- Shortcuts para acciones rápidas
+
+---
+
+## Compatibilidad
+
+- Chrome/Edge (recomendado)
+- Firefox
+- Safari (iOS/macOS)
+- Navegadores móviles modernos
+
+---
+
+## Documentación Adicional
+
+- [Sistema de Diseño](DESIGN_SYSTEM.md)
+- [Guía de Calculadoras](CALCULATORS_GUIDE.md)
+- [MEV/MRV Guide](MEV_MRV_GUIDE.md)
+- [Features Roadmap](FEATURES.md)
+
+---
+
+## Changelog
+
+### v3.1.0 (Diciembre 2025)
+- Fix: CSS no cargaba por cache de PWA
+- PWA: cleanupOutdatedCaches, skipWaiting, clientsClaim
+- CSS crítico inline para fallback
+
+### v3.0.0 (Diciembre 2025)
+- Migración completa a Vite + TypeScript
+- Tailwind CSS local (sin CDN)
+- Lucide icons reemplazando emojis
+- Eliminación total de gradientes
+- Módulo de Cardio & HIIT completo (7 modos)
+- 21 tests unitarios con Vitest
+- Arquitectura modular (16+ módulos)
+
+### v2.1.0 (Diciembre 2025)
+- Dark Mode Premium
+- Chart.js integration
+- Excel export
+
+### v2.0.0 (Diciembre 2025)
+- PWA inicial
+- Timer de descanso
+- Tracking de PRs
+
+---
+
+**Versión:** 3.1.0
+**Desarrollado para:** Alonso
+**Fecha:** Diciembre 2025
