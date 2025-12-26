@@ -242,12 +242,16 @@ export function renderHistoryItem(
   const date = formatDate(session.savedAt || session.date);
 
   if (session.type === 'cardio') {
-    const modeName =
-      session.mode === 'tabata'
-        ? 'Tabata'
-        : session.mode === 'amrap'
-          ? 'AMRAP'
-          : 'EMOM';
+    const modeNames: Record<string, string> = {
+      tabata: 'Tabata',
+      emom: 'EMOM',
+      amrap: 'AMRAP',
+      circuit: 'Circuito',
+      pyramid: 'Pirámide',
+      custom: 'Personalizado',
+      fortime: 'For Time',
+    };
+    const modeName = modeNames[session.mode || 'emom'] || 'Cardio';
 
     return `
       <div class="bg-dark-surface border border-dark-border rounded-xl p-4">

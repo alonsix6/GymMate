@@ -20,6 +20,7 @@ import {
   showCardioConfig,
   adjustCardioConfig,
   setCardioExercise,
+  adjustPyramidLevel,
   startCardioWorkout,
   toggleCardioPause,
   stopCardioWorkout,
@@ -69,6 +70,7 @@ declare global {
     showCardioConfig: typeof showCardioConfig;
     adjustCardioConfig: typeof adjustCardioConfig;
     setCardioExercise: typeof setCardioExercise;
+    adjustPyramidLevel: typeof adjustPyramidLevel;
     startCardioWorkout: typeof startCardioWorkout;
     toggleCardioPause: typeof toggleCardioPause;
     stopCardioWorkout: typeof stopCardioWorkout;
@@ -97,6 +99,7 @@ window.selectCardioMode = selectCardioMode;
 window.showCardioConfig = showCardioConfig;
 window.adjustCardioConfig = adjustCardioConfig;
 window.setCardioExercise = setCardioExercise;
+window.adjustPyramidLevel = adjustPyramidLevel;
 window.startCardioWorkout = startCardioWorkout;
 window.toggleCardioPause = toggleCardioPause;
 window.stopCardioWorkout = stopCardioWorkout;

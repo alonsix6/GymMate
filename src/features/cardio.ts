@@ -54,6 +54,7 @@ export function showCardioSelector(): void {
       ${renderModeCard('emom', 'EMOM', 'Every Minute On the Minute', 'clock')}
       ${renderModeCard('amrap', 'AMRAP', 'As Many Reps As Possible', 'trending')}
       ${renderModeCard('circuit', 'Circuito', 'Ejercicios en secuencia con descansos', 'activity')}
+      ${renderModeCard('pyramid', 'Pirámide', 'Intervalos ascendentes y descendentes', 'triangle')}
       ${renderModeCard('custom', 'Personalizado', 'Configura tu propio intervalo', 'settings')}
     </div>
   `;
@@ -210,6 +211,47 @@ export function showCardioConfig(): void {
       `;
       break;
 
+    case 'pyramid':
+      const levels = config.levels || [20, 30, 40, 30, 20];
+      configHTML = `
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm text-text-secondary mb-2">Niveles de pirámide (segundos)</label>
+            <div class="bg-dark-bg border border-dark-border rounded-lg p-3 mb-3">
+              <div id="pyramidLevels" class="flex flex-wrap gap-2 mb-3">
+                ${levels.map((l) => `
+                  <span class="px-3 py-1 bg-status-warning/20 text-status-warning rounded-full text-sm font-bold">
+                    ${l}s
+                  </span>
+                `).join('')}
+              </div>
+              <div class="flex gap-2">
+                <button onclick="window.adjustPyramidLevel(-10)" class="flex-1 p-2 bg-dark-surface border border-dark-border rounded-lg text-sm">
+                  ${icon('minus', 'sm')} Reducir
+                </button>
+                <button onclick="window.adjustPyramidLevel(10)" class="flex-1 p-2 bg-dark-surface border border-dark-border rounded-lg text-sm">
+                  ${icon('plus', 'sm')} Aumentar
+                </button>
+              </div>
+            </div>
+            <p class="text-xs text-text-muted">Patrón: 20s → 30s → 40s → 30s → 20s</p>
+          </div>
+          <div>
+            <label class="block text-sm text-text-secondary mb-2">Descanso entre niveles (segundos)</label>
+            <div class="flex items-center gap-3">
+              <button onclick="window.adjustCardioConfig('rest', -5)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
+                ${icon('minus', 'md')}
+              </button>
+              <span id="configRest" class="text-2xl font-bold text-status-error w-16 text-center">${config.rest || 10}</span>
+              <button onclick="window.adjustCardioConfig('rest', 5)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
+                ${icon('plus', 'md')}
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      break;
+
     default: // custom, circuit
       configHTML = `
         <div class="space-y-4">
@@ -318,6 +360,15 @@ export function setCardioExercise(exercise: string): void {
   cardioState.config.exercise = exercise;
 }
 
+export function adjustPyramidLevel(delta: number): void {
+  const levels = cardioState.config.levels || [20, 30, 40, 30, 20];
+  const newLevels = levels.map(l => Math.max(5, l + delta));
+  cardioState.config.levels = newLevels;
+
+  // Re-render config
+  showCardioConfig();
+}
+
 // ==========================================
 // INICIAR WORKOUT
 // ==========================================
@@ -348,6 +399,10 @@ export function startCardioWorkout(): void {
   } else if (mode === 'emom') {
     cardioState.timeRemaining = config.interval || 60;
     cardioState.currentPhase = 'emom';
+  } else if (mode === 'pyramid') {
+    const levels = config.levels || [20, 30, 40, 30, 20];
+    cardioState.currentExerciseIndex = 0; // Use this to track current level
+    cardioState.timeRemaining = levels[0];
   } else {
     cardioState.timeRemaining = config.work || 20;
   }
@@ -413,6 +468,31 @@ function handlePhaseEnd(): void {
     }
     cardioState.currentRound++;
     cardioState.timeRemaining = config.interval || 60;
+    renderTimerView();
+    return;
+  }
+
+  if (mode === 'pyramid') {
+    const levels = config.levels || [20, 30, 40, 30, 20];
+    const currentLevelIndex = cardioState.currentExerciseIndex;
+
+    if (cardioState.currentPhase === 'work') {
+      // Switch to rest
+      cardioState.currentPhase = 'rest';
+      cardioState.timeRemaining = config.rest || 10;
+    } else {
+      // Rest ended, check if more levels
+      const nextLevelIndex = currentLevelIndex + 1;
+      if (nextLevelIndex >= levels.length) {
+        finishCardioWorkout();
+        return;
+      }
+      cardioState.currentExerciseIndex = nextLevelIndex;
+      cardioState.currentRound = nextLevelIndex + 1;
+      cardioState.currentPhase = 'work';
+      cardioState.timeRemaining = levels[nextLevelIndex];
+    }
+
     renderTimerView();
     return;
   }
@@ -490,7 +570,10 @@ function renderTimerView(): void {
 
       <!-- Round counter -->
       <div class="text-text-secondary mb-8">
-        Ronda <span class="text-accent font-bold">${cardioState.currentRound}</span> / ${config.rounds || '∞'}
+        ${cardioState.mode === 'pyramid'
+          ? `Nivel <span class="text-accent font-bold">${cardioState.currentExerciseIndex + 1}</span> / ${(config.levels || [20, 30, 40, 30, 20]).length}`
+          : `Ronda <span class="text-accent font-bold">${cardioState.currentRound}</span> / ${config.rounds || '∞'}`
+        }
       </div>
 
       <!-- Total time -->

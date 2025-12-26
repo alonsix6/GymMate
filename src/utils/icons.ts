@@ -93,6 +93,7 @@ export const ICON_MAP = {
   heart: 'heart',
   bookmark: 'bookmark',
   flag: 'flag',
+  triangle: 'triangle',
 
   // Anatomía (representación abstracta)
   legs: 'activity',
