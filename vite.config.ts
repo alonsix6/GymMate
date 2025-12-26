@@ -2,11 +2,17 @@ import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { resolve } from 'path';
 
+// Version for cache busting
+const APP_VERSION = '3.1.0';
+
 export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
     },
+  },
+  define: {
+    __APP_VERSION__: JSON.stringify(APP_VERSION),
   },
   plugins: [
     VitePWA({
@@ -60,6 +66,9 @@ export default defineConfig({
         ],
       },
       workbox: {
+        cleanupOutdatedCaches: true,
+        skipWaiting: true,
+        clientsClaim: true,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         runtimeCaching: [
           {
