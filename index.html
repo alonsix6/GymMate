@@ -47,52 +47,64 @@
   </div>
 
   <!-- Main Container -->
-  <main class="p-4 pb-24">
+  <main class="px-5 pt-6 pb-28">
 
     <!-- ==========================================
          HOME VIEW
          ========================================== -->
     <div id="homeView">
       <!-- Hero Section -->
-      <section class="mb-6">
-        <div id="heroContent" class="py-4">
-          <div class="flex items-center gap-3 mb-2">
-            <i data-lucide="dumbbell" class="w-8 h-8 text-accent"></i>
-            <h1 class="text-2xl font-display font-bold text-text-primary">Bienvenido a GymMate</h1>
+      <section class="mb-8">
+        <div id="heroContent" class="py-2">
+          <div class="flex items-center gap-4 mb-3">
+            <div class="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center">
+              <i data-lucide="dumbbell" class="w-7 h-7 text-accent"></i>
+            </div>
+            <div class="flex-1">
+              <h1 class="text-xl font-display font-bold text-text-primary leading-tight">Bienvenido a GymMate</h1>
+              <p class="text-sm text-text-secondary mt-1">Tu companero de entrenamiento personal</p>
+            </div>
           </div>
-          <p class="text-text-secondary">Tu compañero de entrenamiento personal</p>
         </div>
       </section>
 
       <!-- Resume Workout Card -->
       <div id="resumeWorkoutCard" class="hidden"></div>
 
-      <!-- Quick Actions -->
-      <section class="mb-6">
+      <!-- Quick Actions - Larger touch targets (min 44px) -->
+      <section class="mb-8">
         <div class="grid grid-cols-4 gap-3">
-          <button data-action="calculators" class="bg-dark-surface border border-dark-border rounded-xl p-3 flex flex-col items-center gap-2 active:scale-95 transition-transform">
-            <i data-lucide="calculator" class="w-6 h-6 text-accent"></i>
-            <span class="text-xs text-text-secondary">Calculadoras</span>
+          <button data-action="calculators" class="bg-dark-surface border border-dark-border rounded-2xl p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform min-h-[80px]">
+            <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+              <i data-lucide="calculator" class="w-5 h-5 text-accent"></i>
+            </div>
+            <span class="text-xs text-text-secondary font-medium">Calc</span>
           </button>
-          <button data-action="history" class="bg-dark-surface border border-dark-border rounded-xl p-3 flex flex-col items-center gap-2 active:scale-95 transition-transform">
-            <i data-lucide="history" class="w-6 h-6 text-accent"></i>
-            <span class="text-xs text-text-secondary">Historial</span>
+          <button data-action="history" class="bg-dark-surface border border-dark-border rounded-2xl p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform min-h-[80px]">
+            <div class="w-10 h-10 rounded-xl bg-purple-400/10 flex items-center justify-center">
+              <i data-lucide="history" class="w-5 h-5 text-purple-400"></i>
+            </div>
+            <span class="text-xs text-text-secondary font-medium">Historial</span>
           </button>
-          <button data-action="charts" class="bg-dark-surface border border-dark-border rounded-xl p-3 flex flex-col items-center gap-2 active:scale-95 transition-transform">
-            <i data-lucide="line-chart" class="w-6 h-6 text-accent"></i>
-            <span class="text-xs text-text-secondary">Gráficos</span>
+          <button data-action="charts" class="bg-dark-surface border border-dark-border rounded-2xl p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform min-h-[80px]">
+            <div class="w-10 h-10 rounded-xl bg-green-400/10 flex items-center justify-center">
+              <i data-lucide="line-chart" class="w-5 h-5 text-green-400"></i>
+            </div>
+            <span class="text-xs text-text-secondary font-medium">Graficos</span>
           </button>
-          <button data-action="prs" class="bg-dark-surface border border-dark-border rounded-xl p-3 flex flex-col items-center gap-2 active:scale-95 transition-transform">
-            <i data-lucide="trophy" class="w-6 h-6 text-status-warning"></i>
-            <span class="text-xs text-text-secondary">PRs</span>
+          <button data-action="prs" class="bg-dark-surface border border-dark-border rounded-2xl p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform min-h-[80px]">
+            <div class="w-10 h-10 rounded-xl bg-status-warning/10 flex items-center justify-center">
+              <i data-lucide="trophy" class="w-5 h-5 text-status-warning"></i>
+            </div>
+            <span class="text-xs text-text-secondary font-medium">PRs</span>
           </button>
         </div>
       </section>
 
       <!-- Rutinas -->
-      <section class="mb-6">
-        <h2 class="text-lg font-display font-bold text-text-primary mb-3 flex items-center gap-2">
-          <i data-lucide="dumbbell" class="w-5 h-5 text-accent"></i>
+      <section class="mb-8">
+        <h2 class="text-base font-display font-bold text-text-primary mb-4 flex items-center gap-2">
+          <i data-lucide="list" class="w-5 h-5 text-accent"></i>
           Rutinas Disponibles
         </h2>
         <div id="routinesContainer" class="space-y-3">
@@ -104,16 +116,18 @@
       <div id="customWorkoutsContainer"></div>
 
       <!-- Cardio Section -->
-      <section class="mt-6">
-        <button onclick="window.showCardioSelector()" class="w-full bg-dark-surface border border-status-warning/30 rounded-xl p-4 flex items-center gap-4 active:scale-[0.98] transition-transform">
-          <div class="w-12 h-12 rounded-lg bg-status-warning/10 flex items-center justify-center">
-            <i data-lucide="flame" class="w-6 h-6 text-status-warning"></i>
+      <section class="mt-8">
+        <button onclick="window.showCardioSelector()" class="w-full bg-dark-surface border border-status-warning/30 rounded-2xl p-5 flex items-center gap-4 active:scale-[0.98] transition-transform min-h-[80px]">
+          <div class="w-14 h-14 rounded-xl bg-status-warning/10 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="flame" class="w-7 h-7 text-status-warning"></i>
           </div>
-          <div class="flex-1 text-left">
-            <h3 class="font-bold text-text-primary">Cardio & HIIT</h3>
-            <p class="text-sm text-text-secondary">Tabata, EMOM, AMRAP y más</p>
+          <div class="flex-1 text-left min-w-0">
+            <h3 class="font-bold text-text-primary text-base">Cardio & HIIT</h3>
+            <p class="text-sm text-text-secondary mt-1">Tabata, EMOM, AMRAP y mas</p>
           </div>
-          <i data-lucide="chevron-right" class="w-5 h-5 text-text-muted"></i>
+          <div class="w-10 h-10 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="chevron-right" class="w-5 h-5 text-text-muted"></i>
+          </div>
         </button>
       </section>
     </div>
@@ -122,56 +136,96 @@
          WORKOUT TAB
          ========================================== -->
     <div id="workoutTab" class="tab-content hidden">
-      <!-- Training Info -->
-      <div id="trainingInfo" class="mb-4 hidden">
-        <div class="flex items-center justify-between mb-2">
-          <div>
-            <h2 id="currentTraining" class="text-lg font-bold text-text-primary"></h2>
+      <!-- Header with Back Button -->
+      <div id="trainingInfo" class="mb-6 hidden">
+        <!-- Navigation Bar -->
+        <div class="flex items-center gap-3 mb-4">
+          <button onclick="window.showHome()" class="w-11 h-11 flex items-center justify-center bg-dark-surface border border-dark-border rounded-xl active:scale-95 transition-transform">
+            <i data-lucide="arrow-left" class="w-5 h-5 text-text-primary"></i>
+          </button>
+          <div class="flex-1 min-w-0">
+            <h2 id="currentTraining" class="text-lg font-bold text-text-primary truncate"></h2>
             <p id="currentDate" class="text-sm text-text-secondary"></p>
           </div>
-          <button onclick="window.openRestTimerModal()" class="p-3 bg-dark-surface border border-dark-border rounded-xl active:scale-95 transition-transform">
+          <button onclick="window.openRestTimerModal()" class="w-11 h-11 flex items-center justify-center bg-dark-surface border border-dark-border rounded-xl active:scale-95 transition-transform">
             <i data-lucide="timer" class="w-5 h-5 text-accent"></i>
           </button>
+        </div>
+
+        <!-- Instructions Banner -->
+        <div class="bg-accent/10 border border-accent/20 rounded-xl p-4 mb-4">
+          <p class="text-sm text-accent font-medium flex items-center gap-2">
+            <i data-lucide="info" class="w-4 h-4 flex-shrink-0"></i>
+            <span>Ingresa sets, reps y peso para cada ejercicio. Marca completado cuando termines.</span>
+          </p>
         </div>
       </div>
 
       <!-- Quick Stats -->
-      <div id="quickStats" class="hidden mb-4">
-        <div class="grid grid-cols-4 gap-2">
-          <div class="bg-dark-surface border border-dark-border rounded-xl p-3 text-center">
-            <i data-lucide="trending-up" class="w-5 h-5 text-accent mx-auto mb-1"></i>
-            <p id="statVolumen" class="text-lg font-bold text-accent">0</p>
-            <p class="text-xs text-text-muted">Volumen</p>
+      <div id="quickStats" class="hidden mb-6">
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-dark-surface border border-dark-border rounded-2xl p-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+                <i data-lucide="trending-up" class="w-5 h-5 text-accent"></i>
+              </div>
+              <div>
+                <p id="statVolumen" class="text-xl font-bold text-accent">0</p>
+                <p class="text-xs text-text-muted">Volumen (kg)</p>
+              </div>
+            </div>
           </div>
-          <div class="bg-dark-surface border border-dark-border rounded-xl p-3 text-center">
-            <i data-lucide="dumbbell" class="w-5 h-5 text-status-success mx-auto mb-1"></i>
-            <p id="statEjercicios" class="text-lg font-bold text-status-success">0</p>
-            <p class="text-xs text-text-muted">Ejercicios</p>
+          <div class="bg-dark-surface border border-dark-border rounded-2xl p-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-status-success/10 flex items-center justify-center">
+                <i data-lucide="check-circle" class="w-5 h-5 text-status-success"></i>
+              </div>
+              <div>
+                <p id="statCompletados" class="text-xl font-bold text-status-success">0/0</p>
+                <p class="text-xs text-text-muted">Completados</p>
+              </div>
+            </div>
           </div>
-          <div class="bg-dark-surface border border-dark-border rounded-xl p-3 text-center">
-            <i data-lucide="check-circle" class="w-5 h-5 text-status-warning mx-auto mb-1"></i>
-            <p id="statCompletados" class="text-lg font-bold text-status-warning">0/0</p>
-            <p class="text-xs text-text-muted">Completados</p>
+          <div class="bg-dark-surface border border-dark-border rounded-2xl p-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-status-warning/10 flex items-center justify-center">
+                <i data-lucide="dumbbell" class="w-5 h-5 text-status-warning"></i>
+              </div>
+              <div>
+                <p id="statEjercicios" class="text-xl font-bold text-status-warning">0</p>
+                <p class="text-xs text-text-muted">Ejercicios</p>
+              </div>
+            </div>
           </div>
-          <div class="bg-dark-surface border border-dark-border rounded-xl p-3 text-center">
-            <i data-lucide="layers" class="w-5 h-5 text-status-info mx-auto mb-1"></i>
-            <p id="statSets" class="text-lg font-bold text-status-info">0</p>
-            <p class="text-xs text-text-muted">Sets</p>
+          <div class="bg-dark-surface border border-dark-border rounded-2xl p-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-status-info/10 flex items-center justify-center">
+                <i data-lucide="layers" class="w-5 h-5 text-status-info"></i>
+              </div>
+              <div>
+                <p id="statSets" class="text-xl font-bold text-status-info">0</p>
+                <p class="text-xs text-text-muted">Sets totales</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Ejercicios Container -->
+      <!-- Ejercicios Section -->
       <div id="ejerciciosContainer" class="hidden">
-        <div id="ejerciciosList"></div>
-        <div id="opcionalesList" class="mt-4"></div>
+        <h3 class="text-base font-semibold text-text-primary mb-4 flex items-center gap-2">
+          <i data-lucide="list-checks" class="w-5 h-5 text-accent"></i>
+          Ejercicios del Dia
+        </h3>
+        <div id="ejerciciosList" class="space-y-4"></div>
+        <div id="opcionalesList" class="mt-6"></div>
       </div>
 
       <!-- Volume Summary -->
-      <div id="volumeSummary" class="hidden mt-4">
-        <div class="bg-dark-surface border border-dark-border rounded-xl p-4">
-          <h3 class="text-sm font-semibold text-text-primary mb-3 flex items-center gap-2">
-            <i data-lucide="bar-chart-3" class="w-4 h-4 text-accent"></i>
+      <div id="volumeSummary" class="hidden mt-6">
+        <div class="bg-dark-surface border border-dark-border rounded-2xl p-5">
+          <h3 class="text-base font-semibold text-text-primary mb-4 flex items-center gap-2">
+            <i data-lucide="bar-chart-3" class="w-5 h-5 text-accent"></i>
             Resumen de Volumen
           </h3>
           <div id="volumeBars"></div>
@@ -179,16 +233,16 @@
       </div>
 
       <!-- Save Section -->
-      <div id="saveSection" class="hidden mt-4 space-y-3">
-        <button id="saveButton" onclick="window.saveWorkout()" class="w-full bg-accent hover:bg-accent-hover text-white font-semibold py-3 px-4 rounded-xl active:scale-95 transition-all flex items-center justify-center gap-2">
-          <i data-lucide="save" class="w-5 h-5"></i>
+      <div id="saveSection" class="hidden mt-6 space-y-4">
+        <button id="saveButton" onclick="window.saveWorkout()" class="w-full bg-accent hover:bg-accent-hover text-white font-semibold py-4 px-6 rounded-2xl active:scale-95 transition-all flex items-center justify-center gap-3 text-base min-h-[56px]">
+          <i data-lucide="save" class="w-6 h-6"></i>
           Guardar Entrenamiento
         </button>
-        <button onclick="window.finishWorkout()" class="w-full bg-dark-surface border border-dark-border text-text-secondary font-semibold py-3 px-4 rounded-xl active:scale-95 transition-all flex items-center justify-center gap-2">
-          <i data-lucide="flag" class="w-5 h-5"></i>
-          Terminar Sesión
+        <button onclick="window.finishWorkout()" class="w-full bg-dark-surface border border-dark-border text-text-secondary font-semibold py-4 px-6 rounded-2xl active:scale-95 transition-all flex items-center justify-center gap-3 text-base min-h-[56px]">
+          <i data-lucide="log-out" class="w-5 h-5"></i>
+          Terminar Sesion
         </button>
-        <p id="saveMessage" class="hidden text-center text-sm text-status-success py-2"></p>
+        <p id="saveMessage" class="hidden text-center text-sm text-status-success py-3"></p>
       </div>
     </div>
 

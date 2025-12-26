@@ -172,11 +172,15 @@ function updateHeroSection(): void {
   }
 
   heroContent.innerHTML = `
-    <div class="flex items-center gap-3 mb-2">
-      ${icon('workout', 'xl', 'text-accent')}
-      <h1 class="text-2xl font-display font-bold text-text-primary">${message}</h1>
+    <div class="flex items-center gap-4 mb-3">
+      <div class="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center">
+        ${icon('workout', 'lg', 'text-accent')}
+      </div>
+      <div class="flex-1">
+        <h1 class="text-xl font-display font-bold text-text-primary leading-tight">${message}</h1>
+        <p class="text-sm text-text-secondary mt-1">${subtitle}</p>
+      </div>
     </div>
-    <p class="text-text-secondary">${subtitle}</p>
   `;
 
   refreshIcons();

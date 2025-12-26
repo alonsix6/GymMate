@@ -27,7 +27,7 @@ import {
 } from '@/features/cardio';
 import { trainingGroups } from '@/data/training-groups';
 import { getCustomWorkouts, deleteCustomWorkout } from '@/utils/storage';
-import { icon } from '@/utils/icons';
+import { icon, getGroupIcon } from '@/utils/icons';
 
 // ==========================================
 // EXPONER FUNCIONES AL WINDOW (para onclick)
@@ -113,32 +113,48 @@ function renderRoutinesInHome(): void {
   if (!container) return;
 
   const groupColors: Record<string, string> = {
-    grupo1: 'border-l-blue-500',
-    grupo2: 'border-l-green-500',
-    grupo3: 'border-l-purple-500',
-    grupo4: 'border-l-orange-500',
-    grupo5: 'border-l-pink-500',
+    grupo1: 'border-l-blue-400',
+    grupo2: 'border-l-green-400',
+    grupo3: 'border-l-purple-400',
+    grupo4: 'border-l-orange-400',
+    grupo5: 'border-l-pink-400',
+  };
+
+  const groupBgColors: Record<string, string> = {
+    grupo1: 'bg-blue-400/10',
+    grupo2: 'bg-green-400/10',
+    grupo3: 'bg-purple-400/10',
+    grupo4: 'bg-orange-400/10',
+    grupo5: 'bg-pink-400/10',
   };
 
   let html = '';
 
   // Rutinas predefinidas
   Object.entries(trainingGroups).forEach(([id, group]) => {
+    const groupIcon = getGroupIcon(id);
+    // Extract short name (after the dash)
+    const shortName = group.nombre.split(' - ')[1] || group.nombre;
+    const groupNum = group.nombre.split(' - ')[0] || '';
+
     html += `
       <div
         data-grupo="${id}"
-        class="bg-dark-surface border border-dark-border ${groupColors[id]} border-l-4 rounded-xl p-4
-               cursor-pointer active:scale-[0.98] transition-transform"
+        class="bg-dark-surface border border-dark-border ${groupColors[id]} border-l-4 rounded-2xl p-5
+               cursor-pointer active:scale-[0.98] transition-transform min-h-[76px]"
       >
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-lg bg-dark-bg flex items-center justify-center">
-            ${icon('workout', 'lg', 'text-accent')}
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl ${groupBgColors[id]} flex items-center justify-center flex-shrink-0">
+            <i data-lucide="${groupIcon.icon}" class="w-6 h-6 ${groupIcon.color}"></i>
           </div>
-          <div class="flex-1">
-            <h3 class="font-bold text-text-primary text-sm">${group.nombre}</h3>
-            <p class="text-xs text-text-secondary">${group.ejercicios.length} ejercicios principales</p>
+          <div class="flex-1 min-w-0">
+            <p class="text-xs text-text-muted font-medium uppercase tracking-wide">${groupNum}</p>
+            <h3 class="font-bold text-text-primary text-base truncate">${shortName}</h3>
+            <p class="text-sm text-text-secondary">${group.ejercicios.length} ejercicios</p>
           </div>
-          ${icon('chevronRight', 'md', 'text-text-muted')}
+          <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center">
+            ${icon('chevronRight', 'md', 'text-text-muted')}
+          </div>
         </div>
       </div>
     `;
