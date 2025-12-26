@@ -538,6 +538,27 @@
           </p>
         </div>
       </form>
+
+      <!-- Backup Section -->
+      <div class="mt-6 bg-dark-surface border border-dark-border rounded-xl p-4">
+        <h2 class="text-lg font-display font-semibold text-text-primary mb-3 flex items-center gap-2">
+          <i data-lucide="database" class="w-5 h-5 text-accent" aria-hidden="true"></i>
+          Copia de seguridad
+        </h2>
+        <p class="text-sm text-text-secondary mb-4">
+          Exporta tu historial para guardarlo o importa un archivo CSV previamente exportado para restaurar tus datos.
+        </p>
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="window.exportToExcel()" class="py-3 px-4 bg-dark-bg border border-dark-border rounded-xl text-text-primary text-sm font-medium active:scale-95 transition-all flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-dark-surface" aria-label="Exportar historial a archivo CSV">
+            <i data-lucide="download" class="w-5 h-5 text-accent" aria-hidden="true"></i>
+            Exportar
+          </button>
+          <button onclick="window.importFromCSV()" class="py-3 px-4 bg-accent text-white rounded-xl text-sm font-medium active:scale-95 transition-all flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-accent" aria-label="Importar historial desde archivo CSV">
+            <i data-lucide="upload" class="w-5 h-5" aria-hidden="true"></i>
+            Importar
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- ==========================================

@@ -4,7 +4,7 @@ import { initializeNavigation, showHome, switchTab, resumeDraft, dismissDraft } 
 import { initializeModals, showAnimation, closeAnimationModal } from '@/ui/modals';
 import { initializeTimerListeners, openRestTimerModal } from '@/features/timer';
 import { initializeProfile } from '@/features/profile';
-import { loadHistory, loadPRs, exportToExcel, deleteHistoryItem } from '@/features/history';
+import { loadHistory, loadPRs, exportToExcel, deleteHistoryItem, triggerCSVImport } from '@/features/history';
 import {
   loadTrainingGroup,
   updateEjercicio,
@@ -71,6 +71,7 @@ declare global {
     // History
     deleteHistoryItem: typeof deleteHistoryItem;
     exportToExcel: typeof exportToExcel;
+    importFromCSV: typeof triggerCSVImport;
 
     // Custom Workouts
     deleteCustomWorkout: typeof deleteCustomWorkout;
@@ -108,6 +109,7 @@ window.closeAnimationModal = closeAnimationModal;
 window.openRestTimerModal = openRestTimerModal;
 window.deleteHistoryItem = deleteHistoryItem;
 window.exportToExcel = exportToExcel;
+window.importFromCSV = triggerCSVImport;
 window.deleteCustomWorkout = deleteCustomWorkout;
 window.openWorkoutBuilder = openWorkoutBuilder;
 window.closeWorkoutBuilder = closeWorkoutBuilder;
