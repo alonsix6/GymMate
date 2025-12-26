@@ -17,9 +17,9 @@ export const STORAGE_KEYS = {
   CUSTOM_WORKOUTS: 'gymmate_custom_workouts',
 } as const;
 
-// Colores del tema
+// Colores del tema - Negro puro para OLED
 export const THEME_COLORS = {
-  bg: '#0f172a',
+  bg: '#000000',
   surface: '#1e293b',
   accent: '#3b82f6',
   text: {

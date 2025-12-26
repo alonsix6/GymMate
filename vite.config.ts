@@ -22,8 +22,8 @@ export default defineConfig({
         name: 'GymMate - Tu Compañero de Entrenamiento',
         short_name: 'GymMate',
         description: 'App de seguimiento de entrenamientos con tracking de volumen, PRs, y progreso',
-        theme_color: '#0f172a',
-        background_color: '#0f172a',
+        theme_color: '#000000',
+        background_color: '#000000',
         display: 'standalone',
         orientation: 'portrait',
         icons: [
