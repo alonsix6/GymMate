@@ -115,16 +115,16 @@ export function renderExercise(
   const cardBg = isOptional ? 'bg-orange-500/5 border-orange-500/20' : 'bg-slate-800/50 border-slate-700/50';
 
   return `
-    <div class="${cardBg} border rounded-xl p-4" id="ejercicio-${index}">
+    <div class="${cardBg} border rounded-xl p-4 mb-4" id="ejercicio-${index}">
       <!-- Header -->
-      <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-3 flex-1 min-w-0">
           <input
             type="checkbox"
             id="completado-${index}"
             ${ejercicio.completado ? 'checked' : ''}
             onchange="window.toggleCompletado(${index})"
-            class="w-6 h-6 rounded-lg bg-slate-700 border-2 border-slate-600 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 cursor-pointer"
+            class="w-6 h-6 rounded-lg bg-slate-700 border-2 border-slate-600 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 cursor-pointer flex-shrink-0"
           />
           <div class="flex-1 min-w-0">
             <h3 class="font-bold text-white text-base leading-tight">${ejercicio.nombre}</h3>
@@ -142,7 +142,7 @@ export function renderExercise(
             ? `
           <button
             onclick="window.showAnimation('${ejercicio.nombre}', '${gifUrl}')"
-            class="w-10 h-10 flex items-center justify-center rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 active:scale-95 transition-all"
+            class="w-10 h-10 flex items-center justify-center rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 active:scale-95 transition-all flex-shrink-0"
           >
             ${icon('play', 'md')}
           </button>
@@ -151,10 +151,10 @@ export function renderExercise(
         }
       </div>
 
-      <!-- Inputs - Clean and simple -->
-      <div class="grid grid-cols-3 gap-2">
+      <!-- Inputs - Clean and simple with better spacing -->
+      <div class="grid grid-cols-3 gap-3">
         <div>
-          <label class="block text-xs text-slate-500 mb-1 text-center">Sets</label>
+          <label class="block text-xs text-slate-500 mb-1.5 text-center">Sets</label>
           <input
             type="number"
             id="sets-${index}"
@@ -167,7 +167,7 @@ export function renderExercise(
           />
         </div>
         <div>
-          <label class="block text-xs text-slate-500 mb-1 text-center">Reps</label>
+          <label class="block text-xs text-slate-500 mb-1.5 text-center">Reps</label>
           <input
             type="number"
             id="reps-${index}"
@@ -180,7 +180,7 @@ export function renderExercise(
           />
         </div>
         <div>
-          <label class="block text-xs text-slate-500 mb-1 text-center">Kg</label>
+          <label class="block text-xs text-slate-500 mb-1.5 text-center">Kg</label>
           <input
             type="number"
             id="peso-${index}"
@@ -195,7 +195,7 @@ export function renderExercise(
       </div>
 
       <!-- Volume - Prominent -->
-      <div class="mt-3 pt-3 border-t border-slate-700/50 flex items-center justify-between">
+      <div class="mt-4 pt-3 border-t border-slate-700/50 flex items-center justify-between">
         <span class="text-sm text-slate-400">Volumen</span>
         <span class="text-lg font-bold ${ejercicio.volumen > 0 ? 'text-emerald-400' : 'text-slate-500'}" id="volumen-${index}">
           ${ejercicio.volumen > 0 ? ejercicio.volumen.toLocaleString() + ' kg' : '-'}

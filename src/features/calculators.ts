@@ -13,6 +13,8 @@ import { icon, refreshIcons } from '@/utils/icons';
 export function initializeCalculators(): void {
   populateExerciseDropdowns();
   setupEventListeners();
+  // Auto-fill calories calculator from saved profile
+  prefillCaloriesFromProfile();
 }
 
 // ==========================================
