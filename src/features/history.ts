@@ -1,7 +1,6 @@
 import { getHistory, deleteFromHistory, getPRs } from '@/utils/storage';
 import { renderHistoryItem, renderPRItem, refreshIcons } from '@/ui/components';
 import { icon } from '@/utils/icons';
-import * as XLSX from 'xlsx';
 
 // ==========================================
 // CARGAR HISTORIAL
@@ -84,10 +83,19 @@ export function loadPRs(): void {
 }
 
 // ==========================================
-// EXPORTAR A EXCEL
+// EXPORTAR A CSV (reemplaza xlsx por seguridad)
 // ==========================================
 
-export function exportToExcel(): void {
+function escapeCSV(value: string | number): string {
+  const str = String(value);
+  // Escapar comillas dobles y envolver en comillas si contiene caracteres especiales
+  if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+    return `"${str.replace(/"/g, '""')}"`;
+  }
+  return str;
+}
+
+export function exportToCSV(): void {
   const history = getHistory();
 
   if (history.length === 0) {
@@ -95,11 +103,8 @@ export function exportToExcel(): void {
     return;
   }
 
-  // Preparar datos para Excel
-  const excelData: (string | number)[][] = [];
-
   // Headers
-  excelData.push([
+  const headers = [
     'Fecha',
     'Grupo',
     'Ejercicio',
@@ -111,7 +116,9 @@ export function exportToExcel(): void {
     'Volumen',
     'Completado',
     'Volumen Total Sesión',
-  ]);
+  ];
+
+  const rows: string[][] = [headers];
 
   // Data rows - solo exportar sesiones de pesas
   history.forEach((session) => {
@@ -124,52 +131,43 @@ export function exportToExcel(): void {
 
       session.ejercicios.forEach((ej) => {
         if (ej.volumen > 0) {
-          excelData.push([
+          rows.push([
             fecha,
             grupo,
             ej.nombre,
-            ej.sets,
-            ej.reps,
-            ej.peso,
+            String(ej.sets),
+            String(ej.reps),
+            String(ej.peso),
             ej.esMancuerna ? 'Sí' : 'No',
             ej.grupoMuscular,
-            ej.volumen,
+            String(ej.volumen),
             ej.completado ? 'Sí' : 'No',
-            volumenTotalSesion,
+            String(volumenTotalSesion),
           ]);
         }
       });
     }
   });
 
-  // Crear workbook y worksheet
-  const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.aoa_to_sheet(excelData);
+  // Generar CSV con BOM para Excel
+  const BOM = '\uFEFF';
+  const csvContent = BOM + rows.map(row => row.map(escapeCSV).join(',')).join('\n');
 
-  // Set column widths
-  ws['!cols'] = [
-    { wch: 12 }, // Fecha
-    { wch: 30 }, // Grupo
-    { wch: 30 }, // Ejercicio
-    { wch: 8 }, // Sets
-    { wch: 8 }, // Reps
-    { wch: 10 }, // Peso
-    { wch: 15 }, // Es Mancuerna
-    { wch: 18 }, // Grupo Muscular
-    { wch: 10 }, // Volumen
-    { wch: 12 }, // Completado
-    { wch: 18 }, // Volumen Total
-  ];
-
-  // Add worksheet to workbook
-  XLSX.utils.book_append_sheet(wb, ws, 'Historial de Entrenos');
-
-  // Generate Excel file and download
-  XLSX.writeFile(
-    wb,
-    `GymMate_Historial_${new Date().toISOString().split('T')[0]}.xlsx`
-  );
+  // Crear blob y descargar
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', `GymMate_Historial_${new Date().toISOString().split('T')[0]}.csv`);
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
+
+// Mantener compatibilidad con el nombre anterior
+export const exportToExcel = exportToCSV;
 
 // ==========================================
 // ESTADÍSTICAS RÁPIDAS
