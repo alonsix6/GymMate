@@ -15,7 +15,7 @@ import {
   finishWorkout,
 } from '@/features/workout';
 import { trainingGroups } from '@/data/training-groups';
-import { getCustomWorkouts } from '@/utils/storage';
+import { getCustomWorkouts, deleteCustomWorkout } from '@/utils/storage';
 import { icon } from '@/utils/icons';
 
 // ==========================================
@@ -49,6 +49,9 @@ declare global {
     // History
     deleteHistoryItem: typeof deleteHistoryItem;
     exportToExcel: typeof exportToExcel;
+
+    // Custom Workouts
+    deleteCustomWorkout: typeof deleteCustomWorkout;
   }
 }
 
@@ -68,6 +71,7 @@ window.closeAnimationModal = closeAnimationModal;
 window.openRestTimerModal = openRestTimerModal;
 window.deleteHistoryItem = deleteHistoryItem;
 window.exportToExcel = exportToExcel;
+window.deleteCustomWorkout = deleteCustomWorkout;
 
 // ==========================================
 // RENDERIZAR RUTINAS EN HOME
