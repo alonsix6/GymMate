@@ -207,18 +207,18 @@ function updateHeroSection(): void {
 
   // Build stats display - more vibrant
   const statsHtml = stats.totalWorkouts > 0 ? `
-    <div class="grid grid-cols-3 gap-3 mt-5">
-      <div class="bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/30 rounded-xl p-3 text-center">
-        <p class="text-3xl font-bold text-blue-400">${stats.totalWorkouts}</p>
-        <p class="text-xs text-blue-300/80 font-medium">Entrenos</p>
+    <div class="grid grid-cols-3 gap-2 mt-5">
+      <div class="bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/30 rounded-xl p-2 text-center overflow-hidden">
+        <p class="text-2xl font-bold text-blue-400 truncate">${stats.totalWorkouts}</p>
+        <p class="text-[10px] text-blue-300/80 font-medium truncate">Entrenos</p>
       </div>
-      <div class="bg-gradient-to-br from-orange-500/20 to-orange-600/10 border border-orange-500/30 rounded-xl p-3 text-center">
-        <p class="text-3xl font-bold text-orange-400">${stats.streak}</p>
-        <p class="text-xs text-orange-300/80 font-medium">🔥 Racha</p>
+      <div class="bg-gradient-to-br from-orange-500/20 to-orange-600/10 border border-orange-500/30 rounded-xl p-2 text-center overflow-hidden">
+        <p class="text-2xl font-bold text-orange-400 truncate">${stats.streak}</p>
+        <p class="text-[10px] text-orange-300/80 font-medium truncate">🔥 Racha</p>
       </div>
-      <div class="bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30 rounded-xl p-3 text-center">
-        <p class="text-3xl font-bold text-emerald-400">${formatVolume(weeklyVolume)}</p>
-        <p class="text-xs text-emerald-300/80 font-medium">Kg/Semana</p>
+      <div class="bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30 rounded-xl p-2 text-center overflow-hidden">
+        <p class="text-2xl font-bold text-emerald-400 truncate">${formatVolume(weeklyVolume)}</p>
+        <p class="text-[10px] text-emerald-300/80 font-medium truncate">Kg/Sem</p>
       </div>
     </div>
   ` : `
@@ -230,15 +230,15 @@ function updateHeroSection(): void {
 
   // Recent PR display - celebratory!
   const prHtml = recentPR ? `
-    <div class="mt-4 bg-gradient-to-r from-yellow-500/20 via-amber-500/15 to-orange-500/20 border border-yellow-500/40 rounded-xl p-4">
-      <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-yellow-500/30">
-          <i data-lucide="trophy" class="w-6 h-6 text-white"></i>
+    <div class="mt-4 bg-gradient-to-r from-yellow-500/20 via-amber-500/15 to-orange-500/20 border border-yellow-500/40 rounded-xl p-3 overflow-hidden">
+      <div class="flex items-center gap-2">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-yellow-500/30">
+          <i data-lucide="trophy" class="w-5 h-5 text-white"></i>
         </div>
-        <div class="flex-1 min-w-0">
-          <p class="text-xs text-yellow-400 font-bold uppercase tracking-wide">🏆 PR Reciente!</p>
-          <p class="text-base text-white font-bold truncate">${recentPR.exercise}</p>
-          <p class="text-sm text-yellow-300/80 font-semibold">${recentPR.weight}kg x ${recentPR.reps} reps</p>
+        <div class="flex-1 min-w-0 overflow-hidden">
+          <p class="text-[10px] text-yellow-400 font-bold uppercase tracking-wide truncate">🏆 PR Reciente!</p>
+          <p class="text-sm text-white font-bold truncate">${recentPR.exercise}</p>
+          <p class="text-xs text-yellow-300/80 font-semibold truncate">${recentPR.weight}kg x ${recentPR.reps} reps</p>
         </div>
       </div>
     </div>

@@ -436,15 +436,15 @@
         </h2>
       </div>
 
-      <form id="profileForm" class="bg-dark-surface border border-dark-border rounded-xl p-4">
+      <form id="profileForm" class="bg-dark-surface border border-dark-border rounded-xl p-4 overflow-hidden">
         <div class="space-y-4">
           <div>
             <label class="block text-sm text-text-secondary mb-1">Nombre</label>
             <input type="text" id="profileName" placeholder="Tu nombre" class="w-full" />
           </div>
-          <div>
+          <div class="overflow-hidden">
             <label class="block text-sm text-text-secondary mb-1">Fecha de nacimiento</label>
-            <input type="date" id="profileBirthdate" class="w-full" />
+            <input type="date" id="profileBirthdate" class="w-full max-w-full" />
             <p class="text-xs text-text-muted mt-1">Edad: <span id="calculatedAge">-</span> años</p>
           </div>
           <div>

@@ -112,6 +112,13 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 
+/* Date input - prevent overflow */
+input[type='date'] {
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
 /* Checkbox styling */
 input[type='checkbox'] {
   appearance: none;
