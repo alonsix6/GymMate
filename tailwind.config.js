@@ -4,9 +4,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Paleta profesional simplificada - SIN GRADIENTES
+        // Paleta profesional - Negro puro para OLED
         dark: {
-          bg: '#0f172a',
+          bg: '#000000',
           surface: '#1e293b',
           border: 'rgba(255, 255, 255, 0.05)',
         },
