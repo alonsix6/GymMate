@@ -110,27 +110,31 @@ export function renderExercise(
 
   const optionalBorder = isOptional ? 'border-status-warning/30' : 'border-dark-border';
   const optionalBadge = isOptional
-    ? `<span class="text-xs bg-status-warning/20 text-status-warning px-2 py-0.5 rounded-full">Opcional</span>`
+    ? `<span class="text-xs bg-status-warning/20 text-status-warning px-2 py-1 rounded-full font-medium">Opcional</span>`
     : '';
 
   return `
-    <div class="bg-dark-surface border ${optionalBorder} rounded-xl p-4 mb-3" id="ejercicio-${index}">
+    <div class="bg-dark-surface border ${optionalBorder} rounded-2xl p-5" id="ejercicio-${index}">
       <!-- Header -->
-      <div class="flex items-start justify-between mb-3">
-        <div class="flex items-start gap-3 flex-1">
-          <input
-            type="checkbox"
-            id="completado-${index}"
-            ${ejercicio.completado ? 'checked' : ''}
-            onchange="window.toggleCompletado(${index})"
-            class="w-5 h-5 mt-1 rounded bg-dark-bg border-dark-border text-accent
-                   focus:ring-accent focus:ring-offset-0"
-          />
-          <div class="flex-1">
-            <h3 class="font-semibold text-text-primary text-sm leading-tight">${ejercicio.nombre}</h3>
-            <div class="flex items-center gap-2 mt-1">
-              ${icon(muscleIcon, 'sm', 'text-text-secondary')}
-              <span class="text-xs text-text-secondary">${ejercicio.grupoMuscular}</span>
+      <div class="flex items-start justify-between mb-4">
+        <div class="flex items-start gap-4 flex-1 min-w-0">
+          <label class="flex items-center justify-center w-11 h-11 rounded-xl bg-dark-bg border border-dark-border cursor-pointer flex-shrink-0 active:scale-95 transition-transform">
+            <input
+              type="checkbox"
+              id="completado-${index}"
+              ${ejercicio.completado ? 'checked' : ''}
+              onchange="window.toggleCompletado(${index})"
+              class="w-5 h-5 rounded bg-dark-bg border-dark-border text-accent
+                     focus:ring-accent focus:ring-offset-0"
+            />
+          </label>
+          <div class="flex-1 min-w-0 pt-1">
+            <h3 class="font-semibold text-text-primary text-base leading-tight truncate">${ejercicio.nombre}</h3>
+            <div class="flex flex-wrap items-center gap-2 mt-2">
+              <span class="inline-flex items-center gap-1.5 text-xs text-text-secondary bg-dark-bg px-2 py-1 rounded-lg">
+                <i data-lucide="${muscleIcon}" class="w-3.5 h-3.5"></i>
+                ${ejercicio.grupoMuscular}
+              </span>
               ${optionalBadge}
             </div>
           </div>
@@ -140,7 +144,8 @@ export function renderExercise(
             ? `
           <button
             onclick="window.showAnimation('${ejercicio.nombre}', '${gifUrl}')"
-            class="p-2 rounded-lg hover:bg-white/5 active:scale-95 transition-all text-text-secondary hover:text-accent"
+            class="w-11 h-11 flex items-center justify-center rounded-xl bg-dark-bg border border-dark-border hover:border-accent/50 active:scale-95 transition-all text-text-secondary hover:text-accent flex-shrink-0"
+            aria-label="Ver animacion"
           >
             ${icon('play', 'md')}
           </button>
@@ -149,14 +154,15 @@ export function renderExercise(
         }
       </div>
 
-      <!-- Inputs -->
-      <div class="grid grid-cols-3 gap-2 mb-3">
+      <!-- Inputs - Larger touch targets -->
+      <div class="grid grid-cols-3 gap-3 mb-4">
         <div>
-          <label class="block text-xs text-text-secondary mb-1">Sets</label>
+          <label class="block text-xs text-text-muted mb-2 font-medium">Sets</label>
           <div class="flex items-center">
             <button
               onclick="window.decrementInput('sets-${index}')"
-              class="p-1.5 bg-dark-bg border border-dark-border rounded-l-lg hover:bg-white/5"
+              class="w-11 h-11 flex items-center justify-center bg-dark-bg border border-dark-border rounded-l-xl hover:bg-white/5 active:scale-95 transition-all"
+              aria-label="Decrementar sets"
             >
               ${icon('minus', 'sm')}
             </button>
@@ -167,22 +173,24 @@ export function renderExercise(
               min="0"
               max="20"
               onchange="window.updateEjercicio(${index})"
-              class="w-full text-center py-2 bg-dark-bg border-y border-dark-border text-text-primary text-sm"
+              class="w-full h-11 text-center bg-dark-bg border-y border-dark-border text-text-primary text-base font-semibold"
             />
             <button
               onclick="window.incrementInput('sets-${index}')"
-              class="p-1.5 bg-dark-bg border border-dark-border rounded-r-lg hover:bg-white/5"
+              class="w-11 h-11 flex items-center justify-center bg-dark-bg border border-dark-border rounded-r-xl hover:bg-white/5 active:scale-95 transition-all"
+              aria-label="Incrementar sets"
             >
               ${icon('plus', 'sm')}
             </button>
           </div>
         </div>
         <div>
-          <label class="block text-xs text-text-secondary mb-1">Reps</label>
+          <label class="block text-xs text-text-muted mb-2 font-medium">Reps</label>
           <div class="flex items-center">
             <button
               onclick="window.decrementInput('reps-${index}')"
-              class="p-1.5 bg-dark-bg border border-dark-border rounded-l-lg hover:bg-white/5"
+              class="w-11 h-11 flex items-center justify-center bg-dark-bg border border-dark-border rounded-l-xl hover:bg-white/5 active:scale-95 transition-all"
+              aria-label="Decrementar reps"
             >
               ${icon('minus', 'sm')}
             </button>
@@ -193,18 +201,19 @@ export function renderExercise(
               min="0"
               max="100"
               onchange="window.updateEjercicio(${index})"
-              class="w-full text-center py-2 bg-dark-bg border-y border-dark-border text-text-primary text-sm"
+              class="w-full h-11 text-center bg-dark-bg border-y border-dark-border text-text-primary text-base font-semibold"
             />
             <button
               onclick="window.incrementInput('reps-${index}')"
-              class="p-1.5 bg-dark-bg border border-dark-border rounded-r-lg hover:bg-white/5"
+              class="w-11 h-11 flex items-center justify-center bg-dark-bg border border-dark-border rounded-r-xl hover:bg-white/5 active:scale-95 transition-all"
+              aria-label="Incrementar reps"
             >
               ${icon('plus', 'sm')}
             </button>
           </div>
         </div>
         <div>
-          <label class="block text-xs text-text-secondary mb-1">Peso (kg)</label>
+          <label class="block text-xs text-text-muted mb-2 font-medium">Peso (kg)</label>
           <input
             type="number"
             id="peso-${index}"
@@ -212,18 +221,18 @@ export function renderExercise(
             min="0"
             step="0.5"
             onchange="window.updateEjercicio(${index})"
-            class="w-full text-center py-2 bg-dark-bg border border-dark-border rounded-lg text-text-primary text-sm"
+            class="w-full h-11 text-center bg-dark-bg border border-dark-border rounded-xl text-text-primary text-base font-semibold"
           />
         </div>
       </div>
 
       <!-- Volume -->
-      <div class="flex items-center justify-between pt-2 border-t border-dark-border">
+      <div class="flex items-center justify-between pt-4 border-t border-dark-border">
         <div class="flex items-center gap-2">
-          ${icon('trending', 'sm', 'text-text-secondary')}
-          <span class="text-xs text-text-secondary">Volumen</span>
+          ${icon('trending', 'sm', 'text-text-muted')}
+          <span class="text-sm text-text-muted">Volumen</span>
         </div>
-        <span class="text-sm font-bold text-accent" id="volumen-${index}">
+        <span class="text-base font-bold text-accent" id="volumen-${index}">
           ${ejercicio.volumen.toLocaleString()} kg
         </span>
       </div>
