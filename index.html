@@ -97,18 +97,18 @@
       <!-- Custom Workouts -->
       <div id="customWorkoutsContainer"></div>
 
-      <!-- Cardio Section (Coming Soon) -->
+      <!-- Cardio Section -->
       <section class="mt-6">
-        <div class="w-full bg-dark-surface border border-dark-border rounded-xl p-4 flex items-center gap-4 opacity-50">
+        <button onclick="window.showCardioSelector()" class="w-full bg-dark-surface border border-status-warning/30 rounded-xl p-4 flex items-center gap-4 active:scale-[0.98] transition-transform">
           <div class="w-12 h-12 rounded-lg bg-status-warning/10 flex items-center justify-center">
             <i data-lucide="flame" class="w-6 h-6 text-status-warning"></i>
           </div>
           <div class="flex-1 text-left">
             <h3 class="font-bold text-text-primary">Cardio & HIIT</h3>
-            <p class="text-sm text-text-secondary">Próximamente</p>
+            <p class="text-sm text-text-secondary">Tabata, EMOM, AMRAP y más</p>
           </div>
-          <span class="text-xs text-text-muted bg-dark-bg px-2 py-1 rounded">Soon</span>
-        </div>
+          <i data-lucide="chevron-right" class="w-5 h-5 text-text-muted"></i>
+        </button>
       </section>
     </div>
 
@@ -387,6 +387,30 @@
           </p>
         </div>
       </form>
+    </div>
+
+    <!-- ==========================================
+         CARDIO VIEWS
+         ========================================== -->
+
+    <!-- Cardio Selector View -->
+    <div id="cardioSelectorView" class="hidden">
+      <!-- Rendered dynamically by cardio.ts -->
+    </div>
+
+    <!-- Cardio Config View -->
+    <div id="cardioConfigView" class="hidden">
+      <!-- Rendered dynamically by cardio.ts -->
+    </div>
+
+    <!-- Cardio Timer View -->
+    <div id="cardioTimerView" class="hidden">
+      <!-- Rendered dynamically by cardio.ts -->
+    </div>
+
+    <!-- Cardio Summary View -->
+    <div id="cardioSummaryView" class="hidden">
+      <!-- Rendered dynamically by cardio.ts -->
     </div>
 
   </main>

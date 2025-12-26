@@ -14,6 +14,16 @@ import {
   saveWorkout,
   finishWorkout,
 } from '@/features/workout';
+import {
+  showCardioSelector,
+  selectCardioMode,
+  showCardioConfig,
+  adjustCardioConfig,
+  setCardioExercise,
+  startCardioWorkout,
+  toggleCardioPause,
+  stopCardioWorkout,
+} from '@/features/cardio';
 import { trainingGroups } from '@/data/training-groups';
 import { getCustomWorkouts, deleteCustomWorkout } from '@/utils/storage';
 import { icon } from '@/utils/icons';
@@ -52,6 +62,16 @@ declare global {
 
     // Custom Workouts
     deleteCustomWorkout: typeof deleteCustomWorkout;
+
+    // Cardio
+    showCardioSelector: typeof showCardioSelector;
+    selectCardioMode: typeof selectCardioMode;
+    showCardioConfig: typeof showCardioConfig;
+    adjustCardioConfig: typeof adjustCardioConfig;
+    setCardioExercise: typeof setCardioExercise;
+    startCardioWorkout: typeof startCardioWorkout;
+    toggleCardioPause: typeof toggleCardioPause;
+    stopCardioWorkout: typeof stopCardioWorkout;
   }
 }
 
@@ -72,6 +92,14 @@ window.openRestTimerModal = openRestTimerModal;
 window.deleteHistoryItem = deleteHistoryItem;
 window.exportToExcel = exportToExcel;
 window.deleteCustomWorkout = deleteCustomWorkout;
+window.showCardioSelector = showCardioSelector;
+window.selectCardioMode = selectCardioMode;
+window.showCardioConfig = showCardioConfig;
+window.adjustCardioConfig = adjustCardioConfig;
+window.setCardioExercise = setCardioExercise;
+window.startCardioWorkout = startCardioWorkout;
+window.toggleCardioPause = toggleCardioPause;
+window.stopCardioWorkout = stopCardioWorkout;
 
 // ==========================================
 // RENDERIZAR RUTINAS EN HOME
