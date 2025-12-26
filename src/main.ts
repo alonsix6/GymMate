@@ -26,8 +26,19 @@ import {
   stopCardioWorkout,
 } from '@/features/cardio';
 import { trainingGroups } from '@/data/training-groups';
-import { getCustomWorkouts, deleteCustomWorkout } from '@/utils/storage';
+import { getCustomWorkouts, deleteCustomWorkout, addCustomWorkout, CustomWorkout } from '@/utils/storage';
 import { icon, getGroupIcon } from '@/utils/icons';
+import type { MuscleGroup } from '@/types';
+
+// ==========================================
+// WORKOUT BUILDER STATE
+// ==========================================
+
+const workoutBuilderState: {
+  selectedExercises: Array<{ nombre: string; grupoMuscular: string }>;
+} = {
+  selectedExercises: [],
+};
 
 // ==========================================
 // EXPONER FUNCIONES AL WINDOW (para onclick)
@@ -63,6 +74,10 @@ declare global {
 
     // Custom Workouts
     deleteCustomWorkout: typeof deleteCustomWorkout;
+    openWorkoutBuilder: typeof openWorkoutBuilder;
+    closeWorkoutBuilder: typeof closeWorkoutBuilder;
+    toggleExerciseSelection: typeof toggleExerciseSelection;
+    saveCustomWorkout: typeof saveCustomWorkout;
 
     // Cardio
     showCardioSelector: typeof showCardioSelector;
@@ -94,6 +109,10 @@ window.openRestTimerModal = openRestTimerModal;
 window.deleteHistoryItem = deleteHistoryItem;
 window.exportToExcel = exportToExcel;
 window.deleteCustomWorkout = deleteCustomWorkout;
+window.openWorkoutBuilder = openWorkoutBuilder;
+window.closeWorkoutBuilder = closeWorkoutBuilder;
+window.toggleExerciseSelection = toggleExerciseSelection;
+window.saveCustomWorkout = saveCustomWorkout;
 window.showCardioSelector = showCardioSelector;
 window.selectCardioMode = selectCardioMode;
 window.showCardioConfig = showCardioConfig;
@@ -254,6 +273,213 @@ function renderCustomWorkoutsInHome(): void {
   html += '</div></div>';
   container.innerHTML = html;
 
+  refreshIcons();
+}
+
+// ==========================================
+// WORKOUT BUILDER
+// ==========================================
+
+function openWorkoutBuilder(): void {
+  // Reset state
+  workoutBuilderState.selectedExercises = [];
+
+  const modal = document.getElementById('workoutBuilderModal');
+  if (!modal) return;
+
+  // Render exercise groups
+  renderExerciseGroups();
+  updateSelectedExercisesList();
+
+  // Clear name input
+  const nameInput = document.getElementById('customWorkoutName') as HTMLInputElement;
+  if (nameInput) nameInput.value = '';
+
+  // Show modal
+  modal.classList.add('active');
+  refreshIcons();
+}
+
+function closeWorkoutBuilder(): void {
+  const modal = document.getElementById('workoutBuilderModal');
+  if (modal) {
+    modal.classList.remove('active');
+  }
+}
+
+function renderExerciseGroups(): void {
+  const container = document.getElementById('exerciseGroupsList');
+  if (!container) return;
+
+  const groupColors: Record<string, { bg: string; border: string; text: string }> = {
+    grupo1: { bg: 'from-blue-500/10 to-blue-600/5', border: 'border-blue-500/30', text: 'text-blue-400' },
+    grupo2: { bg: 'from-emerald-500/10 to-emerald-600/5', border: 'border-emerald-500/30', text: 'text-emerald-400' },
+    grupo3: { bg: 'from-purple-500/10 to-purple-600/5', border: 'border-purple-500/30', text: 'text-purple-400' },
+    grupo4: { bg: 'from-orange-500/10 to-orange-600/5', border: 'border-orange-500/30', text: 'text-orange-400' },
+    grupo5: { bg: 'from-pink-500/10 to-pink-600/5', border: 'border-pink-500/30', text: 'text-pink-400' },
+  };
+
+  let html = '';
+
+  Object.entries(trainingGroups).forEach(([groupId, group]) => {
+    const colors = groupColors[groupId] || groupColors.grupo1;
+    const shortName = group.nombre.split(' - ')[1] || group.nombre;
+
+    html += `
+      <div class="bg-gradient-to-br ${colors.bg} border ${colors.border} rounded-xl overflow-hidden">
+        <div class="p-3 border-b ${colors.border}">
+          <h4 class="font-bold ${colors.text} text-sm">${shortName}</h4>
+        </div>
+        <div class="p-2 space-y-1">
+    `;
+
+    // Add main exercises
+    group.ejercicios.forEach((ejercicio) => {
+      const isSelected = workoutBuilderState.selectedExercises.some(
+        (e) => e.nombre === ejercicio.nombre
+      );
+      html += renderExerciseItem(ejercicio.nombre, ejercicio.grupoMuscular, isSelected);
+    });
+
+    // Add optional exercises
+    if (group.opcionales) {
+      group.opcionales.forEach((ejercicio) => {
+        const isSelected = workoutBuilderState.selectedExercises.some(
+          (e) => e.nombre === ejercicio.nombre
+        );
+        html += renderExerciseItem(ejercicio.nombre, ejercicio.grupoMuscular, isSelected, true);
+      });
+    }
+
+    html += '</div></div>';
+  });
+
+  container.innerHTML = html;
+}
+
+function renderExerciseItem(nombre: string, grupoMuscular: string, isSelected: boolean, isOptional: boolean = false): string {
+  const bgClass = isSelected
+    ? 'bg-accent/20 border-accent/40'
+    : 'bg-dark-bg/50 border-transparent hover:border-white/10';
+  const checkClass = isSelected ? 'text-accent' : 'text-text-muted';
+  const optionalTag = isOptional ? '<span class="text-[10px] text-orange-400 ml-1">(opt)</span>' : '';
+
+  return `
+    <button
+      onclick="window.toggleExerciseSelection('${nombre}', '${grupoMuscular}')"
+      class="w-full flex items-center gap-2 p-2 rounded-lg border ${bgClass} transition-all active:scale-[0.98]"
+    >
+      <i data-lucide="${isSelected ? 'check-circle' : 'circle'}" class="w-4 h-4 ${checkClass} flex-shrink-0"></i>
+      <span class="text-sm text-text-primary text-left flex-1 truncate">${nombre}${optionalTag}</span>
+      <span class="text-[10px] text-text-muted flex-shrink-0">${grupoMuscular}</span>
+    </button>
+  `;
+}
+
+function toggleExerciseSelection(nombre: string, grupoMuscular: string): void {
+  const existingIndex = workoutBuilderState.selectedExercises.findIndex(
+    (e) => e.nombre === nombre
+  );
+
+  if (existingIndex >= 0) {
+    // Remove from selection
+    workoutBuilderState.selectedExercises.splice(existingIndex, 1);
+  } else {
+    // Add to selection
+    workoutBuilderState.selectedExercises.push({ nombre, grupoMuscular });
+  }
+
+  // Re-render
+  renderExerciseGroups();
+  updateSelectedExercisesList();
+  suggestWorkoutName();
+  refreshIcons();
+}
+
+function updateSelectedExercisesList(): void {
+  const container = document.getElementById('selectedExercisesList');
+  const countSpan = document.getElementById('selectedCount');
+
+  if (!container) return;
+
+  if (countSpan) {
+    countSpan.textContent = String(workoutBuilderState.selectedExercises.length);
+  }
+
+  if (workoutBuilderState.selectedExercises.length === 0) {
+    container.innerHTML = '<p class="text-text-muted text-sm text-center">Selecciona ejercicios de la lista</p>';
+    return;
+  }
+
+  const html = workoutBuilderState.selectedExercises
+    .map(
+      (ex, i) => `
+      <div class="flex items-center justify-between py-1.5 ${i > 0 ? 'border-t border-dark-border' : ''}">
+        <span class="text-sm text-text-primary">${ex.nombre}</span>
+        <button
+          onclick="window.toggleExerciseSelection('${ex.nombre}', '${ex.grupoMuscular}')"
+          class="p-1 text-status-error hover:text-status-error/70"
+        >
+          <i data-lucide="x" class="w-3 h-3"></i>
+        </button>
+      </div>
+    `
+    )
+    .join('');
+
+  container.innerHTML = html;
+  refreshIcons();
+}
+
+function suggestWorkoutName(): void {
+  const nameInput = document.getElementById('customWorkoutName') as HTMLInputElement;
+  if (!nameInput || nameInput.value.trim()) return; // Don't overwrite user input
+
+  const muscleGroups = new Set(
+    workoutBuilderState.selectedExercises.map((e) => e.grupoMuscular)
+  );
+
+  if (muscleGroups.size === 0) return;
+
+  const groupArray = Array.from(muscleGroups);
+  let suggestion = '';
+
+  if (groupArray.length === 1) {
+    suggestion = `Rutina de ${groupArray[0]}`;
+  } else if (groupArray.length === 2) {
+    suggestion = `${groupArray[0]} + ${groupArray[1]}`;
+  } else {
+    suggestion = `${groupArray.slice(0, 2).join(' + ')} y más`;
+  }
+
+  nameInput.placeholder = suggestion;
+}
+
+function saveCustomWorkout(): void {
+  const nameInput = document.getElementById('customWorkoutName') as HTMLInputElement;
+  const name = nameInput?.value.trim() || nameInput?.placeholder || 'Mi Rutina';
+
+  if (workoutBuilderState.selectedExercises.length === 0) {
+    alert('Selecciona al menos un ejercicio');
+    return;
+  }
+
+  const workout: CustomWorkout = {
+    id: `custom_${Date.now()}`,
+    nombre: name,
+    ejercicios: workoutBuilderState.selectedExercises.map((ex) => ({
+      nombre: ex.nombre,
+      esMancuerna: false,
+      grupoMuscular: ex.grupoMuscular as MuscleGroup,
+    })),
+    opcionales: [],
+    isCustom: true,
+    createdAt: new Date().toISOString(),
+  };
+
+  addCustomWorkout(workout);
+  closeWorkoutBuilder();
+  renderCustomWorkoutsInHome();
   refreshIcons();
 }
 

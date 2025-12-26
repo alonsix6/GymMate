@@ -188,8 +188,8 @@ function handleCaloriesCalculation(): void {
   if (!resultsDiv) return;
 
   resultsDiv.innerHTML = `
-    <div class="space-y-4">
-      <div class="grid grid-cols-2 gap-3">
+    <div class="space-y-3">
+      <div class="grid grid-cols-2 gap-2">
         <div class="bg-dark-bg border border-dark-border rounded-xl p-3 text-center">
           <p class="text-xs text-text-secondary mb-1">BMR</p>
           <p class="text-xl font-bold text-text-primary">${result.bmr}</p>
@@ -202,30 +202,30 @@ function handleCaloriesCalculation(): void {
         </div>
       </div>
 
-      <div class="grid grid-cols-3 gap-3">
-        <div class="bg-status-error/10 border border-status-error/20 rounded-xl p-3 text-center">
-          <p class="text-xs text-text-secondary mb-1">Déficit (-20%)</p>
-          <p class="text-lg font-bold text-status-error">${result.deficit}</p>
-          <p class="text-xs text-text-muted">kcal</p>
+      <div class="grid grid-cols-3 gap-2">
+        <div class="bg-status-error/10 border border-status-error/20 rounded-lg p-2 text-center overflow-hidden">
+          <p class="text-[10px] text-text-secondary mb-0.5 truncate">Déficit</p>
+          <p class="text-base font-bold text-status-error">${result.deficit}</p>
+          <p class="text-[10px] text-text-muted">kcal</p>
         </div>
-        <div class="bg-status-success/10 border border-status-success/20 rounded-xl p-3 text-center">
-          <p class="text-xs text-text-secondary mb-1">Mantenimiento</p>
-          <p class="text-lg font-bold text-status-success">${result.maintenance}</p>
-          <p class="text-xs text-text-muted">kcal</p>
+        <div class="bg-status-success/10 border border-status-success/20 rounded-lg p-2 text-center overflow-hidden">
+          <p class="text-[10px] text-text-secondary mb-0.5 truncate">Mantener</p>
+          <p class="text-base font-bold text-status-success">${result.maintenance}</p>
+          <p class="text-[10px] text-text-muted">kcal</p>
         </div>
-        <div class="bg-accent/10 border border-accent/20 rounded-xl p-3 text-center">
-          <p class="text-xs text-text-secondary mb-1">Superávit (+20%)</p>
-          <p class="text-lg font-bold text-accent">${result.surplus}</p>
-          <p class="text-xs text-text-muted">kcal</p>
+        <div class="bg-accent/10 border border-accent/20 rounded-lg p-2 text-center overflow-hidden">
+          <p class="text-[10px] text-text-secondary mb-0.5 truncate">Superávit</p>
+          <p class="text-base font-bold text-accent">${result.surplus}</p>
+          <p class="text-[10px] text-text-muted">kcal</p>
         </div>
       </div>
 
-      <div class="bg-dark-bg border border-dark-border rounded-xl p-4">
+      <div class="bg-dark-bg border border-dark-border rounded-lg p-3">
         <div class="flex items-start gap-2">
-          ${icon('info', 'md', 'text-status-info')}
-          <div class="text-xs text-text-secondary">
-            <p class="mb-1"><strong>BMR:</strong> Calorías que quemas en reposo absoluto.</p>
-            <p><strong>TDEE:</strong> Calorías totales incluyendo actividad física.</p>
+          ${icon('info', 'sm', 'text-status-info flex-shrink-0')}
+          <div class="text-[11px] text-text-secondary leading-relaxed">
+            <p><strong>BMR:</strong> Calorías en reposo.</p>
+            <p><strong>TDEE:</strong> Calorías totales con actividad.</p>
           </div>
         </div>
       </div>

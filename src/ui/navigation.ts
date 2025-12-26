@@ -495,16 +495,12 @@ export function initializeNavigation(): void {
     });
   });
 
-  // FAB button - go to home and scroll to routines
+  // FAB button - open workout builder to create custom routine
   const fabButton = document.getElementById('fabButton');
   fabButton?.addEventListener('click', () => {
-    showHome();
-    // Scroll to routines section after a small delay
-    setTimeout(() => {
-      const routinesSection = document.getElementById('routinesContainer');
-      if (routinesSection) {
-        routinesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 100);
+    // Use window to access the function from main.ts
+    if (typeof (window as any).openWorkoutBuilder === 'function') {
+      (window as any).openWorkoutBuilder();
+    }
   });
 }
