@@ -152,7 +152,7 @@ function updateHeroSection(): void {
   let greeting = 'Hola';
   let timeEmoji = '';
   if (hour < 12) {
-    greeting = 'Buenos dias';
+    greeting = 'Buenos días';
     timeEmoji = '☀️';
   } else if (hour < 18) {
     greeting = 'Buenas tardes';
@@ -169,37 +169,37 @@ function updateHeroSection(): void {
   let statusIcon = 'zap';
 
   if (hasDraft) {
-    motivationalMsg = '💪 Tienes un entrenamiento pendiente!';
+    motivationalMsg = '💪 ¡Tienes un entrenamiento pendiente!';
     heroGradient = 'from-orange-600/30 via-amber-600/20 to-yellow-600/20';
     accentGradient = 'from-orange-500 to-amber-500';
     statusIcon = 'play-circle';
   } else if (stats.streak >= 5) {
-    motivationalMsg = `🔥 ${stats.streak} dias de racha! IMPARABLE!`;
+    motivationalMsg = `🔥 ${stats.streak} días de racha! ¡IMPARABLE!`;
     heroGradient = 'from-orange-600/30 via-red-600/20 to-pink-600/20';
     accentGradient = 'from-orange-500 to-red-500';
     statusIcon = 'flame';
   } else if (stats.streak >= 3) {
-    motivationalMsg = `⚡ Racha de ${stats.streak} dias! Sigue asi!`;
+    motivationalMsg = `⚡ Racha de ${stats.streak} días! ¡Sigue así!`;
     heroGradient = 'from-green-600/30 via-emerald-600/20 to-teal-600/20';
     accentGradient = 'from-green-500 to-emerald-500';
     statusIcon = 'trending-up';
   } else if (stats.daysSinceLastWorkout > 7) {
-    motivationalMsg = '🎯 Es momento de volver! Tu puedes!';
+    motivationalMsg = '🎯 ¡Es momento de volver! ¡Tú puedes!';
     heroGradient = 'from-purple-600/30 via-indigo-600/20 to-blue-600/20';
     accentGradient = 'from-purple-500 to-indigo-500';
     statusIcon = 'target';
   } else if (stats.totalWorkouts === 0) {
-    motivationalMsg = '🚀 Comienza tu transformacion hoy!';
+    motivationalMsg = '🚀 ¡Comienza tu transformación hoy!';
     heroGradient = 'from-cyan-600/30 via-blue-600/20 to-indigo-600/20';
     accentGradient = 'from-cyan-500 to-blue-500';
     statusIcon = 'rocket';
   } else if (stats.daysSinceLastWorkout <= 1) {
-    motivationalMsg = '💥 Estas en fuego! No pares!';
+    motivationalMsg = '💥 ¡Estás en fuego! ¡No pares!';
     heroGradient = 'from-emerald-600/30 via-green-600/20 to-teal-600/20';
     accentGradient = 'from-emerald-500 to-green-500';
     statusIcon = 'zap';
   } else {
-    motivationalMsg = '💪 Vamos a entrenar!';
+    motivationalMsg = '💪 ¡Vamos a entrenar!';
     heroGradient = 'from-blue-600/30 via-indigo-600/20 to-purple-600/20';
     accentGradient = 'from-blue-500 to-indigo-500';
     statusIcon = 'dumbbell';
