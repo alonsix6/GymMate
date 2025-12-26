@@ -3,7 +3,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { resolve } from 'path';
 
 // Version for cache busting
-const APP_VERSION = '3.1.0';
+const APP_VERSION = '3.2.0';
 
 export default defineConfig({
   resolve: {
@@ -17,7 +17,7 @@ export default defineConfig({
   plugins: [
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icon-192.png', 'icon-512.png'],
+      includeAssets: ['favicon.svg', 'favicon-16.png', 'favicon-32.png', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png'],
       manifest: {
         name: 'GymMate - Tu Compañero de Entrenamiento',
         short_name: 'GymMate',
