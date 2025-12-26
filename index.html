@@ -53,16 +53,19 @@
          HOME VIEW
          ========================================== -->
     <div id="homeView">
-      <!-- Hero Section -->
-      <section class="mb-8">
-        <div id="heroContent" class="py-2">
-          <div class="flex items-center gap-4 mb-3">
-            <div class="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center">
-              <i data-lucide="dumbbell" class="w-7 h-7 text-accent"></i>
-            </div>
-            <div class="flex-1">
-              <h1 class="text-xl font-display font-bold text-text-primary leading-tight">Bienvenido a GymMate</h1>
-              <p class="text-sm text-text-secondary mt-1">Tu companero de entrenamiento personal</p>
+      <!-- Hero Section - Dynamic content rendered by JS -->
+      <section class="mb-6">
+        <div id="heroContent">
+          <!-- Placeholder - Will be replaced by updateHeroSection() -->
+          <div class="bg-dark-surface border border-dark-border rounded-2xl p-5 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2"></div>
+            <div class="relative">
+              <p class="text-sm text-text-muted mb-1">Hola</p>
+              <h1 class="text-2xl font-display font-bold text-text-primary mb-3">GymMate</h1>
+              <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-accent/10 rounded-full">
+                <i data-lucide="zap" class="w-4 h-4 text-accent"></i>
+                <span class="text-sm font-medium text-accent">Cargando...</span>
+              </div>
             </div>
           </div>
         </div>
@@ -72,7 +75,8 @@
       <div id="resumeWorkoutCard" class="hidden"></div>
 
       <!-- Quick Actions - Larger touch targets (min 44px) -->
-      <section class="mb-8">
+      <section class="mb-6">
+        <h3 class="text-sm font-semibold text-text-muted uppercase tracking-wide mb-3">Acceso Rapido</h3>
         <div class="grid grid-cols-4 gap-3">
           <button data-action="calculators" class="bg-dark-surface border border-dark-border rounded-2xl p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform min-h-[80px]">
             <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
