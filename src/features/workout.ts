@@ -9,6 +9,8 @@ import {
   saveCurrentSession,
   endSession,
   hasUnsavedData,
+  hasUnsavedChanges,
+  setOnDraftSavedCallback,
 } from '@/state/session';
 import { renderExercise, refreshIcons } from '@/ui/components';
 import { icon } from '@/utils/icons';
@@ -327,11 +329,14 @@ export function updateUnsavedIndicator(): void {
   const indicator = document.getElementById('unsavedIndicator');
   if (!indicator) return;
 
-  if (hasUnsavedData()) {
+  // Only show indicator when there are actual pending changes (before auto-save)
+  // hasUnsavedChanges is false after draft auto-save, so indicator hides
+  if (hasUnsavedChanges) {
     indicator.classList.remove('hidden');
     indicator.classList.add('animate-slide-down');
   } else {
     indicator.classList.add('hidden');
+    indicator.classList.remove('animate-slide-down');
   }
 }
 
@@ -376,3 +381,8 @@ export function finishWorkout(): void {
   endSession();
   window.location.reload();
 }
+
+// Register callback to update indicator when draft is auto-saved
+setOnDraftSavedCallback(() => {
+  updateUnsavedIndicator();
+});
