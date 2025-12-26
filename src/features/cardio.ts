@@ -30,6 +30,15 @@ const DEFAULT_CONFIGS: Record<CardioMode, CardioConfig> = {
 // ==========================================
 
 export function showCardioSelector(): void {
+  // Ocultar home view y todos los tabs
+  const homeView = document.getElementById('homeView');
+  if (homeView) homeView.classList.add('hidden');
+
+  document.querySelectorAll('.tab-content').forEach((tab) => {
+    tab.classList.add('hidden');
+    tab.classList.remove('active');
+  });
+
   hideAllCardioViews();
 
   const selectorView = document.getElementById('cardioSelectorView');
@@ -37,17 +46,18 @@ export function showCardioSelector(): void {
 
   selectorView.classList.remove('hidden');
   selectorView.innerHTML = `
-    <div class="mb-6">
-      <button onclick="window.showHome()" class="flex items-center gap-2 text-text-secondary hover:text-text-primary mb-4">
-        ${icon('back', 'md')}
-        <span>Volver</span>
+    <!-- Navigation Bar -->
+    <div class="flex items-center gap-3 mb-6">
+      <button onclick="window.showHome()" class="w-11 h-11 flex items-center justify-center bg-dark-surface border border-dark-border rounded-xl active:scale-95 transition-transform">
+        <i data-lucide="arrow-left" class="w-5 h-5 text-text-primary"></i>
       </button>
       <h2 class="text-xl font-display font-bold text-text-primary flex items-center gap-2">
-        ${icon('fire', 'lg', 'text-status-warning')}
+        ${icon('fire', 'lg', 'text-orange-400')}
         Cardio & HIIT
       </h2>
-      <p class="text-text-secondary text-sm mt-1">Selecciona un modo de entrenamiento</p>
     </div>
+
+    <p class="text-text-secondary text-sm mb-4">Selecciona un modo de entrenamiento</p>
 
     <div class="space-y-3">
       ${renderModeCard('tabata', 'Tabata', '20s trabajo / 10s descanso × 8 rondas', 'zap')}
@@ -66,17 +76,17 @@ function renderModeCard(mode: CardioMode, title: string, description: string, ic
   return `
     <button
       onclick="window.selectCardioMode('${mode}')"
-      class="w-full bg-dark-surface border border-dark-border rounded-xl p-4 flex items-center gap-4
-             active:scale-[0.98] transition-transform text-left"
+      class="w-full bg-gradient-to-br from-orange-500/15 to-red-600/10 border border-orange-500/30 rounded-xl p-4 flex items-center gap-4
+             active:scale-[0.98] transition-all hover:border-orange-400/50 text-left"
     >
-      <div class="w-12 h-12 rounded-lg bg-status-warning/10 flex items-center justify-center">
-        ${icon(iconName, 'lg', 'text-status-warning')}
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg shadow-orange-500/20">
+        ${icon(iconName, 'lg', 'text-white')}
       </div>
       <div class="flex-1">
-        <h3 class="font-bold text-text-primary">${title}</h3>
-        <p class="text-sm text-text-secondary">${description}</p>
+        <h3 class="font-bold text-white">${title}</h3>
+        <p class="text-sm text-orange-200/70">${description}</p>
       </div>
-      ${icon('chevronRight', 'md', 'text-text-muted')}
+      ${icon('chevronRight', 'md', 'text-orange-300')}
     </button>
   `;
 }
@@ -306,13 +316,13 @@ export function showCardioConfig(): void {
   };
 
   configView.innerHTML = `
-    <div class="mb-6">
-      <button onclick="window.showCardioSelector()" class="flex items-center gap-2 text-text-secondary hover:text-text-primary mb-4">
-        ${icon('back', 'md')}
-        <span>Cambiar modo</span>
+    <!-- Navigation Bar -->
+    <div class="flex items-center gap-3 mb-6">
+      <button onclick="window.showCardioSelector()" class="w-11 h-11 flex items-center justify-center bg-dark-surface border border-dark-border rounded-xl active:scale-95 transition-transform">
+        <i data-lucide="arrow-left" class="w-5 h-5 text-text-primary"></i>
       </button>
       <h2 class="text-xl font-display font-bold text-text-primary flex items-center gap-2">
-        ${icon('settings', 'lg', 'text-accent')}
+        ${icon('settings', 'lg', 'text-orange-400')}
         Configurar ${modeNames[mode]}
       </h2>
     </div>
@@ -323,8 +333,8 @@ export function showCardioConfig(): void {
 
     <button
       onclick="window.startCardioWorkout()"
-      class="w-full bg-status-warning hover:bg-status-warning/90 text-dark-bg font-bold py-4 px-6 rounded-xl
-             active:scale-95 transition-all flex items-center justify-center gap-2 text-lg"
+      class="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold py-4 px-6 rounded-xl
+             active:scale-95 transition-all flex items-center justify-center gap-2 text-lg shadow-lg shadow-orange-500/30"
     >
       ${icon('play', 'lg')}
       Comenzar
