@@ -112,20 +112,42 @@ function renderRoutinesInHome(): void {
   const container = document.getElementById('routinesContainer');
   if (!container) return;
 
-  const groupColors: Record<string, string> = {
-    grupo1: 'border-l-blue-400',
-    grupo2: 'border-l-green-400',
-    grupo3: 'border-l-purple-400',
-    grupo4: 'border-l-orange-400',
-    grupo5: 'border-l-pink-400',
-  };
-
-  const groupBgColors: Record<string, string> = {
-    grupo1: 'bg-blue-400/10',
-    grupo2: 'bg-green-400/10',
-    grupo3: 'bg-purple-400/10',
-    grupo4: 'bg-orange-400/10',
-    grupo5: 'bg-pink-400/10',
+  const groupStyles: Record<string, { border: string; bg: string; gradient: string; iconGradient: string; textColor: string }> = {
+    grupo1: {
+      border: 'border-blue-500/40',
+      bg: 'from-blue-500/20 to-blue-600/10',
+      gradient: 'from-blue-500 to-indigo-600',
+      iconGradient: 'from-blue-500 to-indigo-600',
+      textColor: 'text-blue-300',
+    },
+    grupo2: {
+      border: 'border-emerald-500/40',
+      bg: 'from-emerald-500/20 to-green-600/10',
+      gradient: 'from-emerald-500 to-green-600',
+      iconGradient: 'from-emerald-500 to-green-600',
+      textColor: 'text-emerald-300',
+    },
+    grupo3: {
+      border: 'border-purple-500/40',
+      bg: 'from-purple-500/20 to-violet-600/10',
+      gradient: 'from-purple-500 to-violet-600',
+      iconGradient: 'from-purple-500 to-violet-600',
+      textColor: 'text-purple-300',
+    },
+    grupo4: {
+      border: 'border-orange-500/40',
+      bg: 'from-orange-500/20 to-amber-600/10',
+      gradient: 'from-orange-500 to-amber-600',
+      iconGradient: 'from-orange-500 to-amber-600',
+      textColor: 'text-orange-300',
+    },
+    grupo5: {
+      border: 'border-pink-500/40',
+      bg: 'from-pink-500/20 to-rose-600/10',
+      gradient: 'from-pink-500 to-rose-600',
+      iconGradient: 'from-pink-500 to-rose-600',
+      textColor: 'text-pink-300',
+    },
   };
 
   let html = '';
@@ -133,6 +155,7 @@ function renderRoutinesInHome(): void {
   // Rutinas predefinidas
   Object.entries(trainingGroups).forEach(([id, group]) => {
     const groupIcon = getGroupIcon(id);
+    const style = groupStyles[id] || groupStyles.grupo1;
     // Extract short name (after the dash)
     const shortName = group.nombre.split(' - ')[1] || group.nombre;
     const groupNum = group.nombre.split(' - ')[0] || '';
@@ -140,20 +163,20 @@ function renderRoutinesInHome(): void {
     html += `
       <div
         data-grupo="${id}"
-        class="bg-dark-surface border border-dark-border ${groupColors[id]} border-l-4 rounded-2xl p-5
-               cursor-pointer active:scale-[0.98] transition-transform min-h-[76px]"
+        class="bg-gradient-to-br ${style.bg} border ${style.border} rounded-2xl p-5
+               cursor-pointer active:scale-[0.98] transition-all hover:border-opacity-70 min-h-[76px]"
       >
         <div class="flex items-center gap-4">
-          <div class="w-12 h-12 rounded-xl ${groupBgColors[id]} flex items-center justify-center flex-shrink-0">
-            <i data-lucide="${groupIcon.icon}" class="w-6 h-6 ${groupIcon.color}"></i>
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${style.iconGradient} flex items-center justify-center flex-shrink-0 shadow-lg">
+            <i data-lucide="${groupIcon.icon}" class="w-6 h-6 text-white"></i>
           </div>
           <div class="flex-1 min-w-0">
-            <p class="text-xs text-text-muted font-medium uppercase tracking-wide">${groupNum}</p>
-            <h3 class="font-bold text-text-primary text-base truncate">${shortName}</h3>
-            <p class="text-sm text-text-secondary">${group.ejercicios.length} ejercicios</p>
+            <p class="text-xs ${style.textColor} font-semibold uppercase tracking-wide">${groupNum}</p>
+            <h3 class="font-bold text-white text-base truncate">${shortName}</h3>
+            <p class="text-sm text-white/60">${group.ejercicios.length} ejercicios</p>
           </div>
           <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center">
-            ${icon('chevronRight', 'md', 'text-text-muted')}
+            ${icon('chevronRight', 'md', style.textColor)}
           </div>
         </div>
       </div>

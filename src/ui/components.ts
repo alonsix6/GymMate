@@ -108,31 +108,29 @@ export function renderExercise(
   const gifUrl = getExerciseGif(ejercicio.nombre);
   const muscleIcon = getMuscleIcon(ejercicio.grupoMuscular);
 
-  const optionalBorder = isOptional ? 'border-status-warning/30' : 'border-dark-border';
   const optionalBadge = isOptional
-    ? `<span class="text-xs bg-status-warning/20 text-status-warning px-2 py-1 rounded-full font-medium">Opcional</span>`
+    ? `<span class="text-xs bg-orange-500/20 text-orange-400 px-2 py-0.5 rounded-full font-semibold">Opcional</span>`
     : '';
 
+  const cardBg = isOptional ? 'bg-orange-500/5 border-orange-500/20' : 'bg-slate-800/50 border-slate-700/50';
+
   return `
-    <div class="bg-dark-surface border ${optionalBorder} rounded-2xl p-5" id="ejercicio-${index}">
+    <div class="${cardBg} border rounded-xl p-4" id="ejercicio-${index}">
       <!-- Header -->
-      <div class="flex items-start justify-between mb-4">
-        <div class="flex items-start gap-4 flex-1 min-w-0">
-          <label class="flex items-center justify-center w-11 h-11 rounded-xl bg-dark-bg border border-dark-border cursor-pointer flex-shrink-0 active:scale-95 transition-transform">
-            <input
-              type="checkbox"
-              id="completado-${index}"
-              ${ejercicio.completado ? 'checked' : ''}
-              onchange="window.toggleCompletado(${index})"
-              class="w-5 h-5 rounded bg-dark-bg border-dark-border text-accent
-                     focus:ring-accent focus:ring-offset-0"
-            />
-          </label>
-          <div class="flex-1 min-w-0 pt-1">
-            <h3 class="font-semibold text-text-primary text-base leading-tight truncate">${ejercicio.nombre}</h3>
-            <div class="flex flex-wrap items-center gap-2 mt-2">
-              <span class="inline-flex items-center gap-1.5 text-xs text-text-secondary bg-dark-bg px-2 py-1 rounded-lg">
-                <i data-lucide="${muscleIcon}" class="w-3.5 h-3.5"></i>
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-3 flex-1 min-w-0">
+          <input
+            type="checkbox"
+            id="completado-${index}"
+            ${ejercicio.completado ? 'checked' : ''}
+            onchange="window.toggleCompletado(${index})"
+            class="w-6 h-6 rounded-lg bg-slate-700 border-2 border-slate-600 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 cursor-pointer"
+          />
+          <div class="flex-1 min-w-0">
+            <h3 class="font-bold text-white text-base leading-tight">${ejercicio.nombre}</h3>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-xs text-slate-400 flex items-center gap-1">
+                <i data-lucide="${muscleIcon}" class="w-3 h-3"></i>
                 ${ejercicio.grupoMuscular}
               </span>
               ${optionalBadge}
@@ -144,8 +142,7 @@ export function renderExercise(
             ? `
           <button
             onclick="window.showAnimation('${ejercicio.nombre}', '${gifUrl}')"
-            class="w-11 h-11 flex items-center justify-center rounded-xl bg-dark-bg border border-dark-border hover:border-accent/50 active:scale-95 transition-all text-text-secondary hover:text-accent flex-shrink-0"
-            aria-label="Ver animacion"
+            class="w-10 h-10 flex items-center justify-center rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 active:scale-95 transition-all"
           >
             ${icon('play', 'md')}
           </button>
@@ -154,86 +151,54 @@ export function renderExercise(
         }
       </div>
 
-      <!-- Inputs - Larger touch targets -->
-      <div class="grid grid-cols-3 gap-3 mb-4">
+      <!-- Inputs - Clean and simple -->
+      <div class="grid grid-cols-3 gap-2">
         <div>
-          <label class="block text-xs text-text-muted mb-2 font-medium">Sets</label>
-          <div class="flex items-center">
-            <button
-              onclick="window.decrementInput('sets-${index}')"
-              class="w-11 h-11 flex items-center justify-center bg-dark-bg border border-dark-border rounded-l-xl hover:bg-white/5 active:scale-95 transition-all"
-              aria-label="Decrementar sets"
-            >
-              ${icon('minus', 'sm')}
-            </button>
-            <input
-              type="number"
-              id="sets-${index}"
-              value="${ejercicio.sets}"
-              min="0"
-              max="20"
-              onchange="window.updateEjercicio(${index})"
-              class="w-full h-11 text-center bg-dark-bg border-y border-dark-border text-text-primary text-base font-semibold"
-            />
-            <button
-              onclick="window.incrementInput('sets-${index}')"
-              class="w-11 h-11 flex items-center justify-center bg-dark-bg border border-dark-border rounded-r-xl hover:bg-white/5 active:scale-95 transition-all"
-              aria-label="Incrementar sets"
-            >
-              ${icon('plus', 'sm')}
-            </button>
-          </div>
+          <label class="block text-xs text-slate-500 mb-1 text-center">Sets</label>
+          <input
+            type="number"
+            id="sets-${index}"
+            value="${ejercicio.sets || ''}"
+            placeholder="0"
+            min="0"
+            max="20"
+            onchange="window.updateEjercicio(${index})"
+            class="w-full h-12 text-center bg-slate-900 border-2 border-slate-700 rounded-xl text-white text-xl font-bold focus:border-blue-500 focus:ring-0 placeholder-slate-600"
+          />
         </div>
         <div>
-          <label class="block text-xs text-text-muted mb-2 font-medium">Reps</label>
-          <div class="flex items-center">
-            <button
-              onclick="window.decrementInput('reps-${index}')"
-              class="w-11 h-11 flex items-center justify-center bg-dark-bg border border-dark-border rounded-l-xl hover:bg-white/5 active:scale-95 transition-all"
-              aria-label="Decrementar reps"
-            >
-              ${icon('minus', 'sm')}
-            </button>
-            <input
-              type="number"
-              id="reps-${index}"
-              value="${ejercicio.reps}"
-              min="0"
-              max="100"
-              onchange="window.updateEjercicio(${index})"
-              class="w-full h-11 text-center bg-dark-bg border-y border-dark-border text-text-primary text-base font-semibold"
-            />
-            <button
-              onclick="window.incrementInput('reps-${index}')"
-              class="w-11 h-11 flex items-center justify-center bg-dark-bg border border-dark-border rounded-r-xl hover:bg-white/5 active:scale-95 transition-all"
-              aria-label="Incrementar reps"
-            >
-              ${icon('plus', 'sm')}
-            </button>
-          </div>
+          <label class="block text-xs text-slate-500 mb-1 text-center">Reps</label>
+          <input
+            type="number"
+            id="reps-${index}"
+            value="${ejercicio.reps || ''}"
+            placeholder="0"
+            min="0"
+            max="100"
+            onchange="window.updateEjercicio(${index})"
+            class="w-full h-12 text-center bg-slate-900 border-2 border-slate-700 rounded-xl text-white text-xl font-bold focus:border-blue-500 focus:ring-0 placeholder-slate-600"
+          />
         </div>
         <div>
-          <label class="block text-xs text-text-muted mb-2 font-medium">Peso (kg)</label>
+          <label class="block text-xs text-slate-500 mb-1 text-center">Kg</label>
           <input
             type="number"
             id="peso-${index}"
-            value="${ejercicio.peso}"
+            value="${ejercicio.peso || ''}"
+            placeholder="0"
             min="0"
             step="0.5"
             onchange="window.updateEjercicio(${index})"
-            class="w-full h-11 text-center bg-dark-bg border border-dark-border rounded-xl text-text-primary text-base font-semibold"
+            class="w-full h-12 text-center bg-slate-900 border-2 border-slate-700 rounded-xl text-white text-xl font-bold focus:border-blue-500 focus:ring-0 placeholder-slate-600"
           />
         </div>
       </div>
 
-      <!-- Volume -->
-      <div class="flex items-center justify-between pt-4 border-t border-dark-border">
-        <div class="flex items-center gap-2">
-          ${icon('trending', 'sm', 'text-text-muted')}
-          <span class="text-sm text-text-muted">Volumen</span>
-        </div>
-        <span class="text-base font-bold text-accent" id="volumen-${index}">
-          ${ejercicio.volumen.toLocaleString()} kg
+      <!-- Volume - Prominent -->
+      <div class="mt-3 pt-3 border-t border-slate-700/50 flex items-center justify-between">
+        <span class="text-sm text-slate-400">Volumen</span>
+        <span class="text-lg font-bold ${ejercicio.volumen > 0 ? 'text-emerald-400' : 'text-slate-500'}" id="volumen-${index}">
+          ${ejercicio.volumen > 0 ? ejercicio.volumen.toLocaleString() + ' kg' : '-'}
         </span>
       </div>
     </div>

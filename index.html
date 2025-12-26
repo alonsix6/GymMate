@@ -74,41 +74,45 @@
       <!-- Resume Workout Card -->
       <div id="resumeWorkoutCard" class="hidden"></div>
 
-      <!-- Quick Actions - Larger touch targets (min 44px) -->
+      <!-- Quick Actions - Vibrant and energetic -->
       <section class="mb-6">
-        <h3 class="text-sm font-semibold text-text-muted uppercase tracking-wide mb-3">Acceso Rapido</h3>
+        <h3 class="text-sm font-bold text-white uppercase tracking-wide mb-4 flex items-center gap-2">
+          <span class="w-1 h-4 bg-gradient-to-b from-cyan-400 to-blue-500 rounded-full"></span>
+          Acceso Rapido
+        </h3>
         <div class="grid grid-cols-4 gap-3">
-          <button data-action="calculators" class="bg-dark-surface border border-dark-border rounded-2xl p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform min-h-[80px]">
-            <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
-              <i data-lucide="calculator" class="w-5 h-5 text-accent"></i>
+          <button data-action="calculators" class="bg-gradient-to-br from-blue-500/20 to-indigo-600/10 border border-blue-500/30 rounded-2xl p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform min-h-[80px] hover:border-blue-400/50">
+            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
+              <i data-lucide="calculator" class="w-5 h-5 text-white"></i>
             </div>
-            <span class="text-xs text-text-secondary font-medium">Calc</span>
+            <span class="text-xs text-blue-300 font-semibold">Calc</span>
           </button>
-          <button data-action="history" class="bg-dark-surface border border-dark-border rounded-2xl p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform min-h-[80px]">
-            <div class="w-10 h-10 rounded-xl bg-purple-400/10 flex items-center justify-center">
-              <i data-lucide="history" class="w-5 h-5 text-purple-400"></i>
+          <button data-action="history" class="bg-gradient-to-br from-purple-500/20 to-violet-600/10 border border-purple-500/30 rounded-2xl p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform min-h-[80px] hover:border-purple-400/50">
+            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center shadow-lg shadow-purple-500/30">
+              <i data-lucide="history" class="w-5 h-5 text-white"></i>
             </div>
-            <span class="text-xs text-text-secondary font-medium">Historial</span>
+            <span class="text-xs text-purple-300 font-semibold">Historial</span>
           </button>
-          <button data-action="charts" class="bg-dark-surface border border-dark-border rounded-2xl p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform min-h-[80px]">
-            <div class="w-10 h-10 rounded-xl bg-green-400/10 flex items-center justify-center">
-              <i data-lucide="line-chart" class="w-5 h-5 text-green-400"></i>
+          <button data-action="charts" class="bg-gradient-to-br from-emerald-500/20 to-green-600/10 border border-emerald-500/30 rounded-2xl p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform min-h-[80px] hover:border-emerald-400/50">
+            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center shadow-lg shadow-emerald-500/30">
+              <i data-lucide="line-chart" class="w-5 h-5 text-white"></i>
             </div>
-            <span class="text-xs text-text-secondary font-medium">Graficos</span>
+            <span class="text-xs text-emerald-300 font-semibold">Graficos</span>
           </button>
-          <button data-action="prs" class="bg-dark-surface border border-dark-border rounded-2xl p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform min-h-[80px]">
-            <div class="w-10 h-10 rounded-xl bg-status-warning/10 flex items-center justify-center">
-              <i data-lucide="trophy" class="w-5 h-5 text-status-warning"></i>
+          <button data-action="prs" class="bg-gradient-to-br from-yellow-500/20 to-orange-600/10 border border-yellow-500/30 rounded-2xl p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform min-h-[80px] hover:border-yellow-400/50">
+            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center shadow-lg shadow-yellow-500/30">
+              <i data-lucide="trophy" class="w-5 h-5 text-white"></i>
             </div>
-            <span class="text-xs text-text-secondary font-medium">PRs</span>
+            <span class="text-xs text-yellow-300 font-semibold">PRs</span>
           </button>
         </div>
       </section>
 
       <!-- Rutinas -->
       <section class="mb-8">
-        <h2 class="text-base font-display font-bold text-text-primary mb-4 flex items-center gap-2">
-          <i data-lucide="list" class="w-5 h-5 text-accent"></i>
+        <h2 class="text-base font-display font-bold text-white mb-4 flex items-center gap-2">
+          <span class="w-1 h-5 bg-gradient-to-b from-pink-500 to-purple-600 rounded-full"></span>
+          <i data-lucide="dumbbell" class="w-5 h-5 text-pink-400"></i>
           Rutinas Disponibles
         </h2>
         <div id="routinesContainer" class="space-y-3">
@@ -121,16 +125,16 @@
 
       <!-- Cardio Section -->
       <section class="mt-8">
-        <button onclick="window.showCardioSelector()" class="w-full bg-dark-surface border border-status-warning/30 rounded-2xl p-5 flex items-center gap-4 active:scale-[0.98] transition-transform min-h-[80px]">
-          <div class="w-14 h-14 rounded-xl bg-status-warning/10 flex items-center justify-center flex-shrink-0">
-            <i data-lucide="flame" class="w-7 h-7 text-status-warning"></i>
+        <button onclick="window.showCardioSelector()" class="w-full bg-gradient-to-r from-orange-600/20 via-red-600/15 to-pink-600/20 border border-orange-500/40 rounded-2xl p-5 flex items-center gap-4 active:scale-[0.98] transition-transform min-h-[80px] hover:border-orange-400/60">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-orange-500/40">
+            <i data-lucide="flame" class="w-7 h-7 text-white"></i>
           </div>
           <div class="flex-1 text-left min-w-0">
-            <h3 class="font-bold text-text-primary text-base">Cardio & HIIT</h3>
-            <p class="text-sm text-text-secondary mt-1">Tabata, EMOM, AMRAP y mas</p>
+            <h3 class="font-bold text-white text-base">🔥 Cardio & HIIT</h3>
+            <p class="text-sm text-orange-200/80 mt-1">Tabata, EMOM, AMRAP y mas</p>
           </div>
           <div class="w-10 h-10 flex items-center justify-center flex-shrink-0">
-            <i data-lucide="chevron-right" class="w-5 h-5 text-text-muted"></i>
+            <i data-lucide="chevron-right" class="w-5 h-5 text-orange-300"></i>
           </div>
         </button>
       </section>
@@ -254,10 +258,16 @@
          CALCULATORS TAB
          ========================================== -->
     <div id="calculatorsTab" class="tab-content hidden">
-      <h2 class="text-xl font-display font-bold text-text-primary mb-4 flex items-center gap-2">
-        <i data-lucide="calculator" class="w-6 h-6 text-accent"></i>
-        Calculadoras
-      </h2>
+      <!-- Navigation Bar -->
+      <div class="flex items-center gap-3 mb-6">
+        <button onclick="window.showHome()" class="w-11 h-11 flex items-center justify-center bg-dark-surface border border-dark-border rounded-xl active:scale-95 transition-transform">
+          <i data-lucide="arrow-left" class="w-5 h-5 text-text-primary"></i>
+        </button>
+        <h2 class="text-xl font-display font-bold text-text-primary flex items-center gap-2">
+          <i data-lucide="calculator" class="w-6 h-6 text-accent"></i>
+          Calculadoras
+        </h2>
+      </div>
 
       <!-- 1RM Calculator -->
       <div class="bg-dark-surface border border-dark-border rounded-xl p-4 mb-4">
@@ -326,10 +336,16 @@
          CHARTS TAB
          ========================================== -->
     <div id="chartsTab" class="tab-content hidden">
-      <h2 class="text-xl font-display font-bold text-text-primary mb-4 flex items-center gap-2">
-        <i data-lucide="line-chart" class="w-6 h-6 text-accent"></i>
-        Progreso
-      </h2>
+      <!-- Navigation Bar -->
+      <div class="flex items-center gap-3 mb-6">
+        <button onclick="window.showHome()" class="w-11 h-11 flex items-center justify-center bg-dark-surface border border-dark-border rounded-xl active:scale-95 transition-transform">
+          <i data-lucide="arrow-left" class="w-5 h-5 text-text-primary"></i>
+        </button>
+        <h2 class="text-xl font-display font-bold text-text-primary flex items-center gap-2">
+          <i data-lucide="line-chart" class="w-6 h-6 text-green-400"></i>
+          Progreso
+        </h2>
+      </div>
 
       <!-- Volume Trend -->
       <div class="bg-dark-surface border border-dark-border rounded-xl p-4 mb-4">
@@ -371,9 +387,13 @@
          HISTORY TAB
          ========================================== -->
     <div id="historyTab" class="tab-content hidden">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-xl font-display font-bold text-text-primary flex items-center gap-2">
-          <i data-lucide="history" class="w-6 h-6 text-accent"></i>
+      <!-- Navigation Bar -->
+      <div class="flex items-center gap-3 mb-6">
+        <button onclick="window.showHome()" class="w-11 h-11 flex items-center justify-center bg-dark-surface border border-dark-border rounded-xl active:scale-95 transition-transform">
+          <i data-lucide="arrow-left" class="w-5 h-5 text-text-primary"></i>
+        </button>
+        <h2 class="flex-1 text-xl font-display font-bold text-text-primary flex items-center gap-2">
+          <i data-lucide="history" class="w-6 h-6 text-purple-400"></i>
           Historial
         </h2>
         <button onclick="window.exportToExcel()" class="px-3 py-2 bg-dark-surface border border-dark-border rounded-lg text-text-secondary text-sm active:scale-95 transition-all flex items-center gap-2">
@@ -388,10 +408,16 @@
          PRS TAB
          ========================================== -->
     <div id="prsTab" class="tab-content hidden">
-      <h2 class="text-xl font-display font-bold text-text-primary mb-4 flex items-center gap-2">
-        <i data-lucide="trophy" class="w-6 h-6 text-status-warning"></i>
-        Personal Records
-      </h2>
+      <!-- Navigation Bar -->
+      <div class="flex items-center gap-3 mb-6">
+        <button onclick="window.showHome()" class="w-11 h-11 flex items-center justify-center bg-dark-surface border border-dark-border rounded-xl active:scale-95 transition-transform">
+          <i data-lucide="arrow-left" class="w-5 h-5 text-text-primary"></i>
+        </button>
+        <h2 class="text-xl font-display font-bold text-text-primary flex items-center gap-2">
+          <i data-lucide="trophy" class="w-6 h-6 text-yellow-400"></i>
+          Personal Records
+        </h2>
+      </div>
       <div id="prsList" class="space-y-3"></div>
     </div>
 
@@ -399,10 +425,16 @@
          PROFILE TAB
          ========================================== -->
     <div id="profileTab" class="tab-content hidden">
-      <h2 class="text-xl font-display font-bold text-text-primary mb-4 flex items-center gap-2">
-        <i data-lucide="user" class="w-6 h-6 text-accent"></i>
-        Mi Perfil
-      </h2>
+      <!-- Navigation Bar -->
+      <div class="flex items-center gap-3 mb-6">
+        <button onclick="window.showHome()" class="w-11 h-11 flex items-center justify-center bg-dark-surface border border-dark-border rounded-xl active:scale-95 transition-transform">
+          <i data-lucide="arrow-left" class="w-5 h-5 text-text-primary"></i>
+        </button>
+        <h2 class="text-xl font-display font-bold text-text-primary flex items-center gap-2">
+          <i data-lucide="user" class="w-6 h-6 text-accent"></i>
+          Mi Perfil
+        </h2>
+      </div>
 
       <form id="profileForm" class="bg-dark-surface border border-dark-border rounded-xl p-4">
         <div class="space-y-4">
