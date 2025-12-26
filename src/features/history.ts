@@ -1,4 +1,4 @@
-import { getHistory, deleteFromHistory, getPRs, saveHistory } from '@/utils/storage';
+import { getHistory, deleteFromHistory, getPRs, saveHistory, updatePR } from '@/utils/storage';
 import { renderHistoryItem, renderPRItem, refreshIcons } from '@/ui/components';
 import { icon } from '@/utils/icons';
 
@@ -353,6 +353,33 @@ export function importFromCSV(file: File): Promise<{ imported: number; duplicate
             return dateB - dateA;
           });
           saveHistory(updatedHistory);
+
+          // Actualizar PRs con los datos importados
+          const currentPRs = getPRs();
+          newSessions.forEach(session => {
+            session.ejercicios.forEach(ejercicio => {
+              if (ejercicio.volumen > 0) {
+                const currentPR = currentPRs[ejercicio.nombre];
+                if (!currentPR || ejercicio.peso > currentPR.peso) {
+                  updatePR(ejercicio.nombre, {
+                    peso: ejercicio.peso,
+                    sets: ejercicio.sets,
+                    reps: ejercicio.reps,
+                    volumen: ejercicio.volumen,
+                    date: session.savedAt || session.date,
+                  });
+                  // Actualizar el objeto local para comparaciones posteriores
+                  currentPRs[ejercicio.nombre] = {
+                    peso: ejercicio.peso,
+                    sets: ejercicio.sets,
+                    reps: ejercicio.reps,
+                    volumen: ejercicio.volumen,
+                    date: session.savedAt || session.date,
+                  };
+                }
+              }
+            });
+          });
         }
 
         resolve({ imported: newSessions.length, duplicates });
