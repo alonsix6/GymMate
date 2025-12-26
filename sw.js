@@ -1,11 +1,10 @@
-// Service Worker for GymMate PWA
-const CACHE_NAME = 'gymmate-v4.2';
+// Service Worker for GymMate PWA v3.0
+// Updated for Vite + TypeScript build
+const CACHE_NAME = 'gymmate-v3.0';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/manifest.json',
-  'https://cdn.tailwindcss.com',
-  'https://unpkg.com/lottie-web/build/player/lottie.min.js'
+  '/manifest.json'
 ];
 
 // Install event - cache resources
@@ -90,7 +89,7 @@ self.addEventListener('push', event => {
   const data = event.data ? event.data.json() : {};
   const title = data.title || 'GymMate';
   const options = {
-    body: data.body || '¡Es hora de entrenar! 💪',
+    body: data.body || '¡Es hora de entrenar!',
     icon: '/icon-192.png',
     badge: '/icon-192.png',
     vibrate: [200, 100, 200],
