@@ -1,4 +1,4 @@
-import type { SessionData, ExerciseData, CardioState } from '@/types';
+import type { SessionData, ExerciseData, CardioState, RPEData } from '@/types';
 import { DRAFT_SAVE_DELAY, DRAFT_MAX_AGE } from '@/constants';
 import {
   saveDraft,
@@ -219,17 +219,22 @@ export function restoreFromDraft(draft: SessionData): void {
 // GUARDAR SESIÓN
 // ==========================================
 
-export function saveCurrentSession(): 'new' | 'updated' {
+export function saveCurrentSession(rpe?: RPEData): 'new' | 'updated' {
   // Generar sessionId único si no existe
   if (!sessionId) {
     sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  const sessionCopy: SessionData = {
+  const sessionCopy: SessionData & { rpe?: RPEData } = {
     ...JSON.parse(JSON.stringify(sessionData)),
     savedAt: new Date().toISOString(),
     sessionId,
   };
+
+  // Add RPE if provided
+  if (rpe) {
+    sessionCopy.rpe = rpe;
+  }
 
   // Guardar en history
   const isUpdate =

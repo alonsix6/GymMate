@@ -13,6 +13,9 @@ import {
   toggleCompletado,
   saveWorkout,
   finishWorkout,
+  selectRPE,
+  confirmRPE,
+  skipRPE,
 } from '@/features/workout';
 import {
   showCardioSelector,
@@ -27,7 +30,16 @@ import {
   incrementAmrapRound,
 } from '@/features/cardio';
 import { trainingGroups } from '@/data/training-groups';
-import { getCustomWorkouts, deleteCustomWorkout, addCustomWorkout, CustomWorkout } from '@/utils/storage';
+import {
+  getCustomWorkouts,
+  deleteCustomWorkout,
+  addCustomWorkout,
+  CustomWorkout,
+  getCustomExercises,
+  addCustomExerciseToStorage,
+  deleteCustomExercise,
+  CustomExercise
+} from '@/utils/storage';
 import { icon, getGroupIcon } from '@/utils/icons';
 import type { MuscleGroup } from '@/types';
 
@@ -62,6 +74,11 @@ declare global {
     saveWorkout: typeof saveWorkout;
     finishWorkout: typeof finishWorkout;
 
+    // RPE
+    selectRPE: typeof selectRPE;
+    confirmRPE: typeof confirmRPE;
+    skipRPE: typeof skipRPE;
+
     // Modals
     showAnimation: typeof showAnimation;
     closeAnimationModal: typeof closeAnimationModal;
@@ -80,6 +97,11 @@ declare global {
     closeWorkoutBuilder: typeof closeWorkoutBuilder;
     toggleExerciseSelection: typeof toggleExerciseSelection;
     saveCustomWorkout: typeof saveCustomWorkout;
+
+    // Custom Exercises
+    toggleCustomExerciseForm: typeof toggleCustomExerciseForm;
+    addCustomExercise: typeof addCustomExercise;
+    removeCustomExercise: typeof removeCustomExercise;
 
     // Cardio
     showCardioSelector: typeof showCardioSelector;
@@ -117,6 +139,9 @@ window.decrementInput = decrementInput;
 window.toggleCompletado = toggleCompletado;
 window.saveWorkout = saveWorkout;
 window.finishWorkout = finishWorkout;
+window.selectRPE = selectRPE;
+window.confirmRPE = confirmRPE;
+window.skipRPE = skipRPE;
 window.showAnimation = showAnimation;
 window.closeAnimationModal = closeAnimationModal;
 window.openRestTimerModal = openRestTimerModal;
@@ -128,6 +153,9 @@ window.openWorkoutBuilder = openWorkoutBuilder;
 window.closeWorkoutBuilder = closeWorkoutBuilder;
 window.toggleExerciseSelection = toggleExerciseSelection;
 window.saveCustomWorkout = saveCustomWorkout;
+window.toggleCustomExerciseForm = toggleCustomExerciseForm;
+window.addCustomExercise = addCustomExercise;
+window.removeCustomExercise = removeCustomExercise;
 window.showCardioSelector = showCardioSelector;
 window.selectCardioMode = selectCardioMode;
 window.showCardioConfig = showCardioConfig;
@@ -303,13 +331,22 @@ function openWorkoutBuilder(): void {
   const modal = document.getElementById('workoutBuilderModal');
   if (!modal) return;
 
-  // Render exercise groups
+  // Render exercise groups and custom exercises
   renderExerciseGroups();
+  renderCustomExercisesList();
   updateSelectedExercisesList();
 
   // Clear name input
   const nameInput = document.getElementById('customWorkoutName') as HTMLInputElement;
   if (nameInput) nameInput.value = '';
+
+  // Reset custom exercise form
+  const customExerciseForm = document.getElementById('customExerciseForm');
+  const chevron = document.getElementById('customExerciseChevron');
+  const newExerciseName = document.getElementById('newExerciseName') as HTMLInputElement;
+  if (customExerciseForm) customExerciseForm.classList.add('hidden');
+  if (chevron) chevron.style.transform = 'rotate(0deg)';
+  if (newExerciseName) newExerciseName.value = '';
 
   // Show modal
   modal.classList.add('active');
@@ -480,14 +517,21 @@ function saveCustomWorkout(): void {
     return;
   }
 
+  // Get custom exercises to check for esMancuerna property
+  const customExercises = getCustomExercises();
+
   const workout: CustomWorkout = {
     id: `custom_${Date.now()}`,
     nombre: name,
-    ejercicios: workoutBuilderState.selectedExercises.map((ex) => ({
-      nombre: ex.nombre,
-      esMancuerna: false,
-      grupoMuscular: ex.grupoMuscular as MuscleGroup,
-    })),
+    ejercicios: workoutBuilderState.selectedExercises.map((ex) => {
+      // Check if this is a custom exercise to preserve esMancuerna
+      const customEx = customExercises.find(ce => ce.nombre === ex.nombre);
+      return {
+        nombre: ex.nombre,
+        esMancuerna: customEx?.esMancuerna || false,
+        grupoMuscular: ex.grupoMuscular as MuscleGroup,
+      };
+    }),
     opcionales: [],
     isCustom: true,
     createdAt: new Date().toISOString(),
@@ -497,6 +541,139 @@ function saveCustomWorkout(): void {
   closeWorkoutBuilder();
   renderCustomWorkoutsInHome();
   refreshIcons();
+}
+
+// ==========================================
+// CUSTOM EXERCISES (User-created exercises)
+// ==========================================
+
+function toggleCustomExerciseForm(): void {
+  const form = document.getElementById('customExerciseForm');
+  const chevron = document.getElementById('customExerciseChevron');
+
+  if (form && chevron) {
+    const isHidden = form.classList.contains('hidden');
+    form.classList.toggle('hidden');
+    chevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+  }
+}
+
+function addCustomExercise(): void {
+  const nameInput = document.getElementById('newExerciseName') as HTMLInputElement;
+  const muscleSelect = document.getElementById('newExerciseMuscle') as HTMLSelectElement;
+  const isDumbbellCheckbox = document.getElementById('newExerciseIsDumbbell') as HTMLInputElement;
+
+  const name = nameInput?.value.trim();
+  const muscle = muscleSelect?.value;
+  const isDumbbell = isDumbbellCheckbox?.checked || false;
+
+  if (!name) {
+    nameInput?.focus();
+    nameInput?.classList.add('border-red-500');
+    setTimeout(() => nameInput?.classList.remove('border-red-500'), 2000);
+    return;
+  }
+
+  // Check if exercise already exists
+  const existingExercises = getCustomExercises();
+  if (existingExercises.some(e => e.nombre.toLowerCase() === name.toLowerCase())) {
+    alert('Ya existe un ejercicio con ese nombre');
+    return;
+  }
+
+  const exercise: CustomExercise = {
+    id: `exercise_${Date.now()}`,
+    nombre: name,
+    grupoMuscular: muscle,
+    esMancuerna: isDumbbell,
+    createdAt: new Date().toISOString(),
+  };
+
+  addCustomExerciseToStorage(exercise);
+
+  // Clear inputs
+  nameInput.value = '';
+  isDumbbellCheckbox.checked = false;
+
+  // Auto-add to selected exercises
+  workoutBuilderState.selectedExercises.push({
+    nombre: exercise.nombre,
+    grupoMuscular: exercise.grupoMuscular,
+  });
+
+  // Re-render lists
+  renderCustomExercisesList();
+  updateSelectedExercisesList();
+  suggestWorkoutName();
+  refreshIcons();
+}
+
+function removeCustomExercise(exerciseId: string, exerciseName: string): void {
+  if (confirm(`¿Eliminar "${exerciseName}" de tus ejercicios personalizados?`)) {
+    deleteCustomExercise(exerciseId);
+
+    // Also remove from selection if selected
+    const idx = workoutBuilderState.selectedExercises.findIndex(
+      e => e.nombre === exerciseName
+    );
+    if (idx >= 0) {
+      workoutBuilderState.selectedExercises.splice(idx, 1);
+      updateSelectedExercisesList();
+    }
+
+    renderCustomExercisesList();
+    refreshIcons();
+  }
+}
+
+function renderCustomExercisesList(): void {
+  const section = document.getElementById('customExercisesSection');
+  const container = document.getElementById('customExercisesList');
+  if (!section || !container) return;
+
+  const customExercises = getCustomExercises();
+
+  if (customExercises.length === 0) {
+    section.classList.add('hidden');
+    return;
+  }
+
+  section.classList.remove('hidden');
+
+  const html = customExercises.map(exercise => {
+    const isSelected = workoutBuilderState.selectedExercises.some(
+      e => e.nombre === exercise.nombre
+    );
+    const bgClass = isSelected
+      ? 'bg-accent/20 border-accent/40'
+      : 'bg-dark-bg/50 border-transparent hover:border-white/10';
+    const checkClass = isSelected ? 'text-accent' : 'text-text-muted';
+    const dumbbellTag = exercise.esMancuerna
+      ? '<span class="text-[10px] text-purple-400 ml-1">(manc)</span>'
+      : '';
+
+    return `
+      <div class="flex items-center gap-1">
+        <button
+          onclick="window.toggleExerciseSelection('${exercise.nombre}', '${exercise.grupoMuscular}')"
+          class="flex-1 flex items-center gap-2 p-2 rounded-lg border ${bgClass} transition-all active:scale-[0.98]"
+        >
+          <i data-lucide="${isSelected ? 'check-circle' : 'circle'}" class="w-4 h-4 ${checkClass} flex-shrink-0"></i>
+          <span class="text-sm text-text-primary text-left flex-1 truncate">${exercise.nombre}${dumbbellTag}</span>
+          <span class="text-[10px] text-text-muted flex-shrink-0">${exercise.grupoMuscular}</span>
+        </button>
+        <button
+          onclick="window.removeCustomExercise('${exercise.id}', '${exercise.nombre}')"
+          class="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all"
+          title="Eliminar ejercicio"
+        >
+          <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+      </div>
+    `;
+  }).join('');
+
+  container.innerHTML = html;
 }
 
 // ==========================================
