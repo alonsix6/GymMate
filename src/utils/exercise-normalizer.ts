@@ -67,6 +67,17 @@ const EXERCISE_ALIASES: Record<string, string> = {
 };
 
 /**
+ * Convierte un nombre a Title Case (primera letra de cada palabra en mayúscula)
+ */
+function toTitleCase(str: string): string {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+/**
  * Normaliza un nombre de ejercicio para que variaciones del mismo
  * ejercicio sean reconocidas como iguales.
  *
@@ -84,9 +95,9 @@ export function normalizeExerciseName(name: string): string {
     return EXERCISE_ALIASES[lowercaseName];
   }
 
-  // Si no hay alias, mantener el nombre original pero con formato consistente
-  // (primera letra de cada palabra en mayúscula)
-  return name.trim();
+  // Si no hay alias, normalizar a Title Case para consistencia
+  // Esto hace que "curl martillo" y "Curl Martillo" sean iguales
+  return toTitleCase(name.trim());
 }
 
 /**
