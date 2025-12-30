@@ -16,7 +16,6 @@ import {
   selectRPE,
   confirmRPE,
   skipRPE,
-  toggleSuperset,
 } from '@/features/workout';
 import {
   showCardioSelector,
@@ -79,9 +78,6 @@ declare global {
     selectRPE: typeof selectRPE;
     confirmRPE: typeof confirmRPE;
     skipRPE: typeof skipRPE;
-
-    // Supersets
-    toggleSuperset: typeof toggleSuperset;
 
     // Modals
     showAnimation: typeof showAnimation;
@@ -153,7 +149,6 @@ window.finishWorkout = finishWorkout;
 window.selectRPE = selectRPE;
 window.confirmRPE = confirmRPE;
 window.skipRPE = skipRPE;
-window.toggleSuperset = toggleSuperset;
 window.showAnimation = showAnimation;
 window.closeAnimationModal = closeAnimationModal;
 window.openRestTimerModal = openRestTimerModal;

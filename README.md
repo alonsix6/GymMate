@@ -1,15 +1,15 @@
-# GymMate v3.1 - Tu Compañero Personal de Entrenamiento
+# GymMate v4.0 - Tu Compañero Personal de Entrenamiento
 
-**Progressive Web App profesional para gestionar entrenamientos con seguimiento completo de volumen, PRs, historial, cardio y progreso.**
+**Progressive Web App profesional para gestionar entrenamientos con seguimiento completo de volumen, PRs, historial, cardio, medidas corporales y análisis inteligente.**
 
-## Novedades en v3.1
+## Novedades en v4.0
 
-- **Arquitectura Moderna** - Vite + TypeScript con 16+ módulos
-- **Diseño Profesional** - Sin gradientes, colores sólidos, alto contraste
-- **Lucide Icons** - Iconografía SVG profesional (94+ iconos)
-- **Cardio Completo** - 7 modos: Tabata, EMOM, AMRAP, Circuit, Pyramid, Custom, ForTime
-- **PWA Mejorado** - vite-plugin-pwa con cache inteligente
-- **Tests Unitarios** - 21+ tests con Vitest
+- **ML Insights** - Análisis inteligente en hero section (rachas, tendencias, PRs cercanos, músculos descuidados)
+- **Medidas Corporales** - Tracking de peso, cuello, pecho, cintura, cadera, brazos, muslos con cálculo de grasa corporal (método Navy)
+- **RPE Post-Sesión** - Selector estilo Apple Watch para calificar intensidad (1-10)
+- **AI Coach Dinámico** - Mensajes contextuales durante el entrenamiento
+- **Ejercicios Personalizados** - Crea tus propios ejercicios en el workout builder
+- **Historial Expandido** - Hasta 200 sesiones guardadas (antes 30)
 
 ---
 
@@ -38,14 +38,23 @@
 
 ### Historial y Estadísticas
 
-- Últimos 30 entrenamientos guardados
+- Hasta 200 entrenamientos guardados
 - Historial unificado de pesas y cardio
 - Exportación a Excel con datos completos
+- RPE tracking por sesión
 - 4 gráficos interactivos con Chart.js:
   - Tendencia de volumen
   - Distribución muscular
   - Progreso de peso
   - Comparativa semanal
+
+### Perfil y Medidas Corporales
+
+- Datos personales (nombre, edad, género, peso, altura)
+- Medidas corporales detalladas (cuello, pecho, cintura, cadera, brazos, muslos)
+- Cálculo automático de grasa corporal (método Navy)
+- Historial de mediciones (hasta 100)
+- Sincronización automática del peso con perfil
 
 ### Calculadoras Fitness
 
@@ -116,7 +125,8 @@ GymMate/
 │   │   ├── history.ts       # Historial y stats
 │   │   ├── charts.ts        # Gráficos Chart.js
 │   │   ├── calculators.ts   # Calculadoras fitness
-│   │   └── profile.ts       # Perfil de usuario
+│   │   ├── profile.ts       # Perfil y medidas corporales
+│   │   └── coach.ts         # AI Coach dinámico
 │   ├── ui/
 │   │   ├── navigation.ts    # Navegación y tabs
 │   │   ├── modals.ts        # Sistema de modales
@@ -124,7 +134,8 @@ GymMate/
 │   ├── utils/
 │   │   ├── storage.ts       # localStorage helpers
 │   │   ├── icons.ts         # Lucide icons system
-│   │   └── calculations.ts  # Cálculos matemáticos
+│   │   ├── calculations.ts  # Cálculos matemáticos
+│   │   └── insights.ts      # ML Insights engine
 │   └── tests/
 │       └── calculations.test.ts
 ├── public/
@@ -262,6 +273,14 @@ icon('trophy', 'lg', 'text-status-warning')
 
 ## Changelog
 
+### v4.0.0 (Diciembre 2025)
+- ML Insights en hero section
+- Medidas corporales con cálculo de grasa corporal
+- RPE post-sesión estilo Apple Watch
+- AI Coach dinámico contextual
+- Ejercicios personalizados en workout builder
+- Historial expandido a 200 sesiones
+
 ### v3.1.0 (Diciembre 2025)
 - Fix: CSS no cargaba por cache de PWA
 - PWA: cleanupOutdatedCaches, skipWaiting, clientsClaim
@@ -288,6 +307,6 @@ icon('trophy', 'lg', 'text-status-warning')
 
 ---
 
-**Versión:** 3.1.0
+**Versión:** 4.0.0
 **Desarrollado para:** Alonso
 **Fecha:** Diciembre 2025

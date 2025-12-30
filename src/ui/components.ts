@@ -112,30 +112,7 @@ export function renderExercise(
     ? `<span class="text-xs bg-orange-500/20 text-orange-400 px-2 py-0.5 rounded-full font-semibold">Opcional</span>`
     : '';
 
-  // Superset styling
-  const hasSuperset = ejercicio.supersetGroup !== undefined;
-  const supersetLetter = hasSuperset ? String.fromCharCode(64 + (ejercicio.supersetGroup || 1)) : ''; // A, B, C...
-  const supersetLabel = hasSuperset ? `${supersetLetter}${ejercicio.supersetOrder || 1}` : '';
-
-  const supersetColors: Record<number, { bg: string; border: string; text: string; btnBg: string }> = {
-    1: { bg: 'bg-cyan-500/10', border: 'border-cyan-500/40', text: 'text-cyan-400', btnBg: 'bg-cyan-500/20' },
-    2: { bg: 'bg-pink-500/10', border: 'border-pink-500/40', text: 'text-pink-400', btnBg: 'bg-pink-500/20' },
-    3: { bg: 'bg-amber-500/10', border: 'border-amber-500/40', text: 'text-amber-400', btnBg: 'bg-amber-500/20' },
-    4: { bg: 'bg-lime-500/10', border: 'border-lime-500/40', text: 'text-lime-400', btnBg: 'bg-lime-500/20' },
-  };
-
-  const supersetStyle = hasSuperset && ejercicio.supersetGroup
-    ? supersetColors[ejercicio.supersetGroup] || supersetColors[1]
-    : null;
-
-  let cardBg = isOptional ? 'bg-orange-500/5 border-orange-500/20' : 'bg-slate-800/50 border-slate-700/50';
-  if (supersetStyle) {
-    cardBg = `${supersetStyle.bg} ${supersetStyle.border}`;
-  }
-
-  const supersetBadge = hasSuperset && supersetStyle
-    ? `<span class="text-xs ${supersetStyle.btnBg} ${supersetStyle.text} px-2 py-0.5 rounded-full font-bold">${supersetLabel}</span>`
-    : '';
+  const cardBg = isOptional ? 'bg-orange-500/5 border-orange-500/20' : 'bg-slate-800/50 border-slate-700/50';
 
   return `
     <div class="${cardBg} border rounded-xl p-4 mb-4" id="ejercicio-${index}">
@@ -156,14 +133,11 @@ export function renderExercise(
             }"></i>
           </button>
           <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-2">
-              ${supersetBadge}
-              <h3 id="nombre-${index}" class="font-bold text-base leading-tight transition-all duration-300 ${
-                ejercicio.completado
-                  ? 'text-emerald-400 line-through decoration-emerald-400 decoration-2'
-                  : 'text-white'
-              }">${ejercicio.nombre}</h3>
-            </div>
+            <h3 id="nombre-${index}" class="font-bold text-base leading-tight transition-all duration-300 ${
+              ejercicio.completado
+                ? 'text-emerald-400 line-through decoration-emerald-400 decoration-2'
+                : 'text-white'
+            }">${ejercicio.nombre}</h3>
             <div class="flex items-center gap-2 mt-1">
               <span class="text-xs text-slate-400 flex items-center gap-1">
                 <i data-lucide="${muscleIcon}" class="w-3 h-3"></i>
@@ -173,27 +147,18 @@ export function renderExercise(
             </div>
           </div>
         </div>
-        <div class="flex items-center gap-2">
+        ${
+          gifUrl
+            ? `
           <button
-            onclick="window.toggleSuperset(${index})"
-            class="w-10 h-10 flex items-center justify-center rounded-lg ${hasSuperset && supersetStyle ? supersetStyle.btnBg + ' ' + supersetStyle.text : 'bg-slate-700/50 text-slate-400 hover:bg-slate-700'} active:scale-95 transition-all flex-shrink-0"
-            title="${hasSuperset ? 'Quitar del superset' : 'Agregar a superset'}"
+            onclick="window.showAnimation('${ejercicio.nombre}', '${gifUrl}')"
+            class="w-10 h-10 flex items-center justify-center rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 active:scale-95 transition-all flex-shrink-0"
           >
-            ${icon('link', 'md')}
+            ${icon('play', 'md')}
           </button>
-          ${
-            gifUrl
-              ? `
-            <button
-              onclick="window.showAnimation('${ejercicio.nombre}', '${gifUrl}')"
-              class="w-10 h-10 flex items-center justify-center rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 active:scale-95 transition-all flex-shrink-0"
-            >
-              ${icon('play', 'md')}
-            </button>
-          `
-              : ''
-          }
-        </div>
+        `
+            : ''
+        }
       </div>
 
       <!-- Inputs - Clean and simple with better spacing -->
