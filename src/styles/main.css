@@ -367,6 +367,21 @@ input[type='checkbox']:checked {
   animation: spin 1s linear infinite;
 }
 
+@keyframes pulseOnce {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.01);
+  }
+}
+
+.animate-pulse-once {
+  animation: pulseOnce 0.4s ease-in-out;
+}
+
 /* ==========================================
    SCROLLBAR
    ========================================== */

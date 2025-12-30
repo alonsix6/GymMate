@@ -225,3 +225,37 @@ export function deleteCustomWorkout(workoutId: string): void {
   const filtered = workouts.filter((w) => w.id !== workoutId);
   saveCustomWorkouts(filtered);
 }
+
+// ==========================================
+// CUSTOM EXERCISES (User-created exercises)
+// ==========================================
+
+export interface CustomExercise {
+  id: string;
+  nombre: string;
+  grupoMuscular: string;
+  esMancuerna: boolean;
+  createdAt: string;
+}
+
+const CUSTOM_EXERCISES_KEY = 'gymmate_custom_exercises';
+
+export function getCustomExercises(): CustomExercise[] {
+  return getItem<CustomExercise[]>(CUSTOM_EXERCISES_KEY, []);
+}
+
+export function saveCustomExercises(exercises: CustomExercise[]): void {
+  setItem(CUSTOM_EXERCISES_KEY, exercises);
+}
+
+export function addCustomExerciseToStorage(exercise: CustomExercise): void {
+  const exercises = getCustomExercises();
+  exercises.push(exercise);
+  saveCustomExercises(exercises);
+}
+
+export function deleteCustomExercise(exerciseId: string): void {
+  const exercises = getCustomExercises();
+  const filtered = exercises.filter((e) => e.id !== exerciseId);
+  saveCustomExercises(filtered);
+}

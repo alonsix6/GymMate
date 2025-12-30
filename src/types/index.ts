@@ -106,10 +106,16 @@ export interface CardioExerciseConfig {
   type: 'reps' | 'time';
 }
 
+export interface RPEData {
+  value: number;  // 1-10
+  label: string;  // "Fácil", "Moderado", etc.
+}
+
 export interface HistorySession extends SessionData {
   type?: 'weights' | 'cardio';
   mode?: CardioMode;
   stats?: CardioSessionStats;
+  rpe?: RPEData;
 }
 
 export interface OneRMResult {

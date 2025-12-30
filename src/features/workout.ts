@@ -1,4 +1,4 @@
-import type { ExerciseData, Exercise } from '@/types';
+import type { ExerciseData, Exercise, RPEData } from '@/types';
 import { getTrainingGroup } from '@/data/training-groups';
 import {
   sessionData,
@@ -14,6 +14,11 @@ import {
 } from '@/state/session';
 import { renderExercise, refreshIcons } from '@/ui/components';
 import { icon } from '@/utils/icons';
+import {
+  updateCoachOnSessionLoad,
+  updateCoachOnExerciseUpdate,
+  updateCoachOnExerciseComplete,
+} from '@/features/coach';
 
 // ==========================================
 // CARGAR GRUPO DE ENTRENAMIENTO
@@ -143,6 +148,9 @@ function renderWorkoutUI(
 
   // Refrescar iconos
   refreshIcons();
+
+  // Initialize coach
+  updateCoachOnSessionLoad(groupName, ejercicios);
 }
 
 // ==========================================
@@ -177,6 +185,12 @@ export function updateEjercicio(index: number): void {
   updateQuickStats();
   updateSaveButtonState();
   updateUnsavedIndicator();
+
+  // Update coach with exercise data
+  const ejercicio = sessionData.ejercicios[index];
+  if (ejercicio && ejercicio.peso > 0) {
+    updateCoachOnExerciseUpdate(ejercicio, index, sessionData.ejercicios);
+  }
 }
 
 // ==========================================
@@ -259,6 +273,14 @@ export function toggleCompletado(index: number): void {
 
   updateQuickStats();
   updateSaveButtonState();
+
+  // Update coach on completion
+  if (newState) {
+    const ejercicio = sessionData.ejercicios[index];
+    const completedCount = sessionData.ejercicios.filter(e => e.completado).length;
+    const totalCount = sessionData.ejercicios.length;
+    updateCoachOnExerciseComplete(ejercicio, completedCount, totalCount);
+  }
 }
 
 // ==========================================
@@ -401,7 +423,28 @@ export function saveWorkout(): void {
   updateSaveButtonState();
 }
 
+// ==========================================
+// RPE STATE
+// ==========================================
+
+let selectedRPE: number | null = null;
+let pendingSaveBeforeRPE = false;
+
+const RPE_LABELS: Record<number, string> = {
+  1: 'Muy fácil',
+  2: 'Fácil',
+  3: 'Fácil',
+  4: 'Moderado',
+  5: 'Moderado',
+  6: 'Algo difícil',
+  7: 'Difícil',
+  8: 'Muy difícil',
+  9: 'Máximo',
+  10: 'Máximo absoluto',
+};
+
 export function finishWorkout(): void {
+  // Check if there's data to save
   if (hasUnsavedData()) {
     if (
       !confirm(
@@ -412,9 +455,131 @@ export function finishWorkout(): void {
       window.location.reload();
       return;
     }
-    saveWorkout();
+    pendingSaveBeforeRPE = true;
   }
 
+  // Show RPE modal
+  showRPEModal();
+}
+
+function showRPEModal(): void {
+  const modal = document.getElementById('rpeModal');
+  if (modal) {
+    // Reset state
+    selectedRPE = null;
+    updateRPEDisplay();
+    resetRPEButtons();
+
+    // Show modal
+    modal.classList.add('active');
+
+    // Refresh icons
+    import('@/utils/icons').then(({ refreshIcons }) => refreshIcons());
+  }
+}
+
+function closeRPEModal(): void {
+  const modal = document.getElementById('rpeModal');
+  if (modal) {
+    modal.classList.remove('active');
+  }
+}
+
+function resetRPEButtons(): void {
+  const buttons = document.querySelectorAll('.rpe-btn');
+  buttons.forEach((btn) => {
+    btn.classList.remove('ring-2', 'ring-white', 'scale-110');
+  });
+
+  const confirmBtn = document.getElementById('confirmRPEBtn') as HTMLButtonElement;
+  if (confirmBtn) {
+    confirmBtn.disabled = true;
+  }
+}
+
+function updateRPEDisplay(): void {
+  const valueEl = document.getElementById('rpeValue');
+  const labelEl = document.getElementById('rpeLabel');
+
+  if (valueEl && labelEl) {
+    if (selectedRPE !== null) {
+      valueEl.textContent = String(selectedRPE);
+      labelEl.textContent = RPE_LABELS[selectedRPE] || '';
+
+      // Update color based on RPE
+      valueEl.className = 'text-4xl font-bold mb-1 ';
+      if (selectedRPE <= 3) {
+        valueEl.classList.add('text-emerald-400');
+      } else if (selectedRPE <= 5) {
+        valueEl.classList.add('text-yellow-400');
+      } else if (selectedRPE <= 8) {
+        valueEl.classList.add('text-orange-400');
+      } else {
+        valueEl.classList.add('text-red-400');
+      }
+    } else {
+      valueEl.textContent = '-';
+      valueEl.className = 'text-4xl font-bold text-white mb-1';
+      labelEl.textContent = 'Selecciona un nivel';
+    }
+  }
+}
+
+export function selectRPE(value: number): void {
+  selectedRPE = value;
+
+  // Update button styles
+  const buttons = document.querySelectorAll('.rpe-btn');
+  buttons.forEach((btn) => {
+    const btnValue = parseInt(btn.getAttribute('data-rpe') || '0');
+    if (btnValue === value) {
+      btn.classList.add('ring-2', 'ring-white', 'scale-110');
+    } else {
+      btn.classList.remove('ring-2', 'ring-white', 'scale-110');
+    }
+  });
+
+  // Enable confirm button
+  const confirmBtn = document.getElementById('confirmRPEBtn') as HTMLButtonElement;
+  if (confirmBtn) {
+    confirmBtn.disabled = false;
+  }
+
+  // Update display
+  updateRPEDisplay();
+}
+
+export function confirmRPE(): void {
+  if (selectedRPE === null) return;
+
+  const rpeData: RPEData = {
+    value: selectedRPE,
+    label: RPE_LABELS[selectedRPE] || '',
+  };
+
+  // Save session with RPE if pending
+  if (pendingSaveBeforeRPE) {
+    saveCurrentSession(rpeData);
+  }
+
+  // Close modal and finish
+  closeRPEModal();
+  pendingSaveBeforeRPE = false;
+  selectedRPE = null;
+  endSession();
+  window.location.reload();
+}
+
+export function skipRPE(): void {
+  // Save session without RPE if pending
+  if (pendingSaveBeforeRPE) {
+    saveCurrentSession();
+  }
+
+  // Close modal and finish
+  closeRPEModal();
+  pendingSaveBeforeRPE = false;
+  selectedRPE = null;
   endSession();
   window.location.reload();
 }

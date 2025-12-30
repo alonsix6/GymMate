@@ -5,7 +5,7 @@
 // Auto-guardado
 export const DRAFT_SAVE_DELAY = 15000; // 15 segundos
 export const DRAFT_MAX_AGE = 24 * 60 * 60 * 1000; // 24 horas
-export const MAX_HISTORY_ITEMS = 30;
+export const MAX_HISTORY_ITEMS = 200;
 
 // LocalStorage Keys
 export const STORAGE_KEYS = {
