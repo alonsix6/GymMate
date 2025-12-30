@@ -74,7 +74,7 @@ declare global {
     importFromCSV: typeof triggerCSVImport;
 
     // Custom Workouts
-    deleteCustomWorkout: typeof deleteCustomWorkout;
+    deleteCustomWorkout: typeof handleDeleteCustomWorkout;
     openWorkoutBuilder: typeof openWorkoutBuilder;
     closeWorkoutBuilder: typeof closeWorkoutBuilder;
     toggleExerciseSelection: typeof toggleExerciseSelection;
@@ -90,6 +90,17 @@ declare global {
     startCardioWorkout: typeof startCardioWorkout;
     toggleCardioPause: typeof toggleCardioPause;
     stopCardioWorkout: typeof stopCardioWorkout;
+  }
+}
+
+// ==========================================
+// HANDLER PARA ELIMINAR RUTINAS PERSONALIZADAS
+// ==========================================
+
+function handleDeleteCustomWorkout(workoutId: string): void {
+  if (confirm('¿Eliminar esta rutina personalizada?')) {
+    deleteCustomWorkout(workoutId);
+    renderCustomWorkoutsInHome();
   }
 }
 
@@ -110,7 +121,7 @@ window.openRestTimerModal = openRestTimerModal;
 window.deleteHistoryItem = deleteHistoryItem;
 window.exportToExcel = exportToExcel;
 window.importFromCSV = triggerCSVImport;
-window.deleteCustomWorkout = deleteCustomWorkout;
+window.deleteCustomWorkout = handleDeleteCustomWorkout;
 window.openWorkoutBuilder = openWorkoutBuilder;
 window.closeWorkoutBuilder = closeWorkoutBuilder;
 window.toggleExerciseSelection = toggleExerciseSelection;
