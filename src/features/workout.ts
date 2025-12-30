@@ -231,8 +231,8 @@ export function toggleCompletado(index: number): void {
 
   if (newState) {
     // Completed state - green filled circle with white check
-    button.classList.remove('bg-transparent', 'border-slate-500', 'hover:border-emerald-400');
-    button.classList.add('bg-emerald-500', 'border-emerald-500', 'scale-110');
+    button.classList.remove('bg-transparent', 'border-slate-500', 'hover:border-emerald-400', 'scale-90');
+    button.classList.add('bg-emerald-500', 'border-emerald-500', 'scale-100');
     if (checkIcon) {
       checkIcon.classList.remove('text-slate-600');
       checkIcon.classList.add('text-white');
@@ -244,8 +244,8 @@ export function toggleCompletado(index: number): void {
     }
   } else {
     // Uncompleted state - transparent circle with gray check
-    button.classList.remove('bg-emerald-500', 'border-emerald-500', 'scale-110');
-    button.classList.add('bg-transparent', 'border-slate-500', 'hover:border-emerald-400');
+    button.classList.remove('bg-emerald-500', 'border-emerald-500', 'scale-100');
+    button.classList.add('bg-transparent', 'border-slate-500', 'hover:border-emerald-400', 'scale-90');
     if (checkIcon) {
       checkIcon.classList.remove('text-white');
       checkIcon.classList.add('text-slate-600');
