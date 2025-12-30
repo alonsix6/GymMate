@@ -245,6 +245,9 @@ export function saveCurrentSession(rpe?: RPEData): 'new' | 'updated' {
   // Actualizar estado
   markAsSaved();
 
+  // Limpiar draft después de guardar exitosamente
+  clearDraft();
+
   return isUpdate ? 'updated' : 'new';
 }
 
