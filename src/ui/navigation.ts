@@ -1,5 +1,5 @@
 import type { TabName } from '@/types';
-import { hasUnsavedData, checkForExistingDraft, restoreFromDraft } from '@/state/session';
+import { hasUnsavedData, checkForExistingDraft, restoreFromDraft, endSession } from '@/state/session';
 import { loadHistory, loadPRs } from '@/features/history';
 import { initializeCharts } from '@/features/charts';
 import { initializeCalculators } from '@/features/calculators';
@@ -422,13 +422,15 @@ export function resumeDraft(): void {
     restoreFromDraft(draft);
     switchTab('workout');
     // Renderizar el workout con los datos del draft
-    // Esto se manejará en el módulo de workout
+    import('@/features/workout').then(({ renderFromDraft }) => {
+      renderFromDraft();
+    });
   }
 }
 
 export function dismissDraft(): void {
   if (confirm('¿Descartar el entrenamiento guardado?')) {
-    localStorage.removeItem('gymmate_draft');
+    endSession(); // Limpia draft y resetea sesión
     updateResumeWorkoutCard();
   }
 }

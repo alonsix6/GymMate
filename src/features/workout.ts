@@ -154,6 +154,19 @@ function renderWorkoutUI(
 }
 
 // ==========================================
+// RENDERIZAR DESDE DRAFT (SESIÓN RESTAURADA)
+// ==========================================
+
+export function renderFromDraft(): void {
+  // sessionData ya debe estar restaurado por restoreFromDraft
+  if (sessionData.ejercicios.length === 0) return;
+
+  // Renderizar UI usando todos los ejercicios como obligatorios
+  // (ya que no tenemos la info original del grupo)
+  renderWorkoutUI(sessionData.grupo, sessionData.ejercicios, sessionData.ejercicios.length);
+}
+
+// ==========================================
 // ACTUALIZAR EJERCICIO
 // ==========================================
 
