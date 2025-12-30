@@ -24,6 +24,7 @@ import {
   startCardioWorkout,
   toggleCardioPause,
   stopCardioWorkout,
+  incrementAmrapRound,
 } from '@/features/cardio';
 import { trainingGroups } from '@/data/training-groups';
 import { getCustomWorkouts, deleteCustomWorkout, addCustomWorkout, CustomWorkout } from '@/utils/storage';
@@ -74,7 +75,7 @@ declare global {
     importFromCSV: typeof triggerCSVImport;
 
     // Custom Workouts
-    deleteCustomWorkout: typeof deleteCustomWorkout;
+    deleteCustomWorkout: typeof handleDeleteCustomWorkout;
     openWorkoutBuilder: typeof openWorkoutBuilder;
     closeWorkoutBuilder: typeof closeWorkoutBuilder;
     toggleExerciseSelection: typeof toggleExerciseSelection;
@@ -90,6 +91,18 @@ declare global {
     startCardioWorkout: typeof startCardioWorkout;
     toggleCardioPause: typeof toggleCardioPause;
     stopCardioWorkout: typeof stopCardioWorkout;
+    incrementAmrapRound: typeof incrementAmrapRound;
+  }
+}
+
+// ==========================================
+// HANDLER PARA ELIMINAR RUTINAS PERSONALIZADAS
+// ==========================================
+
+function handleDeleteCustomWorkout(workoutId: string): void {
+  if (confirm('¿Eliminar esta rutina personalizada?')) {
+    deleteCustomWorkout(workoutId);
+    renderCustomWorkoutsInHome();
   }
 }
 
@@ -110,7 +123,7 @@ window.openRestTimerModal = openRestTimerModal;
 window.deleteHistoryItem = deleteHistoryItem;
 window.exportToExcel = exportToExcel;
 window.importFromCSV = triggerCSVImport;
-window.deleteCustomWorkout = deleteCustomWorkout;
+window.deleteCustomWorkout = handleDeleteCustomWorkout;
 window.openWorkoutBuilder = openWorkoutBuilder;
 window.closeWorkoutBuilder = closeWorkoutBuilder;
 window.toggleExerciseSelection = toggleExerciseSelection;
@@ -124,6 +137,7 @@ window.adjustPyramidLevel = adjustPyramidLevel;
 window.startCardioWorkout = startCardioWorkout;
 window.toggleCardioPause = toggleCardioPause;
 window.stopCardioWorkout = stopCardioWorkout;
+window.incrementAmrapRound = incrementAmrapRound;
 
 // ==========================================
 // RENDERIZAR RUTINAS EN HOME
