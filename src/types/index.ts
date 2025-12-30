@@ -14,6 +14,8 @@ export interface ExerciseData extends Exercise {
   peso: number;
   volumen: number;
   completado: boolean;
+  supersetGroup?: number; // Exercises with same group are in a superset (1, 2, 3...)
+  supersetOrder?: number; // Order within superset (1 = A1, 2 = A2, etc.)
 }
 
 export interface SessionData {
@@ -159,6 +161,20 @@ export type CardioMode =
   | 'custom'
   | 'amrap'
   | 'fortime';
+
+export interface BodyMeasurement {
+  date: string;
+  weight?: number;
+  neck?: number;
+  chest?: number;
+  waist?: number;
+  hips?: number;
+  armLeft?: number;
+  armRight?: number;
+  thighLeft?: number;
+  thighRight?: number;
+  bodyFat?: number; // Calculated from Navy method
+}
 
 export type TabName =
   | 'home'

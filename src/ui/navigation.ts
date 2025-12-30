@@ -5,6 +5,7 @@ import { initializeCharts } from '@/features/charts';
 import { initializeCalculators } from '@/features/calculators';
 import { loadProfile } from '@/features/profile';
 import { refreshIcons, icon } from '@/utils/icons';
+import { generateInsight } from '@/utils/insights';
 
 // ==========================================
 // NAVEGACIÓN ENTRE TABS
@@ -147,63 +148,26 @@ function updateHeroSection(): void {
   const recentPR = getRecentPR();
   const weeklyVolume = getWeeklyVolume();
 
-  // Time-based greeting with emoji
+  // Time-based greeting
   const hour = new Date().getHours();
   let greeting = 'Hola';
-  let timeEmoji = '';
+  let timeIcon = 'sun';
   if (hour < 12) {
     greeting = 'Buenos días';
-    timeEmoji = '☀️';
+    timeIcon = 'sun';
   } else if (hour < 18) {
     greeting = 'Buenas tardes';
-    timeEmoji = '🌤️';
+    timeIcon = 'cloud-sun';
   } else {
     greeting = 'Buenas noches';
-    timeEmoji = '🌙';
+    timeIcon = 'moon';
   }
 
-  // Motivational message based on context - more energetic!
-  let motivationalMsg = '';
-  let heroGradient = 'from-blue-600/20 via-purple-600/20 to-pink-600/20';
-  let accentGradient = 'from-blue-500 to-purple-500';
-  let statusIcon = 'zap';
-
-  if (hasDraft) {
-    motivationalMsg = '💪 ¡Tienes un entrenamiento pendiente!';
-    heroGradient = 'from-orange-600/30 via-amber-600/20 to-yellow-600/20';
-    accentGradient = 'from-orange-500 to-amber-500';
-    statusIcon = 'play-circle';
-  } else if (stats.streak >= 5) {
-    motivationalMsg = `🔥 ${stats.streak} días de racha! ¡IMPARABLE!`;
-    heroGradient = 'from-orange-600/30 via-red-600/20 to-pink-600/20';
-    accentGradient = 'from-orange-500 to-red-500';
-    statusIcon = 'flame';
-  } else if (stats.streak >= 3) {
-    motivationalMsg = `⚡ Racha de ${stats.streak} días! ¡Sigue así!`;
-    heroGradient = 'from-green-600/30 via-emerald-600/20 to-teal-600/20';
-    accentGradient = 'from-green-500 to-emerald-500';
-    statusIcon = 'trending-up';
-  } else if (stats.daysSinceLastWorkout > 7) {
-    motivationalMsg = '🎯 ¡Es momento de volver! ¡Tú puedes!';
-    heroGradient = 'from-purple-600/30 via-indigo-600/20 to-blue-600/20';
-    accentGradient = 'from-purple-500 to-indigo-500';
-    statusIcon = 'target';
-  } else if (stats.totalWorkouts === 0) {
-    motivationalMsg = '🚀 ¡Comienza tu transformación hoy!';
-    heroGradient = 'from-cyan-600/30 via-blue-600/20 to-indigo-600/20';
-    accentGradient = 'from-cyan-500 to-blue-500';
-    statusIcon = 'rocket';
-  } else if (stats.daysSinceLastWorkout <= 1) {
-    motivationalMsg = '💥 ¡Estás en fuego! ¡No pares!';
-    heroGradient = 'from-emerald-600/30 via-green-600/20 to-teal-600/20';
-    accentGradient = 'from-emerald-500 to-green-500';
-    statusIcon = 'zap';
-  } else {
-    motivationalMsg = '💪 ¡Vamos a entrenar!';
-    heroGradient = 'from-blue-600/30 via-indigo-600/20 to-purple-600/20';
-    accentGradient = 'from-blue-500 to-indigo-500';
-    statusIcon = 'dumbbell';
-  }
+  // Generate ML-powered insight
+  const insight = generateInsight(hasDraft, stats);
+  const heroGradient = insight.gradient;
+  const accentGradient = insight.accentGradient;
+  const statusIcon = insight.icon;
 
   // Build stats display - more vibrant
   const statsHtml = stats.totalWorkouts > 0 ? `
@@ -236,7 +200,9 @@ function updateHeroSection(): void {
           <i data-lucide="trophy" class="w-5 h-5 text-white"></i>
         </div>
         <div class="flex-1 min-w-0 overflow-hidden">
-          <p class="text-[10px] text-yellow-400 font-bold uppercase tracking-wide truncate">🏆 PR Reciente!</p>
+          <p class="text-[10px] text-yellow-400 font-bold uppercase tracking-wide truncate flex items-center gap-1">
+            <i data-lucide="trophy" class="w-3 h-3"></i> PR Reciente!
+          </p>
           <p class="text-sm text-white font-bold truncate">${recentPR.exercise}</p>
           <p class="text-xs text-yellow-300/80 font-semibold truncate">${recentPR.weight}kg x ${recentPR.reps} reps</p>
         </div>
@@ -253,16 +219,27 @@ function updateHeroSection(): void {
       <!-- Header -->
       <div class="relative">
         <div class="flex items-center justify-between mb-2">
-          <p class="text-base text-white/80">${timeEmoji} ${greeting}</p>
+          <p class="text-base text-white/80 flex items-center gap-1.5">
+            <i data-lucide="${timeIcon}" class="w-4 h-4"></i>
+            ${greeting}
+          </p>
           <div class="flex items-center gap-1 px-2 py-1 bg-white/10 rounded-full">
             <i data-lucide="${statusIcon}" class="w-4 h-4 text-white/80"></i>
           </div>
         </div>
         <h1 class="text-3xl font-display font-bold text-white mb-3">GymMate</h1>
 
-        <!-- Motivational banner -->
+        <!-- ML Insight banner -->
         <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3">
-          <p class="text-base font-semibold text-white">${motivationalMsg}</p>
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="${insight.icon}" class="w-4 h-4 ${insight.textClass}"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold text-white">${insight.message}</p>
+              ${insight.subtext ? `<p class="text-xs text-white/60 mt-0.5">${insight.subtext}</p>` : ''}
+            </div>
+          </div>
         </div>
 
         ${statsHtml}
