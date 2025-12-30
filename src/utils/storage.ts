@@ -5,6 +5,7 @@ import type {
   ProfileData,
   HistorySession,
   TrainingGroup,
+  BodyMeasurement,
 } from '@/types';
 import {
   normalizeExerciseName,
@@ -258,4 +259,50 @@ export function deleteCustomExercise(exerciseId: string): void {
   const exercises = getCustomExercises();
   const filtered = exercises.filter((e) => e.id !== exerciseId);
   saveCustomExercises(filtered);
+}
+
+// ==========================================
+// BODY MEASUREMENTS
+// ==========================================
+
+const BODY_MEASUREMENTS_KEY = 'gymmate_body_measurements';
+const MAX_MEASUREMENTS = 100; // Keep last 100 measurements
+
+export function getBodyMeasurements(): BodyMeasurement[] {
+  return getItem<BodyMeasurement[]>(BODY_MEASUREMENTS_KEY, []);
+}
+
+export function saveBodyMeasurements(measurements: BodyMeasurement[]): void {
+  setItem(BODY_MEASUREMENTS_KEY, measurements);
+}
+
+export function addBodyMeasurement(measurement: BodyMeasurement): void {
+  const measurements = getBodyMeasurements();
+
+  // Check if there's already a measurement for today
+  const today = measurement.date.split('T')[0];
+  const existingIndex = measurements.findIndex(m => m.date.split('T')[0] === today);
+
+  if (existingIndex >= 0) {
+    // Update existing measurement for today
+    measurements[existingIndex] = measurement;
+  } else {
+    // Add new measurement
+    measurements.unshift(measurement);
+  }
+
+  // Keep only MAX_MEASUREMENTS
+  const trimmed = measurements.slice(0, MAX_MEASUREMENTS);
+  saveBodyMeasurements(trimmed);
+}
+
+export function getLatestMeasurement(): BodyMeasurement | null {
+  const measurements = getBodyMeasurements();
+  return measurements.length > 0 ? measurements[0] : null;
+}
+
+export function deleteMeasurement(date: string): void {
+  const measurements = getBodyMeasurements();
+  const filtered = measurements.filter(m => m.date !== date);
+  saveBodyMeasurements(filtered);
 }

@@ -11,6 +11,9 @@ import {
   hasUnsavedData,
   hasUnsavedChanges,
   setOnDraftSavedCallback,
+  updateExerciseSuperset,
+  getNextSupersetGroup,
+  getExercisesInSuperset,
 } from '@/state/session';
 import { renderExercise, refreshIcons } from '@/ui/components';
 import { icon } from '@/utils/icons';
@@ -281,6 +284,140 @@ export function toggleCompletado(index: number): void {
     const totalCount = sessionData.ejercicios.length;
     updateCoachOnExerciseComplete(ejercicio, completedCount, totalCount);
   }
+}
+
+// ==========================================
+// SUPERSETS
+// ==========================================
+
+let pendingSupersetIndex: number | null = null;
+
+export function toggleSuperset(index: number): void {
+  const ejercicio = sessionData.ejercicios[index];
+  if (!ejercicio) return;
+
+  // If this exercise already has a superset, remove it
+  if (ejercicio.supersetGroup !== undefined) {
+    const group = ejercicio.supersetGroup;
+
+    // Remove from superset
+    updateExerciseSuperset(index, undefined, undefined);
+
+    // Get remaining exercises in this superset
+    const remainingInGroup = getExercisesInSuperset(group);
+
+    // If only one exercise left, remove the superset entirely
+    if (remainingInGroup.length === 1) {
+      updateExerciseSuperset(remainingInGroup[0], undefined, undefined);
+    } else {
+      // Re-number remaining exercises
+      remainingInGroup.forEach((idx, order) => {
+        updateExerciseSuperset(idx, group, order + 1);
+      });
+    }
+
+    pendingSupersetIndex = null;
+    refreshExerciseCards();
+    return;
+  }
+
+  // If there's a pending exercise, link them together
+  if (pendingSupersetIndex !== null && pendingSupersetIndex !== index) {
+    const otherEjercicio = sessionData.ejercicios[pendingSupersetIndex];
+
+    // Check if the other exercise already has a superset group
+    if (otherEjercicio.supersetGroup !== undefined) {
+      // Add to existing superset
+      const group = otherEjercicio.supersetGroup;
+      const currentInGroup = getExercisesInSuperset(group);
+      const nextOrder = currentInGroup.length + 1;
+      updateExerciseSuperset(index, group, nextOrder);
+    } else {
+      // Create new superset
+      const newGroup = getNextSupersetGroup();
+      updateExerciseSuperset(pendingSupersetIndex, newGroup, 1);
+      updateExerciseSuperset(index, newGroup, 2);
+    }
+
+    pendingSupersetIndex = null;
+    refreshExerciseCards();
+    return;
+  }
+
+  // Set this as pending superset
+  pendingSupersetIndex = index;
+
+  // Show visual feedback
+  const card = document.getElementById(`ejercicio-${index}`);
+  if (card) {
+    card.classList.add('ring-2', 'ring-cyan-400', 'ring-offset-2', 'ring-offset-dark-bg');
+
+    // Show toast
+    showSupersetToast('Selecciona otro ejercicio para crear un superset');
+
+    // Auto-cancel after 5 seconds
+    setTimeout(() => {
+      if (pendingSupersetIndex === index) {
+        pendingSupersetIndex = null;
+        card.classList.remove('ring-2', 'ring-cyan-400', 'ring-offset-2', 'ring-offset-dark-bg');
+      }
+    }, 5000);
+  }
+}
+
+function showSupersetToast(message: string): void {
+  // Remove existing toast
+  const existingToast = document.getElementById('supersetToast');
+  if (existingToast) existingToast.remove();
+
+  const toast = document.createElement('div');
+  toast.id = 'supersetToast';
+  toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 bg-cyan-500 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg shadow-cyan-500/30 animate-fade-in flex items-center gap-2 z-50';
+  toast.innerHTML = `
+    <i data-lucide="link" class="w-4 h-4"></i>
+    ${message}
+  `;
+  document.body.appendChild(toast);
+  refreshIcons();
+
+  setTimeout(() => {
+    toast.classList.add('animate-fade-out');
+    setTimeout(() => toast.remove(), 300);
+  }, 4000);
+}
+
+function refreshExerciseCards(): void {
+  // Re-render exercise cards to update superset styling
+  const ejerciciosList = document.getElementById('ejerciciosList');
+  const opcionalesList = document.getElementById('opcionalesList');
+
+  const obligatoriosCount = sessionData.ejercicios.filter((_, i) => {
+    const listItem = document.querySelector(`#ejerciciosList #ejercicio-${i}`);
+    return listItem !== null;
+  }).length || sessionData.ejercicios.length;
+
+  if (ejerciciosList) {
+    let html = '';
+    for (let i = 0; i < obligatoriosCount; i++) {
+      html += renderExercise(sessionData.ejercicios[i], i, false);
+    }
+    ejerciciosList.innerHTML = html;
+  }
+
+  if (opcionalesList && sessionData.ejercicios.length > obligatoriosCount) {
+    let html = `
+      <div class="mb-3 flex items-center gap-2">
+        ${icon('bookmark', 'md', 'text-status-warning')}
+        <span class="text-sm font-semibold text-status-warning">Ejercicios Opcionales</span>
+      </div>
+    `;
+    for (let i = obligatoriosCount; i < sessionData.ejercicios.length; i++) {
+      html += renderExercise(sessionData.ejercicios[i], i, true);
+    }
+    opcionalesList.innerHTML = html;
+  }
+
+  refreshIcons();
 }
 
 // ==========================================

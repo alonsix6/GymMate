@@ -1,5 +1,6 @@
-import { getProfile, saveProfile as saveProfileData } from '@/utils/storage';
-import type { ProfileData } from '@/types';
+import { getProfile, saveProfile as saveProfileData, getLatestMeasurement, addBodyMeasurement, getBodyMeasurements, deleteMeasurement } from '@/utils/storage';
+import type { ProfileData, BodyMeasurement } from '@/types';
+import { refreshIcons } from '@/utils/icons';
 
 // ==========================================
 // CARGAR PERFIL
@@ -192,4 +193,274 @@ export function getProfileForCalculators(): {
     height: profile.height || null,
     activity: profile.activity || null,
   };
+}
+
+// ==========================================
+// BODY MEASUREMENTS
+// ==========================================
+
+export function openMeasurementsModal(): void {
+  const modal = document.getElementById('measurementsModal');
+  const dateEl = document.getElementById('measurementDate');
+  const form = document.getElementById('measurementsForm') as HTMLFormElement;
+
+  if (!modal) return;
+
+  // Set current date
+  const today = new Date();
+  if (dateEl) {
+    dateEl.textContent = today.toLocaleDateString('es-ES', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  }
+
+  // Pre-fill with profile weight if available
+  const profile = getProfile();
+  const weightInput = document.getElementById('measureWeight') as HTMLInputElement;
+  if (weightInput && profile.weight) {
+    weightInput.value = String(profile.weight);
+  }
+
+  // Pre-fill with latest measurement values if available
+  const latest = getLatestMeasurement();
+  if (latest) {
+    const fields: (keyof BodyMeasurement)[] = ['neck', 'chest', 'waist', 'hips', 'armLeft', 'armRight', 'thighLeft', 'thighRight'];
+    fields.forEach(field => {
+      const input = document.getElementById(`measure${field.charAt(0).toUpperCase() + field.slice(1)}`) as HTMLInputElement;
+      if (input && latest[field]) {
+        input.value = String(latest[field]);
+      }
+    });
+  }
+
+  // Setup form submit
+  if (form) {
+    form.onsubmit = (e) => {
+      e.preventDefault();
+      saveMeasurement();
+      return false;
+    };
+  }
+
+  // Setup live body fat calculation
+  setupBodyFatCalculation();
+
+  modal.classList.add('active');
+  refreshIcons();
+}
+
+export function closeMeasurementsModal(): void {
+  const modal = document.getElementById('measurementsModal');
+  if (modal) {
+    modal.classList.remove('active');
+    // Reset form
+    const form = document.getElementById('measurementsForm') as HTMLFormElement;
+    if (form) form.reset();
+  }
+}
+
+function setupBodyFatCalculation(): void {
+  const inputs = ['measureWeight', 'measureNeck', 'measureWaist', 'measureHips'];
+  inputs.forEach(id => {
+    const input = document.getElementById(id) as HTMLInputElement;
+    if (input) {
+      input.addEventListener('input', calculateBodyFat);
+    }
+  });
+  // Trigger initial calculation
+  calculateBodyFat();
+}
+
+function calculateBodyFat(): void {
+  const profile = getProfile();
+  const height = profile.height;
+  const gender = profile.gender || 'male';
+
+  const waist = parseFloat((document.getElementById('measureWaist') as HTMLInputElement)?.value || '0');
+  const neck = parseFloat((document.getElementById('measureNeck') as HTMLInputElement)?.value || '0');
+  const hips = parseFloat((document.getElementById('measureHips') as HTMLInputElement)?.value || '0');
+
+  const estimateEl = document.getElementById('bodyFatEstimate');
+  const valueEl = document.getElementById('bodyFatValue');
+
+  if (!estimateEl || !valueEl || !height) return;
+
+  // Navy method requires: height, waist, neck, and hips (for women)
+  let bodyFat: number | null = null;
+
+  if (waist > 0 && neck > 0 && height > 0) {
+    if (gender === 'male') {
+      // Male formula: 86.010 * log10(waist - neck) - 70.041 * log10(height) + 36.76
+      if (waist > neck) {
+        bodyFat = 86.010 * Math.log10(waist - neck) - 70.041 * Math.log10(height) + 36.76;
+      }
+    } else {
+      // Female formula: 163.205 * log10(waist + hips - neck) - 97.684 * log10(height) - 78.387
+      if (hips > 0 && (waist + hips) > neck) {
+        bodyFat = 163.205 * Math.log10(waist + hips - neck) - 97.684 * Math.log10(height) - 78.387;
+      }
+    }
+  }
+
+  if (bodyFat !== null && bodyFat > 0 && bodyFat < 60) {
+    estimateEl.classList.remove('hidden');
+    valueEl.textContent = bodyFat.toFixed(1) + '%';
+  } else {
+    estimateEl.classList.add('hidden');
+  }
+}
+
+function saveMeasurement(): void {
+  const profile = getProfile();
+
+  const measurement: BodyMeasurement = {
+    date: new Date().toISOString(),
+    weight: parseFloat((document.getElementById('measureWeight') as HTMLInputElement)?.value || '0') || undefined,
+    neck: parseFloat((document.getElementById('measureNeck') as HTMLInputElement)?.value || '0') || undefined,
+    chest: parseFloat((document.getElementById('measureChest') as HTMLInputElement)?.value || '0') || undefined,
+    waist: parseFloat((document.getElementById('measureWaist') as HTMLInputElement)?.value || '0') || undefined,
+    hips: parseFloat((document.getElementById('measureHips') as HTMLInputElement)?.value || '0') || undefined,
+    armLeft: parseFloat((document.getElementById('measureArmLeft') as HTMLInputElement)?.value || '0') || undefined,
+    armRight: parseFloat((document.getElementById('measureArmRight') as HTMLInputElement)?.value || '0') || undefined,
+    thighLeft: parseFloat((document.getElementById('measureThighLeft') as HTMLInputElement)?.value || '0') || undefined,
+    thighRight: parseFloat((document.getElementById('measureThighRight') as HTMLInputElement)?.value || '0') || undefined,
+  };
+
+  // Calculate body fat if possible
+  const height = profile.height;
+  const gender = profile.gender || 'male';
+
+  if (measurement.waist && measurement.neck && height) {
+    if (gender === 'male' && measurement.waist > measurement.neck) {
+      measurement.bodyFat = 86.010 * Math.log10(measurement.waist - measurement.neck) - 70.041 * Math.log10(height) + 36.76;
+    } else if (gender === 'female' && measurement.hips && (measurement.waist + measurement.hips) > measurement.neck) {
+      measurement.bodyFat = 163.205 * Math.log10(measurement.waist + measurement.hips - measurement.neck) - 97.684 * Math.log10(height) - 78.387;
+    }
+
+    // Validate body fat range
+    if (measurement.bodyFat && (measurement.bodyFat < 0 || measurement.bodyFat > 60)) {
+      measurement.bodyFat = undefined;
+    }
+  }
+
+  addBodyMeasurement(measurement);
+
+  // Sync weight to profile if changed
+  if (measurement.weight && measurement.weight !== profile.weight) {
+    const weightInput = document.getElementById('profileWeight') as HTMLInputElement;
+    if (weightInput) {
+      weightInput.value = String(measurement.weight);
+    }
+    saveProfileData({
+      name: profile.name || '',
+      birthdate: profile.birthdate || '',
+      gender: profile.gender || 'male',
+      weight: measurement.weight,
+      height: profile.height || 0,
+      activity: profile.activity || 1.2,
+    });
+  }
+
+  closeMeasurementsModal();
+  updateMeasurementPreview();
+}
+
+export function updateMeasurementPreview(): void {
+  const preview = document.getElementById('latestMeasurementPreview');
+  if (!preview) return;
+
+  const latest = getLatestMeasurement();
+  if (!latest) {
+    preview.classList.add('hidden');
+    return;
+  }
+
+  const date = new Date(latest.date);
+  const formattedDate = date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+
+  preview.classList.remove('hidden');
+  preview.innerHTML = `
+    <div class="bg-dark-bg border border-dark-border rounded-xl p-3">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs text-text-muted">Última medición: ${formattedDate}</span>
+        ${latest.bodyFat ? `<span class="text-xs font-medium text-purple-400">${latest.bodyFat.toFixed(1)}% grasa</span>` : ''}
+      </div>
+      <div class="grid grid-cols-4 gap-2 text-center text-xs">
+        ${latest.weight ? `<div><p class="font-bold text-white">${latest.weight}</p><p class="text-text-muted">kg</p></div>` : ''}
+        ${latest.chest ? `<div><p class="font-bold text-white">${latest.chest}</p><p class="text-text-muted">pecho</p></div>` : ''}
+        ${latest.waist ? `<div><p class="font-bold text-white">${latest.waist}</p><p class="text-text-muted">cintura</p></div>` : ''}
+        ${latest.armRight ? `<div><p class="font-bold text-white">${latest.armRight}</p><p class="text-text-muted">brazo</p></div>` : ''}
+      </div>
+    </div>
+  `;
+
+  refreshIcons();
+}
+
+export function showMeasurementsHistory(): void {
+  const modal = document.getElementById('measurementsHistoryModal');
+  const list = document.getElementById('measurementsHistoryList');
+
+  if (!modal || !list) return;
+
+  const measurements = getBodyMeasurements();
+
+  if (measurements.length === 0) {
+    list.innerHTML = `
+      <div class="text-center py-8">
+        <i data-lucide="ruler" class="w-12 h-12 text-text-muted mx-auto mb-3"></i>
+        <p class="text-text-secondary">No hay mediciones registradas</p>
+        <p class="text-xs text-text-muted mt-1">Registra tu primera medición</p>
+      </div>
+    `;
+  } else {
+    list.innerHTML = measurements.map(m => {
+      const date = new Date(m.date);
+      const formattedDate = date.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+
+      return `
+        <div class="bg-dark-bg border border-dark-border rounded-xl p-4">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-sm font-medium text-white">${formattedDate}</span>
+            <button onclick="window.deleteMeasurementEntry('${m.date}')" class="w-8 h-8 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 flex items-center justify-center transition-colors">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+          <div class="grid grid-cols-3 gap-2 text-xs">
+            ${m.weight ? `<div class="bg-dark-surface rounded-lg p-2 text-center"><p class="font-bold text-white">${m.weight} kg</p><p class="text-text-muted">Peso</p></div>` : ''}
+            ${m.bodyFat ? `<div class="bg-purple-500/10 border border-purple-500/20 rounded-lg p-2 text-center"><p class="font-bold text-purple-400">${m.bodyFat.toFixed(1)}%</p><p class="text-text-muted">Grasa</p></div>` : ''}
+            ${m.neck ? `<div class="bg-dark-surface rounded-lg p-2 text-center"><p class="font-bold text-white">${m.neck} cm</p><p class="text-text-muted">Cuello</p></div>` : ''}
+            ${m.chest ? `<div class="bg-dark-surface rounded-lg p-2 text-center"><p class="font-bold text-white">${m.chest} cm</p><p class="text-text-muted">Pecho</p></div>` : ''}
+            ${m.waist ? `<div class="bg-dark-surface rounded-lg p-2 text-center"><p class="font-bold text-white">${m.waist} cm</p><p class="text-text-muted">Cintura</p></div>` : ''}
+            ${m.hips ? `<div class="bg-dark-surface rounded-lg p-2 text-center"><p class="font-bold text-white">${m.hips} cm</p><p class="text-text-muted">Cadera</p></div>` : ''}
+            ${m.armLeft ? `<div class="bg-dark-surface rounded-lg p-2 text-center"><p class="font-bold text-white">${m.armLeft} cm</p><p class="text-text-muted">Brazo Izq</p></div>` : ''}
+            ${m.armRight ? `<div class="bg-dark-surface rounded-lg p-2 text-center"><p class="font-bold text-white">${m.armRight} cm</p><p class="text-text-muted">Brazo Der</p></div>` : ''}
+            ${m.thighLeft ? `<div class="bg-dark-surface rounded-lg p-2 text-center"><p class="font-bold text-white">${m.thighLeft} cm</p><p class="text-text-muted">Muslo Izq</p></div>` : ''}
+            ${m.thighRight ? `<div class="bg-dark-surface rounded-lg p-2 text-center"><p class="font-bold text-white">${m.thighRight} cm</p><p class="text-text-muted">Muslo Der</p></div>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  modal.classList.add('active');
+  refreshIcons();
+}
+
+export function closeMeasurementsHistoryModal(): void {
+  const modal = document.getElementById('measurementsHistoryModal');
+  if (modal) {
+    modal.classList.remove('active');
+  }
+}
+
+export function deleteMeasurementEntry(date: string): void {
+  if (confirm('¿Eliminar esta medición?')) {
+    deleteMeasurement(date);
+    showMeasurementsHistory(); // Refresh the list
+    updateMeasurementPreview(); // Update preview
+  }
 }

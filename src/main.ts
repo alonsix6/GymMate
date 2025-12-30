@@ -3,7 +3,7 @@ import { initializeIcons, refreshIcons } from '@/utils/icons';
 import { initializeNavigation, showHome, switchTab, resumeDraft, dismissDraft } from '@/ui/navigation';
 import { initializeModals, showAnimation, closeAnimationModal } from '@/ui/modals';
 import { initializeTimerListeners, openRestTimerModal } from '@/features/timer';
-import { initializeProfile } from '@/features/profile';
+import { initializeProfile, openMeasurementsModal, closeMeasurementsModal, showMeasurementsHistory, closeMeasurementsHistoryModal, deleteMeasurementEntry, updateMeasurementPreview } from '@/features/profile';
 import { loadHistory, loadPRs, exportToExcel, deleteHistoryItem, triggerCSVImport } from '@/features/history';
 import {
   loadTrainingGroup,
@@ -16,6 +16,7 @@ import {
   selectRPE,
   confirmRPE,
   skipRPE,
+  toggleSuperset,
 } from '@/features/workout';
 import {
   showCardioSelector,
@@ -79,6 +80,9 @@ declare global {
     confirmRPE: typeof confirmRPE;
     skipRPE: typeof skipRPE;
 
+    // Supersets
+    toggleSuperset: typeof toggleSuperset;
+
     // Modals
     showAnimation: typeof showAnimation;
     closeAnimationModal: typeof closeAnimationModal;
@@ -114,6 +118,13 @@ declare global {
     toggleCardioPause: typeof toggleCardioPause;
     stopCardioWorkout: typeof stopCardioWorkout;
     incrementAmrapRound: typeof incrementAmrapRound;
+
+    // Body Measurements
+    openMeasurementsModal: typeof openMeasurementsModal;
+    closeMeasurementsModal: typeof closeMeasurementsModal;
+    showMeasurementsHistory: typeof showMeasurementsHistory;
+    closeMeasurementsHistoryModal: typeof closeMeasurementsHistoryModal;
+    deleteMeasurementEntry: typeof deleteMeasurementEntry;
   }
 }
 
@@ -142,6 +153,7 @@ window.finishWorkout = finishWorkout;
 window.selectRPE = selectRPE;
 window.confirmRPE = confirmRPE;
 window.skipRPE = skipRPE;
+window.toggleSuperset = toggleSuperset;
 window.showAnimation = showAnimation;
 window.closeAnimationModal = closeAnimationModal;
 window.openRestTimerModal = openRestTimerModal;
@@ -166,6 +178,11 @@ window.startCardioWorkout = startCardioWorkout;
 window.toggleCardioPause = toggleCardioPause;
 window.stopCardioWorkout = stopCardioWorkout;
 window.incrementAmrapRound = incrementAmrapRound;
+window.openMeasurementsModal = openMeasurementsModal;
+window.closeMeasurementsModal = closeMeasurementsModal;
+window.showMeasurementsHistory = showMeasurementsHistory;
+window.closeMeasurementsHistoryModal = closeMeasurementsHistoryModal;
+window.deleteMeasurementEntry = deleteMeasurementEntry;
 
 // ==========================================
 // RENDERIZAR RUTINAS EN HOME
@@ -697,6 +714,7 @@ function init(): void {
 
   // Inicializar perfil
   initializeProfile();
+  updateMeasurementPreview();
 
   // Renderizar rutinas en home
   renderRoutinesInHome();
