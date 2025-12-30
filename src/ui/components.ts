@@ -124,8 +124,8 @@ export function renderExercise(
             onclick="window.toggleCompletado(${index})"
             class="w-8 h-8 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
               ejercicio.completado
-                ? 'bg-emerald-500 border-emerald-500 scale-110'
-                : 'bg-transparent border-slate-500 hover:border-emerald-400'
+                ? 'bg-emerald-500 border-emerald-500 scale-100'
+                : 'bg-transparent border-slate-500 hover:border-emerald-400 scale-90'
             }"
           >
             <i data-lucide="check" class="w-5 h-5 transition-all duration-300 ${
