@@ -122,40 +122,40 @@ export function showCardioConfig(): void {
   switch (mode) {
     case 'tabata':
       configHTML = `
-        <div class="space-y-4">
+        <div class="space-y-5">
           <div>
-            <label class="block text-sm text-text-secondary mb-2">Rondas</label>
-            <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('rounds', -1)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">−</span>
+            <label class="block text-sm text-text-secondary mb-3 text-center">Rondas</label>
+            <div class="flex items-center justify-between">
+              <button onclick="window.adjustCardioConfig('rounds', -1)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">−</span>
               </button>
-              <span id="configRounds" class="text-2xl font-bold text-accent w-16 text-center">${config.rounds}</span>
-              <button onclick="window.adjustCardioConfig('rounds', 1)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">+</span>
+              <span id="configRounds" class="flex-1 text-3xl font-bold text-accent text-center">${config.rounds}</span>
+              <button onclick="window.adjustCardioConfig('rounds', 1)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
           <div>
-            <label class="block text-sm text-text-secondary mb-2">Trabajo (segundos)</label>
-            <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('work', -5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">−</span>
+            <label class="block text-sm text-text-secondary mb-3 text-center">Trabajo (segundos)</label>
+            <div class="flex items-center justify-between">
+              <button onclick="window.adjustCardioConfig('work', -5)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">−</span>
               </button>
-              <span id="configWork" class="text-2xl font-bold text-status-success w-16 text-center">${config.work}</span>
-              <button onclick="window.adjustCardioConfig('work', 5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">+</span>
+              <span id="configWork" class="flex-1 text-3xl font-bold text-status-success text-center">${config.work}</span>
+              <button onclick="window.adjustCardioConfig('work', 5)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
           <div>
-            <label class="block text-sm text-text-secondary mb-2">Descanso (segundos)</label>
-            <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('rest', -5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">−</span>
+            <label class="block text-sm text-text-secondary mb-3 text-center">Descanso (segundos)</label>
+            <div class="flex items-center justify-between">
+              <button onclick="window.adjustCardioConfig('rest', -5)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">−</span>
               </button>
-              <span id="configRest" class="text-2xl font-bold text-status-error w-16 text-center">${config.rest}</span>
-              <button onclick="window.adjustCardioConfig('rest', 5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">+</span>
+              <span id="configRest" class="flex-1 text-3xl font-bold text-status-error text-center">${config.rest}</span>
+              <button onclick="window.adjustCardioConfig('rest', 5)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
@@ -165,16 +165,16 @@ export function showCardioConfig(): void {
 
     case 'emom':
       configHTML = `
-        <div class="space-y-4">
+        <div class="space-y-5">
           <div>
-            <label class="block text-sm text-text-secondary mb-2">Minutos totales</label>
-            <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('rounds', -1)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">−</span>
+            <label class="block text-sm text-text-secondary mb-3 text-center">Minutos totales</label>
+            <div class="flex items-center justify-between">
+              <button onclick="window.adjustCardioConfig('rounds', -1)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">−</span>
               </button>
-              <span id="configRounds" class="text-2xl font-bold text-accent w-16 text-center">${config.rounds}</span>
-              <button onclick="window.adjustCardioConfig('rounds', 1)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">+</span>
+              <span id="configRounds" class="flex-1 text-3xl font-bold text-accent text-center">${config.rounds}</span>
+              <button onclick="window.adjustCardioConfig('rounds', 1)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
@@ -186,14 +186,14 @@ export function showCardioConfig(): void {
             </select>
           </div>
           <div>
-            <label class="block text-sm text-text-secondary mb-2">Repeticiones por minuto</label>
-            <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('reps', -1)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">−</span>
+            <label class="block text-sm text-text-secondary mb-3 text-center">Repeticiones por minuto</label>
+            <div class="flex items-center justify-between">
+              <button onclick="window.adjustCardioConfig('reps', -1)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">−</span>
               </button>
-              <span id="configReps" class="text-2xl font-bold text-status-warning w-16 text-center">${config.reps || 10}</span>
-              <button onclick="window.adjustCardioConfig('reps', 1)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">+</span>
+              <span id="configReps" class="flex-1 text-3xl font-bold text-status-warning text-center">${config.reps || 10}</span>
+              <button onclick="window.adjustCardioConfig('reps', 1)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
@@ -203,20 +203,20 @@ export function showCardioConfig(): void {
 
     case 'amrap':
       configHTML = `
-        <div class="space-y-4">
+        <div class="space-y-5">
           <div>
-            <label class="block text-sm text-text-secondary mb-2">Duración (minutos)</label>
-            <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('duration', -60)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">−</span>
+            <label class="block text-sm text-text-secondary mb-3 text-center">Duración (minutos)</label>
+            <div class="flex items-center justify-between">
+              <button onclick="window.adjustCardioConfig('duration', -60)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">−</span>
               </button>
-              <span id="configDuration" class="text-2xl font-bold text-accent w-16 text-center">${(config.duration || 600) / 60}</span>
-              <button onclick="window.adjustCardioConfig('duration', 60)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">+</span>
+              <span id="configDuration" class="flex-1 text-3xl font-bold text-accent text-center">${(config.duration || 600) / 60}</span>
+              <button onclick="window.adjustCardioConfig('duration', 60)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
-          <p class="text-sm text-text-muted">Completa tantas rondas como puedas en el tiempo límite.</p>
+          <p class="text-sm text-text-muted text-center">Completa tantas rondas como puedas en el tiempo límite.</p>
         </div>
       `;
       break;
@@ -276,17 +276,17 @@ export function showCardioConfig(): void {
                 </button>
               </div>
             </div>
-            <p id="pyramidTimeInfo" class="text-xs text-text-muted">Tiempo trabajo: ${Math.floor(totalWorkTime / 60)}:${String(totalWorkTime % 60).padStart(2, '0')} | Total: ${Math.floor((totalWorkTime + totalRestTime) / 60)}:${String((totalWorkTime + totalRestTime) % 60).padStart(2, '0')}</p>
+            <p id="pyramidTimeInfo" class="text-xs text-text-muted text-center">Tiempo trabajo: ${Math.floor(totalWorkTime / 60)}:${String(totalWorkTime % 60).padStart(2, '0')} | Total: ${Math.floor((totalWorkTime + totalRestTime) / 60)}:${String((totalWorkTime + totalRestTime) % 60).padStart(2, '0')}</p>
           </div>
           <div>
-            <label class="block text-sm text-text-secondary mb-2">Descanso entre niveles (segundos)</label>
-            <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('rest', -5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">−</span>
+            <label class="block text-sm text-text-secondary mb-3 text-center">Descanso entre niveles (segundos)</label>
+            <div class="flex items-center justify-between">
+              <button onclick="window.adjustCardioConfig('rest', -5)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">−</span>
               </button>
-              <span id="configRest" class="text-2xl font-bold text-status-error w-16 text-center">${config.rest || 10}</span>
-              <button onclick="window.adjustCardioConfig('rest', 5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">+</span>
+              <span id="configRest" class="flex-1 text-3xl font-bold text-status-error text-center">${config.rest || 10}</span>
+              <button onclick="window.adjustCardioConfig('rest', 5)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
@@ -296,40 +296,40 @@ export function showCardioConfig(): void {
 
     default: // custom, circuit
       configHTML = `
-        <div class="space-y-4">
+        <div class="space-y-5">
           <div>
-            <label class="block text-sm text-text-secondary mb-2">Rondas</label>
-            <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('rounds', -1)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">−</span>
+            <label class="block text-sm text-text-secondary mb-3 text-center">Rondas</label>
+            <div class="flex items-center justify-between">
+              <button onclick="window.adjustCardioConfig('rounds', -1)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">−</span>
               </button>
-              <span id="configRounds" class="text-2xl font-bold text-accent w-16 text-center">${config.rounds}</span>
-              <button onclick="window.adjustCardioConfig('rounds', 1)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">+</span>
+              <span id="configRounds" class="flex-1 text-3xl font-bold text-accent text-center">${config.rounds}</span>
+              <button onclick="window.adjustCardioConfig('rounds', 1)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
           <div>
-            <label class="block text-sm text-text-secondary mb-2">Trabajo (segundos)</label>
-            <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('work', -5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">−</span>
+            <label class="block text-sm text-text-secondary mb-3 text-center">Trabajo (segundos)</label>
+            <div class="flex items-center justify-between">
+              <button onclick="window.adjustCardioConfig('work', -5)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">−</span>
               </button>
-              <span id="configWork" class="text-2xl font-bold text-status-success w-16 text-center">${config.work || 30}</span>
-              <button onclick="window.adjustCardioConfig('work', 5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">+</span>
+              <span id="configWork" class="flex-1 text-3xl font-bold text-status-success text-center">${config.work || 30}</span>
+              <button onclick="window.adjustCardioConfig('work', 5)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
           <div>
-            <label class="block text-sm text-text-secondary mb-2">Descanso (segundos)</label>
-            <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('rest', -5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">−</span>
+            <label class="block text-sm text-text-secondary mb-3 text-center">Descanso (segundos)</label>
+            <div class="flex items-center justify-between">
+              <button onclick="window.adjustCardioConfig('rest', -5)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">−</span>
               </button>
-              <span id="configRest" class="text-2xl font-bold text-status-error w-16 text-center">${config.rest || 15}</span>
-              <button onclick="window.adjustCardioConfig('rest', 5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
-                <span class="text-2xl font-bold text-text-primary">+</span>
+              <span id="configRest" class="flex-1 text-3xl font-bold text-status-error text-center">${config.rest || 15}</span>
+              <button onclick="window.adjustCardioConfig('rest', 5)" class="flex-1 h-14 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-3xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
