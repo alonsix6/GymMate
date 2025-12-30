@@ -126,36 +126,36 @@ export function showCardioConfig(): void {
           <div>
             <label class="block text-sm text-text-secondary mb-2">Rondas</label>
             <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('rounds', -1)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
-                ${icon('minus', 'md')}
+              <button onclick="window.adjustCardioConfig('rounds', -1)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">−</span>
               </button>
               <span id="configRounds" class="text-2xl font-bold text-accent w-16 text-center">${config.rounds}</span>
-              <button onclick="window.adjustCardioConfig('rounds', 1)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
-                ${icon('plus', 'md')}
+              <button onclick="window.adjustCardioConfig('rounds', 1)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
           <div>
             <label class="block text-sm text-text-secondary mb-2">Trabajo (segundos)</label>
             <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('work', -5)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
-                ${icon('minus', 'md')}
+              <button onclick="window.adjustCardioConfig('work', -5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">−</span>
               </button>
               <span id="configWork" class="text-2xl font-bold text-status-success w-16 text-center">${config.work}</span>
-              <button onclick="window.adjustCardioConfig('work', 5)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
-                ${icon('plus', 'md')}
+              <button onclick="window.adjustCardioConfig('work', 5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
           <div>
             <label class="block text-sm text-text-secondary mb-2">Descanso (segundos)</label>
             <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('rest', -5)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
-                ${icon('minus', 'md')}
+              <button onclick="window.adjustCardioConfig('rest', -5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">−</span>
               </button>
               <span id="configRest" class="text-2xl font-bold text-status-error w-16 text-center">${config.rest}</span>
-              <button onclick="window.adjustCardioConfig('rest', 5)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
-                ${icon('plus', 'md')}
+              <button onclick="window.adjustCardioConfig('rest', 5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
@@ -169,12 +169,12 @@ export function showCardioConfig(): void {
           <div>
             <label class="block text-sm text-text-secondary mb-2">Minutos totales</label>
             <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('rounds', -1)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
-                ${icon('minus', 'md')}
+              <button onclick="window.adjustCardioConfig('rounds', -1)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">−</span>
               </button>
               <span id="configRounds" class="text-2xl font-bold text-accent w-16 text-center">${config.rounds}</span>
-              <button onclick="window.adjustCardioConfig('rounds', 1)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
-                ${icon('plus', 'md')}
+              <button onclick="window.adjustCardioConfig('rounds', 1)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
@@ -188,12 +188,12 @@ export function showCardioConfig(): void {
           <div>
             <label class="block text-sm text-text-secondary mb-2">Repeticiones por minuto</label>
             <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('reps', -1)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
-                ${icon('minus', 'md')}
+              <button onclick="window.adjustCardioConfig('reps', -1)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">−</span>
               </button>
               <span id="configReps" class="text-2xl font-bold text-status-warning w-16 text-center">${config.reps || 10}</span>
-              <button onclick="window.adjustCardioConfig('reps', 1)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
-                ${icon('plus', 'md')}
+              <button onclick="window.adjustCardioConfig('reps', 1)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
@@ -207,12 +207,12 @@ export function showCardioConfig(): void {
           <div>
             <label class="block text-sm text-text-secondary mb-2">Duración (minutos)</label>
             <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('duration', -60)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
-                ${icon('minus', 'md')}
+              <button onclick="window.adjustCardioConfig('duration', -60)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">−</span>
               </button>
               <span id="configDuration" class="text-2xl font-bold text-accent w-16 text-center">${(config.duration || 600) / 60}</span>
-              <button onclick="window.adjustCardioConfig('duration', 60)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
-                ${icon('plus', 'md')}
+              <button onclick="window.adjustCardioConfig('duration', 60)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
@@ -276,17 +276,17 @@ export function showCardioConfig(): void {
                 </button>
               </div>
             </div>
-            <p class="text-xs text-text-muted">Tiempo trabajo: ${Math.floor(totalWorkTime / 60)}:${String(totalWorkTime % 60).padStart(2, '0')} | Total: ${Math.floor((totalWorkTime + totalRestTime) / 60)}:${String((totalWorkTime + totalRestTime) % 60).padStart(2, '0')}</p>
+            <p id="pyramidTimeInfo" class="text-xs text-text-muted">Tiempo trabajo: ${Math.floor(totalWorkTime / 60)}:${String(totalWorkTime % 60).padStart(2, '0')} | Total: ${Math.floor((totalWorkTime + totalRestTime) / 60)}:${String((totalWorkTime + totalRestTime) % 60).padStart(2, '0')}</p>
           </div>
           <div>
             <label class="block text-sm text-text-secondary mb-2">Descanso entre niveles (segundos)</label>
             <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('rest', -5)" class="p-2 bg-dark-bg border border-dark-border rounded-lg active:scale-95 transition-transform">
-                ${icon('minus', 'md')}
+              <button onclick="window.adjustCardioConfig('rest', -5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">−</span>
               </button>
               <span id="configRest" class="text-2xl font-bold text-status-error w-16 text-center">${config.rest || 10}</span>
-              <button onclick="window.adjustCardioConfig('rest', 5)" class="p-2 bg-dark-bg border border-dark-border rounded-lg active:scale-95 transition-transform">
-                ${icon('plus', 'md')}
+              <button onclick="window.adjustCardioConfig('rest', 5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
@@ -300,36 +300,36 @@ export function showCardioConfig(): void {
           <div>
             <label class="block text-sm text-text-secondary mb-2">Rondas</label>
             <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('rounds', -1)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
-                ${icon('minus', 'md')}
+              <button onclick="window.adjustCardioConfig('rounds', -1)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">−</span>
               </button>
               <span id="configRounds" class="text-2xl font-bold text-accent w-16 text-center">${config.rounds}</span>
-              <button onclick="window.adjustCardioConfig('rounds', 1)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
-                ${icon('plus', 'md')}
+              <button onclick="window.adjustCardioConfig('rounds', 1)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
           <div>
             <label class="block text-sm text-text-secondary mb-2">Trabajo (segundos)</label>
             <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('work', -5)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
-                ${icon('minus', 'md')}
+              <button onclick="window.adjustCardioConfig('work', -5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">−</span>
               </button>
               <span id="configWork" class="text-2xl font-bold text-status-success w-16 text-center">${config.work || 30}</span>
-              <button onclick="window.adjustCardioConfig('work', 5)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
-                ${icon('plus', 'md')}
+              <button onclick="window.adjustCardioConfig('work', 5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
           <div>
             <label class="block text-sm text-text-secondary mb-2">Descanso (segundos)</label>
             <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('rest', -5)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
-                ${icon('minus', 'md')}
+              <button onclick="window.adjustCardioConfig('rest', -5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">−</span>
               </button>
               <span id="configRest" class="text-2xl font-bold text-status-error w-16 text-center">${config.rest || 15}</span>
-              <button onclick="window.adjustCardioConfig('rest', 5)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
-                ${icon('plus', 'md')}
+              <button onclick="window.adjustCardioConfig('rest', 5)" class="w-12 h-12 bg-dark-surface border border-dark-border rounded-xl flex items-center justify-center active:scale-95 transition-transform hover:bg-dark-bg">
+                <span class="text-2xl font-bold text-text-primary">+</span>
               </button>
             </div>
           </div>
@@ -383,7 +383,7 @@ export function showCardioConfig(): void {
 export function adjustCardioConfig(key: keyof CardioConfig, delta: number): void {
   const config = cardioState.config;
   const current = (config[key] as number) || 0;
-  const newValue = Math.max(1, current + delta);
+  const newValue = Math.max(5, current + delta); // Mínimo 5 segundos
 
   (config as Record<string, number>)[key] = newValue;
 
@@ -396,6 +396,24 @@ export function adjustCardioConfig(key: keyof CardioConfig, delta: number): void
       element.textContent = String(newValue);
     }
   }
+
+  // Si es modo pirámide y se ajusta el descanso, actualizar el tiempo total
+  if (cardioState.mode === 'pyramid' && key === 'rest') {
+    updatePyramidTimeDisplay();
+  }
+}
+
+function updatePyramidTimeDisplay(): void {
+  const config = cardioState.config;
+  const levels = config.levels || [20, 30, 40, 30, 20];
+  const totalWorkTime = levels.reduce((a, b) => a + b, 0);
+  const totalRestTime = (levels.length - 1) * (config.rest || 10);
+  const totalTime = totalWorkTime + totalRestTime;
+
+  const timeEl = document.getElementById('pyramidTimeInfo');
+  if (timeEl) {
+    timeEl.textContent = `Tiempo trabajo: ${Math.floor(totalWorkTime / 60)}:${String(totalWorkTime % 60).padStart(2, '0')} | Total: ${Math.floor(totalTime / 60)}:${String(totalTime % 60).padStart(2, '0')}`;
+  }
 }
 
 export function setCardioExercise(exercise: string): void {
@@ -404,7 +422,7 @@ export function setCardioExercise(exercise: string): void {
 
 // Presets de pirámide disponibles
 const PYRAMID_PRESETS: Record<string, number[]> = {
-  corta: [10, 20, 30, 20, 10],
+  corta: [15, 20, 30, 20, 15],
   media: [20, 30, 40, 30, 20],
   larga: [30, 45, 60, 45, 30],
   intensa: [20, 40, 60, 40, 20],
@@ -415,12 +433,12 @@ export function adjustPyramidLevel(action: string): void {
   const currentLevels = cardioState.config.levels || [20, 30, 40, 30, 20];
 
   if (action === 'scale_up') {
-    // Escalar todos los niveles manteniendo la proporción (multiplicar por 1.5, mínimo +5)
+    // Escalar todos los niveles manteniendo la proporción (multiplicar por 1.25, máximo 120s)
     const newLevels = currentLevels.map(l => Math.min(120, Math.max(l + 5, Math.round(l * 1.25))));
     cardioState.config.levels = newLevels;
   } else if (action === 'scale_down') {
-    // Reducir manteniendo proporción (dividir por 1.25, mínimo 10 segundos)
-    const newLevels = currentLevels.map(l => Math.max(10, Math.round(l * 0.8)));
+    // Reducir manteniendo proporción (dividir por 1.25, mínimo 15 segundos)
+    const newLevels = currentLevels.map(l => Math.max(15, Math.round(l * 0.8)));
     cardioState.config.levels = newLevels;
   } else if (PYRAMID_PRESETS[action]) {
     // Aplicar preset
