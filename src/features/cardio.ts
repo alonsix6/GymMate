@@ -223,37 +223,69 @@ export function showCardioConfig(): void {
 
     case 'pyramid':
       const levels = config.levels || [20, 30, 40, 30, 20];
+      const totalWorkTime = levels.reduce((a, b) => a + b, 0);
+      const totalRestTime = (levels.length - 1) * (config.rest || 10);
       configHTML = `
         <div class="space-y-4">
           <div>
-            <label class="block text-sm text-text-secondary mb-2">Niveles de pirámide (segundos)</label>
+            <label class="block text-sm text-text-secondary mb-2">Estructura de pirámide</label>
             <div class="bg-dark-bg border border-dark-border rounded-lg p-3 mb-3">
-              <div id="pyramidLevels" class="flex flex-wrap gap-2 mb-3">
-                ${levels.map((l) => `
-                  <span class="px-3 py-1 bg-status-warning/20 text-status-warning rounded-full text-sm font-bold">
-                    ${l}s
-                  </span>
-                `).join('')}
+              <!-- Visual pyramid -->
+              <div id="pyramidLevels" class="flex items-end justify-center gap-1 mb-4 h-16">
+                ${levels.map((l) => {
+                  const maxLevel = Math.max(...levels);
+                  const height = Math.round((l / maxLevel) * 100);
+                  return `
+                    <div class="flex flex-col items-center">
+                      <span class="text-xs text-status-warning font-bold mb-1">${l}s</span>
+                      <div class="w-8 bg-gradient-to-t from-orange-600 to-yellow-500 rounded-t" style="height: ${height}%"></div>
+                    </div>
+                  `;
+                }).join('')}
               </div>
+
+              <!-- Presets -->
+              <div class="grid grid-cols-3 gap-2 mb-3">
+                <button onclick="window.adjustPyramidLevel('corta')" class="p-2 bg-dark-surface border border-dark-border rounded-lg text-xs hover:border-orange-500/50 transition-colors">
+                  Corta
+                </button>
+                <button onclick="window.adjustPyramidLevel('media')" class="p-2 bg-dark-surface border border-dark-border rounded-lg text-xs hover:border-orange-500/50 transition-colors">
+                  Media
+                </button>
+                <button onclick="window.adjustPyramidLevel('larga')" class="p-2 bg-dark-surface border border-dark-border rounded-lg text-xs hover:border-orange-500/50 transition-colors">
+                  Larga
+                </button>
+                <button onclick="window.adjustPyramidLevel('intensa')" class="p-2 bg-dark-surface border border-dark-border rounded-lg text-xs hover:border-orange-500/50 transition-colors">
+                  Intensa
+                </button>
+                <button onclick="window.adjustPyramidLevel('extendida')" class="p-2 bg-dark-surface border border-dark-border rounded-lg text-xs hover:border-orange-500/50 transition-colors">
+                  Extendida
+                </button>
+                <button onclick="window.adjustPyramidLevel('reset')" class="p-2 bg-dark-surface border border-dark-border rounded-lg text-xs hover:border-orange-500/50 transition-colors">
+                  Reset
+                </button>
+              </div>
+
+              <!-- Scale buttons -->
               <div class="flex gap-2">
-                <button onclick="window.adjustPyramidLevel(-10)" class="flex-1 p-2 bg-dark-surface border border-dark-border rounded-lg text-sm">
+                <button onclick="window.adjustPyramidLevel('scale_down')" class="flex-1 p-2 bg-dark-surface border border-dark-border rounded-lg text-sm active:scale-95 transition-transform">
                   ${icon('minus', 'sm')} Reducir
                 </button>
-                <button onclick="window.adjustPyramidLevel(10)" class="flex-1 p-2 bg-dark-surface border border-dark-border rounded-lg text-sm">
+                <button onclick="window.adjustPyramidLevel('scale_up')" class="flex-1 p-2 bg-dark-surface border border-dark-border rounded-lg text-sm active:scale-95 transition-transform">
                   ${icon('plus', 'sm')} Aumentar
                 </button>
               </div>
             </div>
-            <p class="text-xs text-text-muted">Patrón: 20s → 30s → 40s → 30s → 20s</p>
+            <p class="text-xs text-text-muted">Tiempo trabajo: ${Math.floor(totalWorkTime / 60)}:${String(totalWorkTime % 60).padStart(2, '0')} | Total: ${Math.floor((totalWorkTime + totalRestTime) / 60)}:${String((totalWorkTime + totalRestTime) % 60).padStart(2, '0')}</p>
           </div>
           <div>
             <label class="block text-sm text-text-secondary mb-2">Descanso entre niveles (segundos)</label>
             <div class="flex items-center gap-3">
-              <button onclick="window.adjustCardioConfig('rest', -5)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
+              <button onclick="window.adjustCardioConfig('rest', -5)" class="p-2 bg-dark-bg border border-dark-border rounded-lg active:scale-95 transition-transform">
                 ${icon('minus', 'md')}
               </button>
               <span id="configRest" class="text-2xl font-bold text-status-error w-16 text-center">${config.rest || 10}</span>
-              <button onclick="window.adjustCardioConfig('rest', 5)" class="p-2 bg-dark-bg border border-dark-border rounded-lg">
+              <button onclick="window.adjustCardioConfig('rest', 5)" class="p-2 bg-dark-bg border border-dark-border rounded-lg active:scale-95 transition-transform">
                 ${icon('plus', 'md')}
               </button>
             </div>
@@ -370,10 +402,32 @@ export function setCardioExercise(exercise: string): void {
   cardioState.config.exercise = exercise;
 }
 
-export function adjustPyramidLevel(delta: number): void {
-  const levels = cardioState.config.levels || [20, 30, 40, 30, 20];
-  const newLevels = levels.map(l => Math.max(5, l + delta));
-  cardioState.config.levels = newLevels;
+// Presets de pirámide disponibles
+const PYRAMID_PRESETS: Record<string, number[]> = {
+  corta: [10, 20, 30, 20, 10],
+  media: [20, 30, 40, 30, 20],
+  larga: [30, 45, 60, 45, 30],
+  intensa: [20, 40, 60, 40, 20],
+  extendida: [15, 30, 45, 60, 45, 30, 15],
+};
+
+export function adjustPyramidLevel(action: string): void {
+  const currentLevels = cardioState.config.levels || [20, 30, 40, 30, 20];
+
+  if (action === 'scale_up') {
+    // Escalar todos los niveles manteniendo la proporción (multiplicar por 1.5, mínimo +5)
+    const newLevels = currentLevels.map(l => Math.min(120, Math.max(l + 5, Math.round(l * 1.25))));
+    cardioState.config.levels = newLevels;
+  } else if (action === 'scale_down') {
+    // Reducir manteniendo proporción (dividir por 1.25, mínimo 10 segundos)
+    const newLevels = currentLevels.map(l => Math.max(10, Math.round(l * 0.8)));
+    cardioState.config.levels = newLevels;
+  } else if (PYRAMID_PRESETS[action]) {
+    // Aplicar preset
+    cardioState.config.levels = [...PYRAMID_PRESETS[action]];
+  } else if (action === 'reset') {
+    cardioState.config.levels = [20, 30, 40, 30, 20];
+  }
 
   // Re-render config
   showCardioConfig();
