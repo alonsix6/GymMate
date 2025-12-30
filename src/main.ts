@@ -24,6 +24,7 @@ import {
   startCardioWorkout,
   toggleCardioPause,
   stopCardioWorkout,
+  incrementAmrapRound,
 } from '@/features/cardio';
 import { trainingGroups } from '@/data/training-groups';
 import { getCustomWorkouts, deleteCustomWorkout, addCustomWorkout, CustomWorkout } from '@/utils/storage';
@@ -90,6 +91,7 @@ declare global {
     startCardioWorkout: typeof startCardioWorkout;
     toggleCardioPause: typeof toggleCardioPause;
     stopCardioWorkout: typeof stopCardioWorkout;
+    incrementAmrapRound: typeof incrementAmrapRound;
   }
 }
 
@@ -135,6 +137,7 @@ window.adjustPyramidLevel = adjustPyramidLevel;
 window.startCardioWorkout = startCardioWorkout;
 window.toggleCardioPause = toggleCardioPause;
 window.stopCardioWorkout = stopCardioWorkout;
+window.incrementAmrapRound = incrementAmrapRound;
 
 // ==========================================
 // RENDERIZAR RUTINAS EN HOME
