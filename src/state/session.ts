@@ -7,7 +7,7 @@ import {
   saveSession,
   addToHistory,
   updatePR,
-  getPRs,
+  getPR,
 } from '@/utils/storage';
 import { calculateVolume, calculateVolumenPorGrupo } from '@/utils/calculations';
 
@@ -255,12 +255,10 @@ export function endSession(): void {
 function checkAndUpdatePR(ejercicioData: ExerciseData): void {
   if (ejercicioData.volumen === 0) return;
 
-  const prs = getPRs();
-  const ejercicioNombre = ejercicioData.nombre;
-  const currentPR = prs[ejercicioNombre];
+  const currentPR = getPR(ejercicioData.nombre);
 
   if (!currentPR || ejercicioData.peso > currentPR.peso) {
-    updatePR(ejercicioNombre, {
+    updatePR(ejercicioData.nombre, {
       peso: ejercicioData.peso,
       sets: ejercicioData.sets,
       reps: ejercicioData.reps,

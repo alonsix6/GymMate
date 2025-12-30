@@ -1,6 +1,7 @@
 import { getHistory, deleteFromHistory, getPRs, saveHistory, updatePR } from '@/utils/storage';
 import { renderHistoryItem, renderPRItem, refreshIcons } from '@/ui/components';
 import { icon } from '@/utils/icons';
+import { normalizeExerciseName } from '@/utils/exercise-normalizer';
 
 // ==========================================
 // CARGAR HISTORIAL
@@ -359,7 +360,8 @@ export function importFromCSV(file: File): Promise<{ imported: number; duplicate
           newSessions.forEach(session => {
             session.ejercicios.forEach(ejercicio => {
               if (ejercicio.volumen > 0) {
-                const currentPR = currentPRs[ejercicio.nombre];
+                const normalizedName = normalizeExerciseName(ejercicio.nombre);
+                const currentPR = currentPRs[normalizedName];
                 if (!currentPR || ejercicio.peso > currentPR.peso) {
                   updatePR(ejercicio.nombre, {
                     peso: ejercicio.peso,
@@ -369,7 +371,7 @@ export function importFromCSV(file: File): Promise<{ imported: number; duplicate
                     date: session.savedAt || session.date,
                   });
                   // Actualizar el objeto local para comparaciones posteriores
-                  currentPRs[ejercicio.nombre] = {
+                  currentPRs[normalizedName] = {
                     peso: ejercicio.peso,
                     sets: ejercicio.sets,
                     reps: ejercicio.reps,

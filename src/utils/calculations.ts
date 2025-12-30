@@ -1,6 +1,7 @@
 import { LOWER_BODY_KEYWORDS } from '@/constants';
 import type { ExerciseData, OneRMResult, ProgressiveResult } from '@/types';
-import { getHistory, getPRs } from './storage';
+import { getHistory, getPR } from './storage';
+import { normalizeExerciseName, isSameExercise } from './exercise-normalizer';
 
 // ==========================================
 // CÁLCULO DE VOLUMEN
@@ -40,6 +41,7 @@ export function calculateVolumenPorGrupo(
 
 export function calculate1RM(exerciseName: string): OneRMResult | null {
   const history = getHistory();
+  const normalizedName = normalizeExerciseName(exerciseName);
 
   let bestPerformance: ExerciseData | null = null;
   let maxWeight = 0;
@@ -47,7 +49,7 @@ export function calculate1RM(exerciseName: string): OneRMResult | null {
   history.forEach((session) => {
     if (session.ejercicios && Array.isArray(session.ejercicios)) {
       const exercise = session.ejercicios.find(
-        (ej) => ej.nombre === exerciseName
+        (ej) => isSameExercise(ej.nombre, normalizedName)
       );
       if (exercise && exercise.peso > 0) {
         if (
@@ -132,8 +134,7 @@ export function calculateCalories(
 export function calculateProgressive(
   exerciseName: string
 ): ProgressiveResult | null {
-  const prs = getPRs();
-  const exercisePR = prs[exerciseName];
+  const exercisePR = getPR(exerciseName);
 
   if (!exercisePR) {
     return null;
@@ -183,9 +184,7 @@ export function calculateProgressive(
 export function checkForPR(ejercicioData: ExerciseData): boolean {
   if (ejercicioData.volumen === 0) return false;
 
-  const prs = getPRs();
-  const ejercicioNombre = ejercicioData.nombre;
-  const currentPR = prs[ejercicioNombre];
+  const currentPR = getPR(ejercicioData.nombre);
 
   if (!currentPR || ejercicioData.peso > currentPR.peso) {
     return true;

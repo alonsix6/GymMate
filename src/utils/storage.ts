@@ -6,6 +6,11 @@ import type {
   HistorySession,
   TrainingGroup,
 } from '@/types';
+import {
+  normalizeExerciseName,
+  migratePRsToNormalizedNames,
+  migrateHistoryExerciseNames,
+} from '@/utils/exercise-normalizer';
 
 // ==========================================
 // WRAPPER PARA LOCALSTORAGE
@@ -40,8 +45,23 @@ function removeItem(key: string): void {
 // HISTORY
 // ==========================================
 
+let historyMigrated = false;
+
 export function getHistory(): HistorySession[] {
-  return getItem<HistorySession[]>(STORAGE_KEYS.HISTORY, []);
+  const history = getItem<HistorySession[]>(STORAGE_KEYS.HISTORY, []);
+
+  // Migrar historial a nombres normalizados si no se ha hecho
+  if (!historyMigrated && history.length > 0) {
+    const migrated = migrateHistoryExerciseNames(history);
+    // Solo guardar si hay cambios
+    if (JSON.stringify(migrated) !== JSON.stringify(history)) {
+      setItem(STORAGE_KEYS.HISTORY, migrated);
+    }
+    historyMigrated = true;
+    return migrated;
+  }
+
+  return history;
 }
 
 export function saveHistory(history: HistorySession[]): void {
@@ -53,15 +73,24 @@ export function saveHistory(history: HistorySession[]): void {
 }
 
 export function addToHistory(session: HistorySession): void {
+  // Normalizar nombres de ejercicios antes de guardar
+  const normalizedSession = {
+    ...session,
+    ejercicios: session.ejercicios?.map(ej => ({
+      ...ej,
+      nombre: normalizeExerciseName(ej.nombre),
+    })) || [],
+  };
+
   const history = getHistory();
   const existingIndex = history.findIndex(
-    (s) => s.sessionId === session.sessionId
+    (s) => s.sessionId === normalizedSession.sessionId
   );
 
   if (existingIndex !== -1) {
-    history[existingIndex] = session;
+    history[existingIndex] = normalizedSession;
   } else {
-    history.unshift(session);
+    history.unshift(normalizedSession);
   }
 
   saveHistory(history);
@@ -77,8 +106,23 @@ export function deleteFromHistory(index: number): void {
 // PRs
 // ==========================================
 
+let prsMigrated = false;
+
 export function getPRs(): Record<string, PRData> {
-  return getItem<Record<string, PRData>>(STORAGE_KEYS.PRS, {});
+  const prs = getItem<Record<string, PRData>>(STORAGE_KEYS.PRS, {});
+
+  // Migrar PRs a nombres normalizados si no se ha hecho
+  if (!prsMigrated && Object.keys(prs).length > 0) {
+    const migrated = migratePRsToNormalizedNames(prs) as Record<string, PRData>;
+    // Solo guardar si hay cambios
+    if (JSON.stringify(migrated) !== JSON.stringify(prs)) {
+      setItem(STORAGE_KEYS.PRS, migrated);
+    }
+    prsMigrated = true;
+    return migrated;
+  }
+
+  return prs;
 }
 
 export function savePRs(prs: Record<string, PRData>): void {
@@ -86,9 +130,16 @@ export function savePRs(prs: Record<string, PRData>): void {
 }
 
 export function updatePR(exerciseName: string, prData: PRData): void {
+  const normalizedName = normalizeExerciseName(exerciseName);
   const prs = getPRs();
-  prs[exerciseName] = prData;
+  prs[normalizedName] = prData;
   savePRs(prs);
+}
+
+export function getPR(exerciseName: string): PRData | null {
+  const normalizedName = normalizeExerciseName(exerciseName);
+  const prs = getPRs();
+  return prs[normalizedName] || null;
 }
 
 // ==========================================
