@@ -104,46 +104,6 @@ export function toggleExerciseCompleted(index: number, completed: boolean): void
   saveDraftNow();
 }
 
-export function updateExerciseSuperset(index: number, group?: number, order?: number): void {
-  const ejercicio = sessionData.ejercicios[index];
-  if (!ejercicio) return;
-
-  ejercicio.supersetGroup = group;
-  ejercicio.supersetOrder = order;
-
-  markAsChanged();
-}
-
-export function getNextSupersetGroup(): number {
-  const existingGroups = new Set<number>();
-  sessionData.ejercicios.forEach(ej => {
-    if (ej.supersetGroup !== undefined) {
-      existingGroups.add(ej.supersetGroup);
-    }
-  });
-
-  // Find the next available group number
-  let nextGroup = 1;
-  while (existingGroups.has(nextGroup)) {
-    nextGroup++;
-  }
-  return nextGroup;
-}
-
-export function getExercisesInSuperset(group: number): number[] {
-  const indices: number[] = [];
-  sessionData.ejercicios.forEach((ej, idx) => {
-    if (ej.supersetGroup === group) {
-      indices.push(idx);
-    }
-  });
-  return indices.sort((a, b) => {
-    const orderA = sessionData.ejercicios[a].supersetOrder || 0;
-    const orderB = sessionData.ejercicios[b].supersetOrder || 0;
-    return orderA - orderB;
-  });
-}
-
 // ==========================================
 // DETECCIÓN DE CAMBIOS
 // ==========================================

@@ -178,7 +178,7 @@ function updateHeroSection(): void {
       </div>
       <div class="bg-gradient-to-br from-orange-500/20 to-orange-600/10 border border-orange-500/30 rounded-xl p-2 text-center overflow-hidden">
         <p class="text-2xl font-bold text-orange-400 truncate">${stats.streak}</p>
-        <p class="text-[10px] text-orange-300/80 font-medium truncate">🔥 Racha</p>
+        <p class="text-[10px] text-orange-300/80 font-medium truncate">Racha</p>
       </div>
       <div class="bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30 rounded-xl p-2 text-center overflow-hidden">
         <p class="text-2xl font-bold text-emerald-400 truncate">${formatVolume(weeklyVolume)}</p>

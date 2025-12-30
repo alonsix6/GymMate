@@ -14,8 +14,6 @@ export interface ExerciseData extends Exercise {
   peso: number;
   volumen: number;
   completado: boolean;
-  supersetGroup?: number; // Exercises with same group are in a superset (1, 2, 3...)
-  supersetOrder?: number; // Order within superset (1 = A1, 2 = A2, etc.)
 }
 
 export interface SessionData {
