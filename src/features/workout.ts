@@ -214,14 +214,51 @@ function validateDecimalInput(input: HTMLInputElement): boolean {
 // ==========================================
 
 export function toggleCompletado(index: number): void {
-  const checkbox = document.getElementById(
-    `completado-${index}`
-  ) as HTMLInputElement;
-  if (checkbox) {
-    toggleExerciseCompleted(index, checkbox.checked);
-    updateQuickStats();
-    updateSaveButtonState();
+  const button = document.getElementById(`completado-${index}`) as HTMLButtonElement;
+  const nombreEl = document.getElementById(`nombre-${index}`) as HTMLElement;
+
+  if (!button) return;
+
+  // Get current state and toggle it
+  const currentState = sessionData.ejercicios[index]?.completado || false;
+  const newState = !currentState;
+
+  // Update state
+  toggleExerciseCompleted(index, newState);
+
+  // Update button visual
+  const checkIcon = button.querySelector('i');
+
+  if (newState) {
+    // Completed state - green filled circle with white check
+    button.classList.remove('bg-transparent', 'border-slate-500', 'hover:border-emerald-400');
+    button.classList.add('bg-emerald-500', 'border-emerald-500', 'scale-110');
+    if (checkIcon) {
+      checkIcon.classList.remove('text-slate-600');
+      checkIcon.classList.add('text-white');
+    }
+    // Exercise name - green with strikethrough
+    if (nombreEl) {
+      nombreEl.classList.remove('text-white');
+      nombreEl.classList.add('text-emerald-400', 'line-through', 'decoration-emerald-400', 'decoration-2');
+    }
+  } else {
+    // Uncompleted state - transparent circle with gray check
+    button.classList.remove('bg-emerald-500', 'border-emerald-500', 'scale-110');
+    button.classList.add('bg-transparent', 'border-slate-500', 'hover:border-emerald-400');
+    if (checkIcon) {
+      checkIcon.classList.remove('text-white');
+      checkIcon.classList.add('text-slate-600');
+    }
+    // Exercise name - white without strikethrough
+    if (nombreEl) {
+      nombreEl.classList.remove('text-emerald-400', 'line-through', 'decoration-emerald-400', 'decoration-2');
+      nombreEl.classList.add('text-white');
+    }
   }
+
+  updateQuickStats();
+  updateSaveButtonState();
 }
 
 // ==========================================

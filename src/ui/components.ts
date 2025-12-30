@@ -119,15 +119,25 @@ export function renderExercise(
       <!-- Header -->
       <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-3 flex-1 min-w-0">
-          <input
-            type="checkbox"
+          <button
             id="completado-${index}"
-            ${ejercicio.completado ? 'checked' : ''}
-            onchange="window.toggleCompletado(${index})"
-            class="w-6 h-6 rounded-lg bg-slate-700 border-2 border-slate-600 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 cursor-pointer flex-shrink-0"
-          />
+            onclick="window.toggleCompletado(${index})"
+            class="w-8 h-8 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+              ejercicio.completado
+                ? 'bg-emerald-500 border-emerald-500 scale-110'
+                : 'bg-transparent border-slate-500 hover:border-emerald-400'
+            }"
+          >
+            <i data-lucide="check" class="w-5 h-5 transition-all duration-300 ${
+              ejercicio.completado ? 'text-white' : 'text-slate-600'
+            }"></i>
+          </button>
           <div class="flex-1 min-w-0">
-            <h3 class="font-bold text-white text-base leading-tight">${ejercicio.nombre}</h3>
+            <h3 id="nombre-${index}" class="font-bold text-base leading-tight transition-all duration-300 ${
+              ejercicio.completado
+                ? 'text-emerald-400 line-through decoration-emerald-400 decoration-2'
+                : 'text-white'
+            }">${ejercicio.nombre}</h3>
             <div class="flex items-center gap-2 mt-1">
               <span class="text-xs text-slate-400 flex items-center gap-1">
                 <i data-lucide="${muscleIcon}" class="w-3 h-3"></i>
