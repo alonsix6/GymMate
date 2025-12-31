@@ -397,6 +397,8 @@ export function updateSaveButtonState(): void {
   }
 }
 
+let savedIndicatorTimeout: ReturnType<typeof setTimeout> | null = null;
+
 export function updateUnsavedIndicator(): void {
   const indicator = document.getElementById('unsavedIndicator');
   if (!indicator) return;
@@ -404,12 +406,40 @@ export function updateUnsavedIndicator(): void {
   // Only show indicator when there are actual pending changes (before auto-save)
   // hasUnsavedChanges is false after draft auto-save, so indicator hides
   if (hasUnsavedChanges) {
-    indicator.classList.remove('hidden');
+    // Clear any pending "saved" timeout
+    if (savedIndicatorTimeout) {
+      clearTimeout(savedIndicatorTimeout);
+      savedIndicatorTimeout = null;
+    }
+    indicator.textContent = 'Cambios sin guardar';
+    indicator.classList.remove('hidden', 'saved');
     indicator.classList.add('animate-slide-down');
   } else {
     indicator.classList.add('hidden');
-    indicator.classList.remove('animate-slide-down');
+    indicator.classList.remove('animate-slide-down', 'saved');
   }
+}
+
+export function showSavedIndicator(): void {
+  const indicator = document.getElementById('unsavedIndicator');
+  if (!indicator) return;
+
+  // Clear any pending timeout
+  if (savedIndicatorTimeout) {
+    clearTimeout(savedIndicatorTimeout);
+  }
+
+  // Show green "saved" indicator
+  indicator.textContent = 'Cambios guardados';
+  indicator.classList.remove('hidden');
+  indicator.classList.add('saved', 'animate-slide-down');
+
+  // Hide after 3 seconds
+  savedIndicatorTimeout = setTimeout(() => {
+    indicator.classList.add('hidden');
+    indicator.classList.remove('animate-slide-down', 'saved');
+    savedIndicatorTimeout = null;
+  }, 3000);
 }
 
 // ==========================================
@@ -599,5 +629,5 @@ export function skipRPE(): void {
 
 // Register callback to update indicator when draft is auto-saved
 setOnDraftSavedCallback(() => {
-  updateUnsavedIndicator();
+  showSavedIndicator();
 });

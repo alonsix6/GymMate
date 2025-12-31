@@ -332,7 +332,7 @@
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label for="caloriesAge" class="sr-only">Edad</label>
-              <input type="number" id="caloriesAge" placeholder="Edad" class="w-full" aria-label="Tu edad en años" />
+              <input type="number" id="caloriesAge" placeholder="Edad" class="w-full" inputmode="numeric" aria-label="Tu edad en años" />
             </div>
             <div>
               <label for="caloriesGender" class="sr-only">Género</label>
@@ -345,11 +345,11 @@
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label for="caloriesWeight" class="sr-only">Peso en kilogramos</label>
-              <input type="number" id="caloriesWeight" placeholder="Peso (kg)" class="w-full" aria-label="Tu peso en kilogramos" />
+              <input type="number" id="caloriesWeight" placeholder="Peso (kg)" class="w-full" inputmode="decimal" aria-label="Tu peso en kilogramos" />
             </div>
             <div>
               <label for="caloriesHeight" class="sr-only">Altura en centímetros</label>
-              <input type="number" id="caloriesHeight" placeholder="Altura (cm)" class="w-full" aria-label="Tu altura en centímetros" />
+              <input type="number" id="caloriesHeight" placeholder="Altura (cm)" class="w-full" inputmode="numeric" aria-label="Tu altura en centímetros" />
             </div>
           </div>
           <div>
@@ -898,6 +898,14 @@
           <button onclick="window.closeMeasurementsModal()" class="w-10 h-10 rounded-xl bg-dark-bg border border-dark-border flex items-center justify-center text-text-secondary hover:text-white transition-colors">
             <i data-lucide="x" class="w-5 h-5"></i>
           </button>
+        </div>
+
+        <!-- Instructions -->
+        <div class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 rounded-xl p-3 mb-4">
+          <p class="text-xs text-blue-300 flex items-start gap-2">
+            <i data-lucide="info" class="w-4 h-4 flex-shrink-0 mt-0.5"></i>
+            <span><strong>Medidas:</strong> Toma todas las medidas con el músculo <strong>relajado</strong>, sin flexionar. Mide por la mañana, antes de comer, para mayor consistencia.</span>
+          </p>
         </div>
 
         <!-- Form -->

@@ -1,7 +1,12 @@
 import './styles/main.css';
 import { initializeIcons, refreshIcons } from '@/utils/icons';
 import { initializeNavigation, showHome, switchTab, resumeDraft, dismissDraft } from '@/ui/navigation';
-import { initializeModals, showAnimation, closeAnimationModal } from '@/ui/modals';
+import { initializeModals, showAnimation, closeAnimationModal, type GuidanceType } from '@/ui/modals';
+
+// Helper function for showing animation with guidance from inline onclick
+function showAnimationWithGuidance(nombre: string, type: GuidanceType, content: string): void {
+  showAnimation(nombre, { type, content });
+}
 import { initializeTimerListeners, openRestTimerModal } from '@/features/timer';
 import { initializeProfile, openMeasurementsModal, closeMeasurementsModal, showMeasurementsHistory, closeMeasurementsHistoryModal, deleteMeasurementEntry, updateMeasurementPreview } from '@/features/profile';
 import { loadHistory, loadPRs, exportToExcel, deleteHistoryItem, triggerCSVImport } from '@/features/history';
@@ -30,6 +35,7 @@ import {
   incrementAmrapRound,
 } from '@/features/cardio';
 import { trainingGroups } from '@/data/training-groups';
+import { getAdditionalExercisesByMuscle, getExerciseInfo } from '@/data/exercises';
 import {
   getCustomWorkouts,
   deleteCustomWorkout,
@@ -81,6 +87,7 @@ declare global {
 
     // Modals
     showAnimation: typeof showAnimation;
+    showAnimationWithGuidance: typeof showAnimationWithGuidance;
     closeAnimationModal: typeof closeAnimationModal;
 
     // Timer
@@ -150,6 +157,7 @@ window.selectRPE = selectRPE;
 window.confirmRPE = confirmRPE;
 window.skipRPE = skipRPE;
 window.showAnimation = showAnimation;
+window.showAnimationWithGuidance = showAnimationWithGuidance;
 window.closeAnimationModal = closeAnimationModal;
 window.openRestTimerModal = openRestTimerModal;
 window.deleteHistoryItem = deleteHistoryItem;
@@ -384,7 +392,22 @@ function renderExerciseGroups(): void {
     grupo5: { bg: 'from-pink-500/10 to-pink-600/5', border: 'border-pink-500/30', text: 'text-pink-400' },
   };
 
+  // Muscle group colors for additional exercises
+  const muscleColors: Record<string, { bg: string; border: string; text: string }> = {
+    'Piernas': { bg: 'from-cyan-500/10 to-cyan-600/5', border: 'border-cyan-500/30', text: 'text-cyan-400' },
+    'Glúteos': { bg: 'from-rose-500/10 to-rose-600/5', border: 'border-rose-500/30', text: 'text-rose-400' },
+    'Pecho': { bg: 'from-red-500/10 to-red-600/5', border: 'border-red-500/30', text: 'text-red-400' },
+    'Espalda': { bg: 'from-amber-500/10 to-amber-600/5', border: 'border-amber-500/30', text: 'text-amber-400' },
+    'Hombros': { bg: 'from-violet-500/10 to-violet-600/5', border: 'border-violet-500/30', text: 'text-violet-400' },
+    'Bíceps': { bg: 'from-lime-500/10 to-lime-600/5', border: 'border-lime-500/30', text: 'text-lime-400' },
+    'Tríceps': { bg: 'from-fuchsia-500/10 to-fuchsia-600/5', border: 'border-fuchsia-500/30', text: 'text-fuchsia-400' },
+    'Core': { bg: 'from-teal-500/10 to-teal-600/5', border: 'border-teal-500/30', text: 'text-teal-400' },
+  };
+
   let html = '';
+
+  // Collect existing exercise names from default groups
+  const existingExerciseNames: string[] = [];
 
   Object.entries(trainingGroups).forEach(([groupId, group]) => {
     const colors = groupColors[groupId] || groupColors.grupo1;
@@ -400,6 +423,7 @@ function renderExerciseGroups(): void {
 
     // Add main exercises
     group.ejercicios.forEach((ejercicio) => {
+      existingExerciseNames.push(ejercicio.nombre);
       const isSelected = workoutBuilderState.selectedExercises.some(
         (e) => e.nombre === ejercicio.nombre
       );
@@ -409,6 +433,7 @@ function renderExerciseGroups(): void {
     // Add optional exercises
     if (group.opcionales) {
       group.opcionales.forEach((ejercicio) => {
+        existingExerciseNames.push(ejercicio.nombre);
         const isSelected = workoutBuilderState.selectedExercises.some(
           (e) => e.nombre === ejercicio.nombre
         );
@@ -418,6 +443,45 @@ function renderExerciseGroups(): void {
 
     html += '</div></div>';
   });
+
+  // Add additional exercises section
+  const additionalByMuscle = getAdditionalExercisesByMuscle(existingExerciseNames);
+  const muscleOrder = ['Piernas', 'Glúteos', 'Pecho', 'Espalda', 'Hombros', 'Bíceps', 'Tríceps', 'Core'];
+
+  if (Object.keys(additionalByMuscle).length > 0) {
+    html += `
+      <div class="mt-4 pt-4 border-t border-dark-border">
+        <p class="text-xs text-text-muted mb-3 flex items-center gap-2">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          Más ejercicios disponibles
+        </p>
+      </div>
+    `;
+
+    muscleOrder.forEach(muscle => {
+      const exercises = additionalByMuscle[muscle];
+      if (!exercises || exercises.length === 0) return;
+
+      const colors = muscleColors[muscle] || muscleColors['Core'];
+
+      html += `
+        <div class="bg-gradient-to-br ${colors.bg} border ${colors.border} rounded-xl overflow-hidden">
+          <div class="p-3 border-b ${colors.border}">
+            <h4 class="font-bold ${colors.text} text-sm">${muscle}</h4>
+          </div>
+          <div class="p-2 space-y-1">
+      `;
+
+      exercises.forEach((ejercicio) => {
+        const isSelected = workoutBuilderState.selectedExercises.some(
+          (e) => e.nombre === ejercicio.nombre
+        );
+        html += renderExerciseItem(ejercicio.nombre, ejercicio.grupoMuscular, isSelected);
+      });
+
+      html += '</div></div>';
+    });
+  }
 
   container.innerHTML = html;
 }
@@ -532,18 +596,33 @@ function saveCustomWorkout(): void {
   // Get custom exercises to check for esMancuerna property
   const customExercises = getCustomExercises();
 
+  // Helper to find esMancuerna from various sources
+  const getEsMancuerna = (nombre: string): boolean => {
+    // 1. Check user's custom exercises
+    const customEx = customExercises.find(ce => ce.nombre === nombre);
+    if (customEx) return customEx.esMancuerna;
+
+    // 2. Check exercise database
+    const dbEx = getExerciseInfo(nombre);
+    if (dbEx) return dbEx.esMancuerna;
+
+    // 3. Check default training groups
+    for (const group of Object.values(trainingGroups)) {
+      const found = [...group.ejercicios, ...group.opcionales].find(e => e.nombre === nombre);
+      if (found) return found.esMancuerna;
+    }
+
+    return false;
+  };
+
   const workout: CustomWorkout = {
     id: `custom_${Date.now()}`,
     nombre: name,
-    ejercicios: workoutBuilderState.selectedExercises.map((ex) => {
-      // Check if this is a custom exercise to preserve esMancuerna
-      const customEx = customExercises.find(ce => ce.nombre === ex.nombre);
-      return {
-        nombre: ex.nombre,
-        esMancuerna: customEx?.esMancuerna || false,
-        grupoMuscular: ex.grupoMuscular as MuscleGroup,
-      };
-    }),
+    ejercicios: workoutBuilderState.selectedExercises.map((ex) => ({
+      nombre: ex.nombre,
+      esMancuerna: getEsMancuerna(ex.nombre),
+      grupoMuscular: ex.grupoMuscular as MuscleGroup,
+    })),
     opcionales: [],
     isCustom: true,
     createdAt: new Date().toISOString(),

@@ -1,4 +1,5 @@
 import type { TrainingGroup } from '@/types';
+import { getExerciseImage, getExerciseGuidance as getGuidance } from '@/data/exercises';
 
 // ==========================================
 // GRUPOS DE ENTRENAMIENTO PREDEFINIDOS
@@ -290,6 +291,15 @@ export function getTrainingGroup(grupoId: string): TrainingGroup | null {
   return trainingGroups[grupoId] || null;
 }
 
+// Get exercise GIF from new database, with fallback to legacy
 export function getExerciseGif(exerciseName: string): string | null {
+  // Try new database first
+  const newImage = getExerciseImage(exerciseName);
+  if (newImage) return newImage;
+
+  // Fallback to legacy exerciseGifs
   return exerciseGifs[exerciseName] || null;
 }
+
+// Re-export for use in components
+export const getExerciseGuidance = getGuidance;

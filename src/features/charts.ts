@@ -2,6 +2,7 @@ import { Chart, registerables } from 'chart.js';
 import { getHistory } from '@/utils/storage';
 import { getWeekNumber, formatShortDate } from '@/utils/calculations';
 import { THEME_COLORS } from '@/constants';
+import { normalizeExerciseName } from '@/utils/exercise-normalizer';
 
 // Registrar todos los componentes de Chart.js
 Chart.register(...registerables);
@@ -234,14 +235,16 @@ function populateExerciseDropdown(
   ) as HTMLSelectElement;
   if (!dropdown) return;
 
-  // Obtener ejercicios únicos
+  // Obtener ejercicios únicos - normalizar nombres para evitar duplicados
   const exercises = new Set<string>();
 
   history.forEach((session) => {
     if (session.ejercicios && Array.isArray(session.ejercicios)) {
       session.ejercicios.forEach((ej) => {
         if (ej.peso > 0) {
-          exercises.add(ej.nombre);
+          // Normalize exercise name to avoid duplicates
+          const normalizedName = normalizeExerciseName(ej.nombre);
+          exercises.add(normalizedName);
         }
       });
     }
@@ -292,8 +295,9 @@ function createWeightProgressChart(
     .reverse()
     .forEach((session) => {
       if (session.ejercicios && Array.isArray(session.ejercicios)) {
+        // Find exercise by normalized name to match all variations
         const exercise = session.ejercicios.find(
-          (ej) => ej.nombre === exerciseName
+          (ej) => normalizeExerciseName(ej.nombre) === exerciseName
         );
         if (exercise && exercise.peso > 0) {
           exerciseData.push({
