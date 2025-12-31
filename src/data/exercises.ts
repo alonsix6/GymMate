@@ -675,3 +675,25 @@ export function getExerciseGuidance(nombre: string): { type: 'image' | 'text'; c
   }
   return null;
 }
+
+// Get exercises that are NOT in the default training groups
+// Used by workout builder to show additional exercise options
+export function getAdditionalExercises(existingExerciseNames: string[]): ExerciseInfo[] {
+  const existingNamesLower = new Set(existingExerciseNames.map(n => n.toLowerCase()));
+  return allExercises.filter(ex => !existingNamesLower.has(ex.nombre.toLowerCase()));
+}
+
+// Get additional exercises grouped by muscle
+export function getAdditionalExercisesByMuscle(existingExerciseNames: string[]): Record<string, ExerciseInfo[]> {
+  const additional = getAdditionalExercises(existingExerciseNames);
+  const grouped: Record<string, ExerciseInfo[]> = {};
+
+  additional.forEach(ex => {
+    if (!grouped[ex.grupoMuscular]) {
+      grouped[ex.grupoMuscular] = [];
+    }
+    grouped[ex.grupoMuscular].push(ex);
+  });
+
+  return grouped;
+}
