@@ -4,7 +4,17 @@ import { icon, refreshIcons } from '@/utils/icons';
 // MODAL DE ANIMACIÓN DE EJERCICIO
 // ==========================================
 
-export function showAnimation(nombre: string, gifUrl: string): void {
+export type GuidanceType = 'image' | 'text';
+
+export interface ExerciseGuidance {
+  type: GuidanceType;
+  content: string;
+}
+
+// Overload for backwards compatibility
+export function showAnimation(nombre: string, gifUrl: string): void;
+export function showAnimation(nombre: string, guidance: ExerciseGuidance): void;
+export function showAnimation(nombre: string, guidanceOrUrl: string | ExerciseGuidance): void {
   const modal = document.getElementById('animationModal');
   const title = document.getElementById('modalTitle');
   const container = document.getElementById('animationContainer');
@@ -13,8 +23,44 @@ export function showAnimation(nombre: string, gifUrl: string): void {
 
   title.textContent = nombre;
 
-  if (gifUrl) {
-    // Mostrar indicador de carga
+  // Normalize input to guidance object
+  const guidance: ExerciseGuidance | null =
+    typeof guidanceOrUrl === 'string'
+      ? guidanceOrUrl
+        ? { type: 'image', content: guidanceOrUrl }
+        : null
+      : guidanceOrUrl;
+
+  if (!guidance) {
+    container.innerHTML = `
+      <div class="flex flex-col items-center gap-3 text-center p-4">
+        ${icon('info', 'xl', 'text-text-muted')}
+        <p class="text-text-secondary">Referencia visual no disponible para este ejercicio.</p>
+      </div>
+    `;
+    refreshIcons();
+    modal.classList.add('active');
+    return;
+  }
+
+  if (guidance.type === 'text') {
+    // Show text description
+    container.innerHTML = `
+      <div class="flex flex-col items-start gap-4 p-4 max-w-md">
+        <div class="flex items-center gap-3">
+          ${icon('info', 'lg', 'text-accent')}
+          <h4 class="text-lg font-semibold text-text-primary">Cómo realizar el ejercicio</h4>
+        </div>
+        <p class="text-text-secondary leading-relaxed text-left">${guidance.content}</p>
+        <div class="flex items-center gap-2 mt-2 text-sm text-text-muted">
+          ${icon('target', 'sm', 'text-status-success')}
+          <span>Mantén la técnica correcta para evitar lesiones</span>
+        </div>
+      </div>
+    `;
+    refreshIcons();
+  } else {
+    // Show image
     container.innerHTML = `
       <div class="flex flex-col items-center gap-3">
         <div class="animate-spin">
@@ -25,7 +71,6 @@ export function showAnimation(nombre: string, gifUrl: string): void {
     `;
     refreshIcons();
 
-    // Crear imagen
     const img = new Image();
     img.className = 'w-full max-w-md rounded-lg shadow-lg';
     img.alt = nombre;
@@ -46,15 +91,7 @@ export function showAnimation(nombre: string, gifUrl: string): void {
       refreshIcons();
     };
 
-    img.src = gifUrl;
-  } else {
-    container.innerHTML = `
-      <div class="flex flex-col items-center gap-3 text-center p-4">
-        ${icon('info', 'xl', 'text-text-muted')}
-        <p class="text-text-secondary">Referencia visual no disponible para este ejercicio.</p>
-      </div>
-    `;
-    refreshIcons();
+    img.src = guidance.content;
   }
 
   modal.classList.add('active');

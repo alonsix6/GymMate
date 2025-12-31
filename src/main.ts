@@ -1,7 +1,12 @@
 import './styles/main.css';
 import { initializeIcons, refreshIcons } from '@/utils/icons';
 import { initializeNavigation, showHome, switchTab, resumeDraft, dismissDraft } from '@/ui/navigation';
-import { initializeModals, showAnimation, closeAnimationModal } from '@/ui/modals';
+import { initializeModals, showAnimation, closeAnimationModal, type GuidanceType } from '@/ui/modals';
+
+// Helper function for showing animation with guidance from inline onclick
+function showAnimationWithGuidance(nombre: string, type: GuidanceType, content: string): void {
+  showAnimation(nombre, { type, content });
+}
 import { initializeTimerListeners, openRestTimerModal } from '@/features/timer';
 import { initializeProfile, openMeasurementsModal, closeMeasurementsModal, showMeasurementsHistory, closeMeasurementsHistoryModal, deleteMeasurementEntry, updateMeasurementPreview } from '@/features/profile';
 import { loadHistory, loadPRs, exportToExcel, deleteHistoryItem, triggerCSVImport } from '@/features/history';
@@ -81,6 +86,7 @@ declare global {
 
     // Modals
     showAnimation: typeof showAnimation;
+    showAnimationWithGuidance: typeof showAnimationWithGuidance;
     closeAnimationModal: typeof closeAnimationModal;
 
     // Timer
@@ -150,6 +156,7 @@ window.selectRPE = selectRPE;
 window.confirmRPE = confirmRPE;
 window.skipRPE = skipRPE;
 window.showAnimation = showAnimation;
+window.showAnimationWithGuidance = showAnimationWithGuidance;
 window.closeAnimationModal = closeAnimationModal;
 window.openRestTimerModal = openRestTimerModal;
 window.deleteHistoryItem = deleteHistoryItem;

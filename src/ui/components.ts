@@ -1,6 +1,6 @@
 import type { ExerciseData, PRData, HistorySession } from '@/types';
 import { icon, refreshIcons, getMuscleIcon } from '@/utils/icons';
-import { getExerciseGif } from '@/data/training-groups';
+import { getExerciseGuidance } from '@/data/training-groups';
 import { formatDate } from '@/utils/calculations';
 
 // ==========================================
@@ -105,7 +105,7 @@ export function renderExercise(
   index: number,
   isOptional: boolean = false
 ): string {
-  const gifUrl = getExerciseGif(ejercicio.nombre);
+  const guidance = getExerciseGuidance(ejercicio.nombre);
   const muscleIcon = getMuscleIcon(ejercicio.grupoMuscular);
 
   const optionalBadge = isOptional
@@ -113,6 +113,10 @@ export function renderExercise(
     : '';
 
   const cardBg = isOptional ? 'bg-orange-500/5 border-orange-500/20' : 'bg-slate-800/50 border-slate-700/50';
+
+  // Determine button icon and color based on guidance type
+  const buttonIcon = guidance?.type === 'text' ? 'info' : 'play';
+  const buttonBg = guidance?.type === 'text' ? 'bg-purple-500/20 text-purple-400 hover:bg-purple-500/30' : 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30';
 
   return `
     <div class="${cardBg} border rounded-xl p-4 mb-4" id="ejercicio-${index}">
@@ -148,13 +152,13 @@ export function renderExercise(
           </div>
         </div>
         ${
-          gifUrl
+          guidance
             ? `
           <button
-            onclick="window.showAnimation('${ejercicio.nombre}', '${gifUrl}')"
-            class="w-10 h-10 flex items-center justify-center rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 active:scale-95 transition-all flex-shrink-0"
+            onclick="window.showAnimationWithGuidance('${ejercicio.nombre.replace(/'/g, "\\'")}', '${guidance.type}', '${guidance.content.replace(/'/g, "\\'")}')"
+            class="w-10 h-10 flex items-center justify-center rounded-lg ${buttonBg} active:scale-95 transition-all flex-shrink-0"
           >
-            ${icon('play', 'md')}
+            ${icon(buttonIcon, 'md')}
           </button>
         `
             : ''
