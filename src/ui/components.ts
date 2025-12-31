@@ -172,6 +172,7 @@ export function renderExercise(
             placeholder="0"
             min="0"
             max="20"
+            inputmode="numeric"
             onchange="window.updateEjercicio(${index})"
             class="w-full h-12 text-center bg-slate-900 border-2 border-slate-700 rounded-xl text-white text-xl font-bold focus:border-blue-500 focus:ring-0 placeholder-slate-600"
           />
@@ -185,6 +186,7 @@ export function renderExercise(
             placeholder="0"
             min="0"
             max="100"
+            inputmode="numeric"
             onchange="window.updateEjercicio(${index})"
             class="w-full h-12 text-center bg-slate-900 border-2 border-slate-700 rounded-xl text-white text-xl font-bold focus:border-blue-500 focus:ring-0 placeholder-slate-600"
           />
@@ -198,6 +200,7 @@ export function renderExercise(
             placeholder="0"
             min="0"
             step="0.5"
+            inputmode="decimal"
             onchange="window.updateEjercicio(${index})"
             class="w-full h-12 text-center ${ejercicio.esMancuerna ? 'bg-purple-900/50 border-purple-600/50' : 'bg-slate-900 border-slate-700'} border-2 rounded-xl text-white text-xl font-bold focus:border-blue-500 focus:ring-0 placeholder-slate-600"
           />

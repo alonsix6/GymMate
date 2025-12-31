@@ -27,6 +27,11 @@ const EXERCISE_ALIASES: Record<string, string> = {
   'elevacion frontal': 'Elevación Frontal / Y-Raise',
   'y-raise': 'Elevación Frontal / Y-Raise',
   'elevación frontal / y-raise': 'Elevación Frontal / Y-Raise',
+  'elevacion frontal / y-raise': 'Elevación Frontal / Y-Raise',
+
+  // Elevación lateral variaciones
+  'elevación lateral': 'Elevación Lateral',
+  'elevacion lateral': 'Elevación Lateral',
 
   // Curl Martillo variaciones
   'curl martillo': 'Curl Martillo',
@@ -36,12 +41,17 @@ const EXERCISE_ALIASES: Record<string, string> = {
   'curl martillo crossbody': 'Curl Martillo Cross-body',
   'curl martillo cross body': 'Curl Martillo Cross-body',
 
+  // Curl Barra
+  'curl barra': 'Curl Barra',
+  'curl con barra': 'Curl Barra',
+
   // Abductora variaciones
   'abductora': 'Abductora Máquina',
   'abductora maquina': 'Abductora Máquina',
   'abductora máquina': 'Abductora Máquina',
   'abducción': 'Abductora Máquina',
   'abduccion': 'Abductora Máquina',
+  'abducciones': 'Abductora Máquina',
 
   // Aductora variaciones
   'aductora': 'Aductora Máquina',
@@ -55,6 +65,8 @@ const EXERCISE_ALIASES: Record<string, string> = {
   'fondos en paralelas': 'Fondos en Máquina',
   'fondos en máquina': 'Fondos en Máquina',
   'fondos en maquina': 'Fondos en Máquina',
+  'extensión o fondos': 'Fondos en Máquina',
+  'extension o fondos': 'Fondos en Máquina',
 
   // Press Francés -> Fondos en Máquina (según cambios anteriores)
   'press francés': 'Fondos en Máquina',
@@ -64,6 +76,44 @@ const EXERCISE_ALIASES: Record<string, string> = {
   'remo con barra': 'Remo en Máquina',
   'remo en máquina': 'Remo en Máquina',
   'remo en maquina': 'Remo en Máquina',
+  'remo sentado': 'Remo en Máquina',
+
+  // Abdominales variaciones
+  'abs en máquina': 'Abdominales en Máquina',
+  'abs en maquina': 'Abdominales en Máquina',
+  'abdominales en máquina': 'Abdominales en Máquina',
+  'abdominales en maquina': 'Abdominales en Máquina',
+  'abdominales': 'Abdominales en Máquina',
+
+  // Extensión de cuádriceps variaciones
+  'extensión de cuádriceps': 'Extensión de Cuádriceps',
+  'extension de cuadriceps': 'Extensión de Cuádriceps',
+  'extensión de cuadriceps': 'Extensión de Cuádriceps',
+  'extension de cuádriceps': 'Extensión de Cuádriceps',
+
+  // Press de pecho variaciones
+  'press de pecho': 'Press Banca',
+  'press banca': 'Press Banca',
+  'press banco': 'Press Banca',
+
+  // Press ligero / máquinas
+  'press ligero o máquinas': 'Press Inclinado',
+  'press ligero o maquinas': 'Press Inclinado',
+
+  // Press militar variaciones
+  'press militar': 'Press Militar',
+
+  // Hip Thrust variaciones
+  'hip thrust': 'Hip Thrust',
+  'hip thrust (core lift)': 'Hip Thrust',
+
+  // Tríceps variaciones
+  'tríceps aislado': 'Extensión de Tríceps en Polea',
+  'triceps aislado': 'Extensión de Tríceps en Polea',
+  'tríceps cuerda': 'Extensión de Tríceps en Polea',
+  'triceps cuerda': 'Extensión de Tríceps en Polea',
+  'extensión de tríceps en polea': 'Extensión de Tríceps en Polea',
+  'extension de triceps en polea': 'Extensión de Tríceps en Polea',
 };
 
 /**

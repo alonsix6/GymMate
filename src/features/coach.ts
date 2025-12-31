@@ -27,6 +27,30 @@ let sessionStartTime: number | null = null;
 let lastTipTime: number = 0;
 const TIP_INTERVAL = 120000; // 2 minutes between tips
 
+// Message priority system - higher priority messages persist longer
+// Priority levels: pr-alert (5) > success (4) > pr-close (3) > motivation (2) > tip (1) > info (0)
+const MESSAGE_PRIORITY: Record<CoachMessageType, number> = {
+  'pr-alert': 5,
+  'success': 4,
+  'pr-close': 3,
+  'motivation': 2,
+  'tip': 1,
+  'info': 0,
+};
+
+// How long each message type should persist (in ms) before being overwritten by lower priority
+const MESSAGE_DISPLAY_TIME: Record<CoachMessageType, number> = {
+  'pr-alert': 8000,
+  'success': 5000,
+  'pr-close': 6000,
+  'motivation': 5000,
+  'tip': 4000,
+  'info': 0, // info can be overwritten immediately
+};
+
+let currentMessageType: CoachMessageType | null = null;
+let currentMessageTimestamp: number = 0;
+
 const TIPS = [
   'Recuerda mantener una buena técnica en cada repetición.',
   'Respira: exhala en el esfuerzo, inhala en la bajada.',
@@ -109,6 +133,9 @@ function getMessageConfig(type: CoachMessageType): Omit<CoachMessage, 'message' 
 export function initCoachSession(): void {
   sessionStartTime = Date.now();
   lastTipTime = Date.now();
+  // Reset message priority state
+  currentMessageType = null;
+  currentMessageTimestamp = 0;
 }
 
 export function updateCoachOnSessionLoad(groupName: string, ejercicios: ExerciseData[]): void {
@@ -249,6 +276,25 @@ export function showCoachMessage(config: CoachMessage): void {
   const subtextEl = document.getElementById('coachSubtext');
 
   if (!banner || !iconContainer || !messageEl || !subtextEl) return;
+
+  // Check if current message has higher priority and hasn't expired
+  const now = Date.now();
+  const newPriority = MESSAGE_PRIORITY[config.type];
+
+  if (currentMessageType !== null) {
+    const currentPriority = MESSAGE_PRIORITY[currentMessageType];
+    const currentDisplayTime = MESSAGE_DISPLAY_TIME[currentMessageType];
+    const timeSinceLastMessage = now - currentMessageTimestamp;
+
+    // Don't overwrite higher priority messages until they expire
+    if (currentPriority > newPriority && timeSinceLastMessage < currentDisplayTime) {
+      return;
+    }
+  }
+
+  // Update current message tracking
+  currentMessageType = config.type;
+  currentMessageTimestamp = now;
 
   // Update banner styles
   banner.className = `rounded-xl p-4 mb-4 transition-all duration-300 ${config.bgClass} border ${config.borderClass}`;

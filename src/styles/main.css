@@ -150,13 +150,20 @@ input[type='checkbox']:checked {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(15, 23, 42, 0.95);
+  background: rgba(15, 23, 42, 0.98);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid var(--color-dark-border);
   padding: 0.5rem 1rem;
   padding-bottom: calc(0.5rem + var(--safe-area-inset-bottom));
   z-index: 40;
+  /* Additional properties to ensure anchoring on mobile */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform;
+  /* Prevent issues with iOS virtual keyboard */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .bottom-nav-item {
@@ -276,6 +283,12 @@ input[type='checkbox']:checked {
   font-size: 0.75rem;
   font-weight: 600;
   z-index: 45;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.unsaved-indicator.saved {
+  background: var(--color-success);
+  color: white;
 }
 
 /* ==========================================
@@ -516,6 +529,7 @@ textarea:focus-visible {
   .bottom-nav {
     max-width: 640px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateZ(0);
+    -webkit-transform: translateX(-50%) translateZ(0);
   }
 }
