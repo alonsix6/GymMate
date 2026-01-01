@@ -2,11 +2,6 @@ import './styles/main.css';
 import { initializeIcons, refreshIcons } from '@/utils/icons';
 import { initializeNavigation, showHome, switchTab, resumeDraft, dismissDraft } from '@/ui/navigation';
 import { initializeModals, showAnimation, closeAnimationModal, type GuidanceType } from '@/ui/modals';
-
-// Helper function for showing animation with guidance from inline onclick
-function showAnimationWithGuidance(nombre: string, type: GuidanceType, content: string): void {
-  showAnimation(nombre, { type, content });
-}
 import { initializeTimerListeners, openRestTimerModal } from '@/features/timer';
 import { initializeProfile, openMeasurementsModal, closeMeasurementsModal, showMeasurementsHistory, closeMeasurementsHistoryModal, deleteMeasurementEntry, updateMeasurementPreview } from '@/features/profile';
 import { loadHistory, loadPRs, exportToExcel, deleteHistoryItem, triggerCSVImport } from '@/features/history';
@@ -87,7 +82,6 @@ declare global {
 
     // Modals
     showAnimation: typeof showAnimation;
-    showAnimationWithGuidance: typeof showAnimationWithGuidance;
     closeAnimationModal: typeof closeAnimationModal;
 
     // Timer
@@ -157,7 +151,6 @@ window.selectRPE = selectRPE;
 window.confirmRPE = confirmRPE;
 window.skipRPE = skipRPE;
 window.showAnimation = showAnimation;
-window.showAnimationWithGuidance = showAnimationWithGuidance;
 window.closeAnimationModal = closeAnimationModal;
 window.openRestTimerModal = openRestTimerModal;
 window.deleteHistoryItem = deleteHistoryItem;
@@ -805,6 +798,27 @@ function initializeKeyboardHandler(): void {
 }
 
 // ==========================================
+// EVENT DELEGATION PARA BOTONES DE GUÍA
+// ==========================================
+
+function initializeGuidanceButtons(): void {
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const btn = target.closest('[data-guidance-btn]') as HTMLElement;
+
+    if (btn) {
+      const nombre = btn.dataset.exerciseName || '';
+      const type = btn.dataset.guidanceType as GuidanceType;
+      const content = btn.dataset.guidanceContent || '';
+
+      if (nombre && type && content) {
+        showAnimation(nombre, { type, content });
+      }
+    }
+  });
+}
+
+// ==========================================
 // INICIALIZACIÓN
 // ==========================================
 
@@ -840,6 +854,9 @@ function init(): void {
 
   // Ocultar bottom nav cuando el teclado virtual está activo
   initializeKeyboardHandler();
+
+  // Event delegation para botones de guía de ejercicios
+  initializeGuidanceButtons();
 
   // Refrescar iconos después de renderizar
   setTimeout(refreshIcons, 100);
