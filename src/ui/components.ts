@@ -159,6 +159,7 @@ export function renderExercise(
             data-exercise-name="${ejercicio.nombre}"
             data-guidance-type="${guidance.type}"
             data-guidance-content="${guidance.content.replace(/"/g, '&quot;')}"
+            ${guidance.fallback ? `data-guidance-fallback="${guidance.fallback.replace(/"/g, '&quot;')}"` : ''}
             class="w-10 h-10 flex items-center justify-center rounded-lg ${buttonBg} active:scale-95 transition-all flex-shrink-0"
           >
             ${icon(buttonIcon, 'md')}
