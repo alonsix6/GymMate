@@ -768,6 +768,43 @@ function renderCustomExercisesList(): void {
 }
 
 // ==========================================
+// MANEJO DEL TECLADO VIRTUAL
+// ==========================================
+
+function initializeKeyboardHandler(): void {
+  const bottomNav = document.querySelector('.bottom-nav') as HTMLElement;
+  if (!bottomNav) return;
+
+  // Detectar focus en inputs numéricos para ocultar bottom nav
+  document.addEventListener('focusin', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName === 'INPUT' &&
+        (target.getAttribute('type') === 'number' ||
+         target.getAttribute('inputmode') === 'numeric' ||
+         target.getAttribute('inputmode') === 'decimal')) {
+      bottomNav.style.display = 'none';
+    }
+  });
+
+  document.addEventListener('focusout', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName === 'INPUT') {
+      // Pequeño delay para evitar parpadeo al cambiar entre inputs
+      setTimeout(() => {
+        const activeElement = document.activeElement as HTMLElement;
+        if (!activeElement ||
+            activeElement.tagName !== 'INPUT' ||
+            (activeElement.getAttribute('type') !== 'number' &&
+             activeElement.getAttribute('inputmode') !== 'numeric' &&
+             activeElement.getAttribute('inputmode') !== 'decimal')) {
+          bottomNav.style.display = '';
+        }
+      }, 100);
+    }
+  });
+}
+
+// ==========================================
 // INICIALIZACIÓN
 // ==========================================
 
@@ -800,6 +837,9 @@ function init(): void {
 
   // Mostrar home por defecto
   showHome();
+
+  // Ocultar bottom nav cuando el teclado virtual está activo
+  initializeKeyboardHandler();
 
   // Refrescar iconos después de renderizar
   setTimeout(refreshIcons, 100);
