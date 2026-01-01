@@ -810,9 +810,10 @@ function initializeGuidanceButtons(): void {
       const nombre = btn.dataset.exerciseName || '';
       const type = btn.dataset.guidanceType as GuidanceType;
       const content = btn.dataset.guidanceContent || '';
+      const fallback = btn.dataset.guidanceFallback; // Description fallback
 
       if (nombre && type && content) {
-        showAnimation(nombre, { type, content });
+        showAnimation(nombre, { type, content, fallback });
       }
     }
   });
