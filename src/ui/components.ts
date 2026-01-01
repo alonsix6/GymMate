@@ -155,7 +155,10 @@ export function renderExercise(
           guidance
             ? `
           <button
-            onclick="window.showAnimationWithGuidance('${ejercicio.nombre.replace(/'/g, "\\'")}', '${guidance.type}', '${guidance.content.replace(/'/g, "\\'")}')"
+            data-guidance-btn
+            data-exercise-name="${ejercicio.nombre}"
+            data-guidance-type="${guidance.type}"
+            data-guidance-content="${guidance.content.replace(/"/g, '&quot;')}"
             class="w-10 h-10 flex items-center justify-center rounded-lg ${buttonBg} active:scale-95 transition-all flex-shrink-0"
           >
             ${icon(buttonIcon, 'md')}

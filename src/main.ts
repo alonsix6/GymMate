@@ -2,11 +2,6 @@ import './styles/main.css';
 import { initializeIcons, refreshIcons } from '@/utils/icons';
 import { initializeNavigation, showHome, switchTab, resumeDraft, dismissDraft } from '@/ui/navigation';
 import { initializeModals, showAnimation, closeAnimationModal, type GuidanceType } from '@/ui/modals';
-
-// Helper function for showing animation with guidance from inline onclick
-function showAnimationWithGuidance(nombre: string, type: GuidanceType, content: string): void {
-  showAnimation(nombre, { type, content });
-}
 import { initializeTimerListeners, openRestTimerModal } from '@/features/timer';
 import { initializeProfile, openMeasurementsModal, closeMeasurementsModal, showMeasurementsHistory, closeMeasurementsHistoryModal, deleteMeasurementEntry, updateMeasurementPreview } from '@/features/profile';
 import { loadHistory, loadPRs, exportToExcel, deleteHistoryItem, triggerCSVImport } from '@/features/history';
@@ -87,7 +82,6 @@ declare global {
 
     // Modals
     showAnimation: typeof showAnimation;
-    showAnimationWithGuidance: typeof showAnimationWithGuidance;
     closeAnimationModal: typeof closeAnimationModal;
 
     // Timer
@@ -157,7 +151,6 @@ window.selectRPE = selectRPE;
 window.confirmRPE = confirmRPE;
 window.skipRPE = skipRPE;
 window.showAnimation = showAnimation;
-window.showAnimationWithGuidance = showAnimationWithGuidance;
 window.closeAnimationModal = closeAnimationModal;
 window.openRestTimerModal = openRestTimerModal;
 window.deleteHistoryItem = deleteHistoryItem;
@@ -768,6 +761,64 @@ function renderCustomExercisesList(): void {
 }
 
 // ==========================================
+// MANEJO DEL TECLADO VIRTUAL
+// ==========================================
+
+function initializeKeyboardHandler(): void {
+  const bottomNav = document.querySelector('.bottom-nav') as HTMLElement;
+  if (!bottomNav) return;
+
+  // Detectar focus en inputs numéricos para ocultar bottom nav
+  document.addEventListener('focusin', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName === 'INPUT' &&
+        (target.getAttribute('type') === 'number' ||
+         target.getAttribute('inputmode') === 'numeric' ||
+         target.getAttribute('inputmode') === 'decimal')) {
+      bottomNav.style.display = 'none';
+    }
+  });
+
+  document.addEventListener('focusout', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName === 'INPUT') {
+      // Pequeño delay para evitar parpadeo al cambiar entre inputs
+      setTimeout(() => {
+        const activeElement = document.activeElement as HTMLElement;
+        if (!activeElement ||
+            activeElement.tagName !== 'INPUT' ||
+            (activeElement.getAttribute('type') !== 'number' &&
+             activeElement.getAttribute('inputmode') !== 'numeric' &&
+             activeElement.getAttribute('inputmode') !== 'decimal')) {
+          bottomNav.style.display = '';
+        }
+      }, 100);
+    }
+  });
+}
+
+// ==========================================
+// EVENT DELEGATION PARA BOTONES DE GUÍA
+// ==========================================
+
+function initializeGuidanceButtons(): void {
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const btn = target.closest('[data-guidance-btn]') as HTMLElement;
+
+    if (btn) {
+      const nombre = btn.dataset.exerciseName || '';
+      const type = btn.dataset.guidanceType as GuidanceType;
+      const content = btn.dataset.guidanceContent || '';
+
+      if (nombre && type && content) {
+        showAnimation(nombre, { type, content });
+      }
+    }
+  });
+}
+
+// ==========================================
 // INICIALIZACIÓN
 // ==========================================
 
@@ -800,6 +851,12 @@ function init(): void {
 
   // Mostrar home por defecto
   showHome();
+
+  // Ocultar bottom nav cuando el teclado virtual está activo
+  initializeKeyboardHandler();
+
+  // Event delegation para botones de guía de ejercicios
+  initializeGuidanceButtons();
 
   // Refrescar iconos después de renderizar
   setTimeout(refreshIcons, 100);

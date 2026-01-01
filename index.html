@@ -175,7 +175,7 @@
     <!-- ==========================================
          WORKOUT TAB
          ========================================== -->
-    <div id="workoutTab" class="tab-content hidden" role="region" aria-label="Sesión de entrenamiento">
+    <div id="workoutTab" class="tab-content hidden pb-24" role="region" aria-label="Sesión de entrenamiento">
       <!-- Header with Back Button -->
       <div id="trainingInfo" class="mb-6 hidden">
         <!-- Navigation Bar -->
@@ -294,7 +294,7 @@
     <!-- ==========================================
          CALCULATORS TAB
          ========================================== -->
-    <div id="calculatorsTab" class="tab-content hidden" role="region" aria-label="Calculadoras de fitness">
+    <div id="calculatorsTab" class="tab-content hidden pb-24" role="region" aria-label="Calculadoras de fitness">
       <!-- Navigation Bar -->
       <div class="flex items-center gap-3 mb-6">
         <button onclick="window.showHome()" class="w-11 h-11 flex items-center justify-center bg-dark-surface border border-dark-border rounded-xl active:scale-95 transition-transform focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-dark-bg" aria-label="Volver al inicio">
@@ -394,7 +394,7 @@
     <!-- ==========================================
          CHARTS TAB
          ========================================== -->
-    <div id="chartsTab" class="tab-content hidden" role="region" aria-label="Gráficos de progreso">
+    <div id="chartsTab" class="tab-content hidden pb-24" role="region" aria-label="Gráficos de progreso">
       <!-- Navigation Bar -->
       <div class="flex items-center gap-3 mb-6">
         <button onclick="window.showHome()" class="w-11 h-11 flex items-center justify-center bg-dark-surface border border-dark-border rounded-xl active:scale-95 transition-transform focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-dark-bg" aria-label="Volver al inicio">
@@ -446,7 +446,7 @@
     <!-- ==========================================
          HISTORY TAB
          ========================================== -->
-    <div id="historyTab" class="tab-content hidden" role="region" aria-label="Historial de entrenamientos">
+    <div id="historyTab" class="tab-content hidden pb-24" role="region" aria-label="Historial de entrenamientos">
       <!-- Navigation Bar -->
       <div class="flex items-center gap-3 mb-6">
         <button onclick="window.showHome()" class="w-11 h-11 flex items-center justify-center bg-dark-surface border border-dark-border rounded-xl active:scale-95 transition-transform focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-dark-bg" aria-label="Volver al inicio">
@@ -467,7 +467,7 @@
     <!-- ==========================================
          PRS TAB
          ========================================== -->
-    <div id="prsTab" class="tab-content hidden" role="region" aria-label="Récords personales">
+    <div id="prsTab" class="tab-content hidden pb-24" role="region" aria-label="Récords personales">
       <!-- Navigation Bar -->
       <div class="flex items-center gap-3 mb-6">
         <button onclick="window.showHome()" class="w-11 h-11 flex items-center justify-center bg-dark-surface border border-dark-border rounded-xl active:scale-95 transition-transform focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-dark-bg" aria-label="Volver al inicio">
@@ -484,7 +484,7 @@
     <!-- ==========================================
          PROFILE TAB
          ========================================== -->
-    <div id="profileTab" class="tab-content hidden" role="region" aria-label="Perfil de usuario">
+    <div id="profileTab" class="tab-content hidden pb-24" role="region" aria-label="Perfil de usuario">
       <!-- Navigation Bar -->
       <div class="flex items-center gap-3 mb-6">
         <button onclick="window.showHome()" class="w-11 h-11 flex items-center justify-center bg-dark-surface border border-dark-border rounded-xl active:scale-95 transition-transform focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-dark-bg" aria-label="Volver al inicio">
@@ -502,9 +502,9 @@
             <label for="profileName" class="block text-sm text-text-secondary mb-1">Nombre</label>
             <input type="text" id="profileName" placeholder="Tu nombre" class="w-full" autocomplete="name" />
           </div>
-          <div class="overflow-hidden">
+          <div>
             <label for="profileBirthdate" class="block text-sm text-text-secondary mb-1">Fecha de nacimiento</label>
-            <input type="date" id="profileBirthdate" class="w-full max-w-full" autocomplete="bday" />
+            <input type="date" id="profileBirthdate" class="w-full" autocomplete="bday" />
             <p class="text-xs text-text-muted mt-1" aria-live="polite">Edad: <span id="calculatedAge">-</span> años</p>
           </div>
           <div>

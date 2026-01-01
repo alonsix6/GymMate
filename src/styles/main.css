@@ -114,9 +114,23 @@ input[type='number'] {
 
 /* Date input - prevent overflow */
 input[type='date'] {
+  width: 100%;
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+}
+
+/* Fix date input calendar icon on mobile */
+input[type='date']::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.6;
+  cursor: pointer;
 }
 
 /* Checkbox styling */
