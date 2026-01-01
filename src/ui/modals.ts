@@ -9,6 +9,7 @@ export type GuidanceType = 'image' | 'text';
 export interface ExerciseGuidance {
   type: GuidanceType;
   content: string;
+  fallback?: string; // Description fallback if image fails to load
 }
 
 // Overload for backwards compatibility
@@ -81,13 +82,30 @@ export function showAnimation(nombre: string, guidanceOrUrl: string | ExerciseGu
     };
 
     img.onerror = () => {
-      container.innerHTML = `
-        <div class="flex flex-col items-center gap-3 text-center p-4">
-          ${icon('error', 'xl', 'text-status-error')}
-          <p class="text-text-primary font-semibold">Error al cargar la imagen</p>
-          <p class="text-text-secondary text-sm">La imagen de referencia no está disponible en este momento.</p>
-        </div>
-      `;
+      // If there's a fallback description, show it instead of error
+      if (guidance.fallback) {
+        container.innerHTML = `
+          <div class="flex flex-col items-start gap-4 p-4 max-w-md">
+            <div class="flex items-center gap-3">
+              ${icon('info', 'lg', 'text-accent')}
+              <h4 class="text-lg font-semibold text-text-primary">Cómo realizar el ejercicio</h4>
+            </div>
+            <p class="text-text-secondary leading-relaxed text-left">${guidance.fallback}</p>
+            <div class="flex items-center gap-2 mt-2 text-sm text-text-muted">
+              ${icon('target', 'sm', 'text-status-success')}
+              <span>Mantén la técnica correcta para evitar lesiones</span>
+            </div>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div class="flex flex-col items-center gap-3 text-center p-4">
+            ${icon('error', 'xl', 'text-status-error')}
+            <p class="text-text-primary font-semibold">Error al cargar la imagen</p>
+            <p class="text-text-secondary text-sm">La imagen de referencia no está disponible en este momento.</p>
+          </div>
+        `;
+      }
       refreshIcons();
     };
 

@@ -25,36 +25,42 @@ export const exercisesPiernas: ExerciseInfo[] = [
     esMancuerna: false,
     grupoMuscular: 'Piernas',
     imageUrl: `${IMG_BASE}/Leg_Press/1.jpg`,
+    descripcion: 'Sentado en máquina, pies en plataforma separados ancho de hombros. Baja controlando el peso flexionando rodillas. Empuja hasta casi extender piernas sin bloquear.',
   },
   {
     nombre: 'Extensión de Cuádriceps',
     esMancuerna: false,
     grupoMuscular: 'Piernas',
     imageUrl: `${IMG_BASE}/Leg_Extensions/1.jpg`,
+    descripcion: 'Sentado en máquina con rodillas alineadas al eje. Extiende piernas contrayendo cuádriceps. Pausa arriba. Baja controlado sin soltar el peso.',
   },
   {
     nombre: 'Sentadilla',
     esMancuerna: false,
     grupoMuscular: 'Piernas',
     imageUrl: `${IMG_BASE}/Barbell_Full_Squat/1.jpg`,
+    descripcion: 'Barra en trapecios, pies ancho de hombros. Baja flexionando caderas y rodillas hasta muslos paralelos al suelo. Espalda recta. Sube empujando con talones.',
   },
   {
     nombre: 'Sentadilla Hack',
     esMancuerna: false,
     grupoMuscular: 'Piernas',
     imageUrl: `${IMG_BASE}/Hack_Squat/1.jpg`,
+    descripcion: 'En máquina hack, espalda contra respaldo, hombros bajo soportes. Baja hasta 90° de rodillas. Empuja hasta casi extender. Enfoca cuádriceps.',
   },
   {
     nombre: 'Zancadas con Barra',
     esMancuerna: false,
     grupoMuscular: 'Piernas',
     imageUrl: `${IMG_BASE}/Barbell_Lunge/1.jpg`,
+    descripcion: 'Barra en trapecios. Da paso largo adelante, baja hasta rodilla trasera casi toque suelo. Mantén torso erguido. Empuja con pierna delantera para volver.',
   },
   {
     nombre: 'Aductora Máquina',
     esMancuerna: false,
     grupoMuscular: 'Piernas',
     imageUrl: `${IMG_BASE}/Thigh_Adductor/1.jpg`,
+    descripcion: 'Sentado en máquina con piernas abiertas. Junta las piernas contra resistencia apretando aductores. Pausa al centro. Abre controlado.',
   },
   {
     nombre: 'Sentadilla Sumo',
@@ -128,24 +134,28 @@ export const exercisesGluteos: ExerciseInfo[] = [
     esMancuerna: false,
     grupoMuscular: 'Glúteos',
     imageUrl: `${IMG_BASE}/Hip_Abduction_Machine/1.jpg`,
+    descripcion: 'Sentado en máquina con piernas juntas. Abre las piernas contra resistencia trabajando glúteo medio. Pausa afuera. Cierra controlado.',
   },
   {
     nombre: 'Patada de Glúteo en Máquina',
     esMancuerna: false,
     grupoMuscular: 'Glúteos',
     imageUrl: `${IMG_BASE}/Cable_Kickback/1.jpg`,
+    descripcion: 'En máquina o polea, estira pierna hacia atrás manteniendo core firme. Contrae glúteo al final del movimiento. Regresa sin impulso.',
   },
   {
     nombre: 'RDL / Peso Muerto Rumano',
     esMancuerna: false,
     grupoMuscular: 'Glúteos',
     imageUrl: `${IMG_BASE}/Barbell_Romanian_Deadlift/1.jpg`,
+    descripcion: 'De pie con barra, flexiona cadera bajando barra por las piernas. Rodillas ligeramente flexionadas. Siente estiramiento en isquios. Sube contrayendo glúteos.',
   },
   {
     nombre: 'Hip Thrust',
     esMancuerna: false,
     grupoMuscular: 'Glúteos',
     imageUrl: `${IMG_BASE}/Barbell_Hip_Thrust/1.jpg`,
+    descripcion: 'Espalda alta en banco, barra sobre cadera. Eleva caderas hasta cuerpo forme línea recta. Aprieta glúteos arriba 2 segundos. Baja controlado.',
   },
   {
     nombre: 'Peso Muerto Convencional',
@@ -195,12 +205,14 @@ export const exercisesPecho: ExerciseInfo[] = [
     esMancuerna: false,
     grupoMuscular: 'Pecho',
     imageUrl: `${IMG_BASE}/Barbell_Bench_Press_-_Medium_Grip/1.jpg`,
+    descripcion: 'Tumbado en banco plano, agarre más ancho que hombros. Baja barra al pecho controlado. Empuja hasta extensión completa. Codos a 45° del cuerpo.',
   },
   {
     nombre: 'Press Inclinado',
     esMancuerna: false,
     grupoMuscular: 'Pecho',
     imageUrl: `${IMG_BASE}/Barbell_Incline_Bench_Press_-_Medium_Grip/1.jpg`,
+    descripcion: 'Banco inclinado 30-45°, barra al pecho alto. Empuja hacia arriba. Trabaja pecho superior principalmente. Baja controlado tocando clavículas.',
   },
   {
     nombre: 'Press Banca Mancuernas',
@@ -268,24 +280,28 @@ export const exercisesEspalda: ExerciseInfo[] = [
     esMancuerna: false,
     grupoMuscular: 'Espalda',
     imageUrl: `${IMG_BASE}/Wide-Grip_Lat_Pulldown/1.jpg`,
+    descripcion: 'Sentado en polea alta, agarre ancho. Tira barra hacia pecho sacando pecho y apretando escápulas. Estira completamente arriba. Trabaja dorsal ancho.',
   },
   {
     nombre: 'Remo en Máquina',
     esMancuerna: false,
     grupoMuscular: 'Espalda',
     imageUrl: `${IMG_BASE}/Seated_Cable_Rows/1.jpg`,
+    descripcion: 'Sentado con pies en plataforma. Tira agarre hacia abdomen, codos cerca del cuerpo. Aprieta escápulas atrás. Estira completamente al frente.',
   },
   {
     nombre: 'Remo Mancuerna',
     esMancuerna: true,
     grupoMuscular: 'Espalda',
     imageUrl: `${IMG_BASE}/One-Arm_Dumbbell_Row/1.jpg`,
+    descripcion: 'Rodilla y mano en banco, espalda paralela al suelo. Tira mancuerna hacia cadera. Aprieta escápula arriba. Baja estirando completamente.',
   },
   {
     nombre: 'Pull-Over en Polea',
     esMancuerna: false,
     grupoMuscular: 'Espalda',
     imageUrl: `${IMG_BASE}/Straight-Arm_Pulldown/1.jpg`,
+    descripcion: 'De pie frente a polea alta, brazos extendidos. Baja barra en arco hacia muslos manteniendo brazos rectos. Contrae dorsales. Sube controlado.',
   },
   {
     nombre: 'Jalón Agarre Cerrado',
@@ -359,30 +375,35 @@ export const exercisesHombros: ExerciseInfo[] = [
     esMancuerna: false,
     grupoMuscular: 'Hombros',
     imageUrl: `${IMG_BASE}/Barbell_Shoulder_Press/1.jpg`,
+    descripcion: 'De pie o sentado, barra a altura de hombros. Empuja hacia arriba hasta extensión completa. Baja controlado hasta mentón. Core activo, evita arquear espalda.',
   },
   {
     nombre: 'Elevación Lateral',
     esMancuerna: true,
     grupoMuscular: 'Hombros',
     imageUrl: `${IMG_BASE}/Side_Lateral_Raise/1.jpg`,
+    descripcion: 'De pie, mancuernas a los lados. Eleva brazos lateralmente hasta horizontal. Codos ligeramente flexionados. Baja controlado. Trabaja deltoides medio.',
   },
   {
     nombre: 'Elevación Frontal / Y-Raise',
     esMancuerna: true,
     grupoMuscular: 'Hombros',
     imageUrl: `${IMG_BASE}/Front_Dumbbell_Raise/1.jpg`,
+    descripcion: 'De pie, mancuernas frente a muslos. Eleva brazos al frente hasta horizontal. Mantén codos ligeramente flexionados. Trabaja deltoides anterior.',
   },
   {
     nombre: 'Pájaros (rear delts)',
     esMancuerna: true,
     grupoMuscular: 'Hombros',
     imageUrl: `${IMG_BASE}/Seated_Bent-Over_Rear_Delt_Raise/1.jpg`,
+    descripcion: 'Inclinado hacia adelante, mancuernas colgando. Eleva brazos lateralmente apretando escápulas. Trabaja deltoides posterior. Baja controlado.',
   },
   {
     nombre: 'Face Pull',
     esMancuerna: false,
     grupoMuscular: 'Hombros',
     imageUrl: `${IMG_BASE}/Face_Pull/1.jpg`,
+    descripcion: 'Polea alta con cuerda. Tira hacia la cara separando manos, codos altos. Aprieta escápulas atrás. Trabaja deltoides posterior y rotadores externos.',
   },
   {
     nombre: 'Press Arnold',
@@ -432,12 +453,14 @@ export const exercisesBiceps: ExerciseInfo[] = [
     esMancuerna: true,
     grupoMuscular: 'Bíceps',
     imageUrl: `${IMG_BASE}/Hammer_Curls/1.jpg`,
+    descripcion: 'De pie, mancuernas con agarre neutro (palmas enfrentadas). Flexiona codos manteniendo agarre. Trabaja bíceps braquial y antebrazo. Baja controlado.',
   },
   {
     nombre: 'Curl Martillo Cross-body',
     esMancuerna: true,
     grupoMuscular: 'Bíceps',
     imageUrl: `${IMG_BASE}/Cross_Body_Hammer_Curl/1.jpg`,
+    descripcion: 'De pie, mancuerna con agarre neutro. Flexiona llevando mancuerna hacia hombro opuesto cruzando el cuerpo. Alterna brazos. Trabaja braquial.',
   },
   {
     nombre: 'Curl con Barra',
@@ -499,12 +522,14 @@ export const exercisesTriceps: ExerciseInfo[] = [
     esMancuerna: false,
     grupoMuscular: 'Tríceps',
     imageUrl: `${IMG_BASE}/Dips_-_Triceps_Version/1.jpg`,
+    descripcion: 'En máquina de fondos asistida o barras paralelas. Baja flexionando codos hasta 90°. Empuja extendiendo completamente. Torso vertical para enfatizar tríceps.',
   },
   {
     nombre: 'Extensión de Tríceps en Polea',
     esMancuerna: false,
     grupoMuscular: 'Tríceps',
     imageUrl: `${IMG_BASE}/Triceps_Pushdown/1.jpg`,
+    descripcion: 'Polea alta con barra recta o V. Codos fijos a los lados. Empuja hacia abajo hasta extensión completa. Contrae tríceps abajo. Sube controlado.',
   },
   {
     nombre: 'Press Francés',
@@ -566,6 +591,7 @@ export const exercisesCore: ExerciseInfo[] = [
     esMancuerna: false,
     grupoMuscular: 'Core',
     imageUrl: `${IMG_BASE}/Ab_Crunch_Machine/1.jpg`,
+    descripcion: 'Sentado en máquina, agarra manijas. Flexiona torso hacia abajo contrayendo abdominales. Pausa abajo. Sube controlado sin usar impulso.',
   },
   {
     nombre: 'Crunch en Polea',
@@ -663,12 +689,17 @@ export function getExerciseImage(nombre: string): string | null {
 }
 
 // Get image URL or description for exercise guidance
-export function getExerciseGuidance(nombre: string): { type: 'image' | 'text'; content: string } | null {
+// Returns image as primary with description as fallback
+export function getExerciseGuidance(nombre: string): { type: 'image' | 'text'; content: string; fallback?: string } | null {
   const exercise = getExerciseInfo(nombre);
   if (!exercise) return null;
 
   if (exercise.imageUrl) {
-    return { type: 'image', content: exercise.imageUrl };
+    return {
+      type: 'image',
+      content: exercise.imageUrl,
+      fallback: exercise.descripcion // Description as fallback if image fails
+    };
   }
   if (exercise.descripcion) {
     return { type: 'text', content: exercise.descripcion };
