@@ -127,26 +127,87 @@ Los titulos (Hierro, Bronce, etc.) son exclusivamente para los **rangos por grup
 
 **Nota:** Con entrenamiento muy dedicado (5+ sesiones/semana, muchos PRs), se puede alcanzar nivel 100 en ~4 anos.
 
-### 1.4 Titulos por Rango de Nivel
+### 1.4 Titulos por Rango de Nivel (con Numerales I-V)
 
-Ademas del numero, cada rango de niveles tiene un titulo asociado:
+Cada titulo tiene 5 sub-niveles (I a V), excepto Simetrico que es unico:
 
-| Niveles | Titulo | Color | Descripcion |
-|---------|--------|-------|-------------|
-| 1-16 | Principiante | #6B7280 (Gris) | Comenzando el viaje |
-| 17-33 | Novato | #22C55E (Verde) | Construyendo bases |
-| 34-50 | Intermedio | #3B82F6 (Azul) | Progreso solido |
-| 51-66 | Avanzado | #8B5CF6 (Morado) | Dominio tecnico |
-| 67-83 | Elite | #F59E0B (Dorado) | Top performer |
-| 84-99 | Legendario | #EF4444 (Rojo) | Los mejores |
-| 100 | Simetrico | Gradiente especial | Maximo logro |
+| Niveles | Titulo | Sub-nivel | Color |
+|---------|--------|-----------|-------|
+| 1-3 | Principiante I | I | #6B7280 |
+| 4-6 | Principiante II | II | #6B7280 |
+| 7-9 | Principiante III | III | #6B7280 |
+| 10-13 | Principiante IV | IV | #6B7280 |
+| 14-16 | Principiante V | V | #6B7280 |
+| 17-20 | Novato I | I | #22C55E |
+| 21-23 | Novato II | II | #22C55E |
+| 24-27 | Novato III | III | #22C55E |
+| 28-30 | Novato IV | IV | #22C55E |
+| 31-33 | Novato V | V | #22C55E |
+| 34-37 | Intermedio I | I | #3B82F6 |
+| 38-40 | Intermedio II | II | #3B82F6 |
+| 41-44 | Intermedio III | III | #3B82F6 |
+| 45-47 | Intermedio IV | IV | #3B82F6 |
+| 48-50 | Intermedio V | V | #3B82F6 |
+| 51-53 | Avanzado I | I | #8B5CF6 |
+| 54-56 | Avanzado II | II | #8B5CF6 |
+| 57-60 | Avanzado III | III | #8B5CF6 |
+| 61-63 | Avanzado IV | IV | #8B5CF6 |
+| 64-66 | Avanzado V | V | #8B5CF6 |
+| 67-70 | Elite I | I | #F59E0B |
+| 71-73 | Elite II | II | #F59E0B |
+| 74-77 | Elite III | III | #F59E0B |
+| 78-80 | Elite IV | IV | #F59E0B |
+| 81-83 | Elite V | V | #F59E0B |
+| 84-86 | Legendario I | I | #EF4444 |
+| 87-90 | Legendario II | II | #EF4444 |
+| 91-93 | Legendario III | III | #EF4444 |
+| 94-96 | Legendario IV | IV | #EF4444 |
+| 97-99 | Legendario V | V | #EF4444 |
+| **100** | **Simetrico** | - | Gradiente |
 
-### 1.5 Visualizacion del Nivel
+**Total: 30 sub-niveles + Simetrico = 31 rangos visuales**
 
-El nivel se muestra con numero + titulo + barra de progreso:
+### 1.5 Funcion para Obtener Titulo
+
+```typescript
+function getLevelTitle(level: number): { title: string; numeral: string; full: string } {
+  if (level === 100) return { title: 'Simetrico', numeral: '', full: 'Simetrico' };
+
+  const titles = [
+    { name: 'Principiante', min: 1, max: 16 },
+    { name: 'Novato', min: 17, max: 33 },
+    { name: 'Intermedio', min: 34, max: 50 },
+    { name: 'Avanzado', min: 51, max: 66 },
+    { name: 'Elite', min: 67, max: 83 },
+    { name: 'Legendario', min: 84, max: 99 },
+  ];
+
+  const numerals = ['I', 'II', 'III', 'IV', 'V'];
+
+  for (const t of titles) {
+    if (level >= t.min && level <= t.max) {
+      const range = t.max - t.min + 1;
+      const position = level - t.min;
+      const numeralIndex = Math.min(Math.floor(position / (range / 5)), 4);
+      const numeral = numerals[numeralIndex];
+      return {
+        title: t.name,
+        numeral,
+        full: `${t.name} ${numeral}`
+      };
+    }
+  }
+
+  return { title: 'Principiante', numeral: 'I', full: 'Principiante I' };
+}
+```
+
+### 1.6 Visualizacion del Nivel
+
+El nivel se muestra con numero + titulo completo + barra de progreso:
 
 ```
-Nivel 42 - Intermedio
+Nivel 42 - Intermedio III
 ████████████░░░░░░  12,450 / 15,000 XP
 ```
 
@@ -456,15 +517,15 @@ Vista frontal simplificada del cuerpo con zonas coloreables:
 interface PlayerStats {
   totalXP: number;
   level: number;               // 1-100
-  title: LevelTitle;           // Titulo segun rango de nivel
+  titleInfo: LevelTitleInfo;   // Titulo con numeral (ej: "Intermedio III")
   currentLevelXP: number;      // XP en el nivel actual
   xpToNextLevel: number;       // XP necesario para subir
   createdAt: string;           // Fecha inicio
   lastUpdated: string;
 }
 
-// Titulos para rangos de nivel de cuenta
-type LevelTitle =
+// Titulos base para rangos de nivel de cuenta
+type LevelTitleBase =
   | 'Principiante'  // 1-16
   | 'Novato'        // 17-33
   | 'Intermedio'    // 34-50
@@ -472,6 +533,17 @@ type LevelTitle =
   | 'Elite'         // 67-83
   | 'Legendario'    // 84-99
   | 'Simetrico';    // 100
+
+// Numerales romanos para sub-niveles
+type LevelNumeral = 'I' | 'II' | 'III' | 'IV' | 'V' | '';
+
+// Titulo completo con numeral
+interface LevelTitleInfo {
+  base: LevelTitleBase;
+  numeral: LevelNumeral;
+  full: string;  // Ej: "Intermedio III" o "Simetrico"
+  color: string;
+}
 
 interface XPTransaction {
   id: string;
