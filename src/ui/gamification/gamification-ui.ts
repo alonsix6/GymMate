@@ -197,12 +197,15 @@ export function renderGamificationModal(): string {
         </div>
 
         <!-- Seccion Logros -->
-        <div class="bg-dark-surface rounded-2xl p-4 mb-4">
+        <div class="bg-dark-surface rounded-2xl p-4 mb-3">
           <button
             class="w-full flex items-center justify-between"
-            onclick="window.toggleAchievementsExpanded && window.toggleAchievementsExpanded()"
+            onclick="window.toggleSection && window.toggleSection('achievements')"
           >
-            <h3 class="text-sm font-medium text-gray-400">LOGROS</h3>
+            <div class="flex items-center gap-2">
+              <span class="text-yellow-400">${icon('award', 'sm')}</span>
+              <h3 class="text-sm font-medium text-white">Logros</h3>
+            </div>
             <div class="flex items-center gap-2">
               <span class="text-sm font-bold text-yellow-400">${achievementProgress.unlocked}/${achievementProgress.total}</span>
               <span id="achievements-chevron" class="text-gray-400 transition-transform duration-200">
@@ -213,14 +216,11 @@ export function renderGamificationModal(): string {
 
           <!-- Collapsed summary -->
           <div id="achievements-summary" class="mt-3">
-            <div class="flex items-center justify-between">
-              <div class="text-xs text-gray-500">Logros desbloqueados</div>
-              <div class="w-32 h-2 bg-dark-border rounded-full overflow-hidden">
-                <div
-                  class="h-full rounded-full bg-yellow-400"
-                  style="width: ${achievementProgress.percentage}%"
-                ></div>
-              </div>
+            <div class="h-1.5 bg-dark-border rounded-full overflow-hidden">
+              <div
+                class="h-full rounded-full bg-gradient-to-r from-yellow-500 to-amber-400"
+                style="width: ${achievementProgress.percentage}%"
+              ></div>
             </div>
           </div>
 
@@ -231,30 +231,54 @@ export function renderGamificationModal(): string {
         </div>
 
         <!-- Guia de Rangos -->
-        <div class="bg-dark-surface rounded-2xl p-4 mb-4">
-          <h3 class="text-sm font-medium text-gray-400 mb-3">GUÍA DE RANGOS</h3>
-          <p class="text-xs text-gray-500 mb-3">
-            Los rangos se basan en tu fuerza relativa (1RM / peso corporal).
-            Cada grupo muscular tiene su propio rango.
-          </p>
-          ${renderAllRanksLegend()}
+        <div class="bg-dark-surface rounded-2xl p-4 mb-3">
+          <button
+            class="w-full flex items-center justify-between"
+            onclick="window.toggleSection && window.toggleSection('ranks')"
+          >
+            <div class="flex items-center gap-2">
+              <span class="text-purple-400">${icon('info', 'sm')}</span>
+              <h3 class="text-sm font-medium text-white">Guía de Rangos</h3>
+            </div>
+            <span id="ranks-chevron" class="text-gray-400 transition-transform duration-200">
+              ${icon('chevronDown', 'sm')}
+            </span>
+          </button>
+
+          <!-- Collapsed hint -->
+          <div id="ranks-summary" class="mt-2">
+            <p class="text-xs text-gray-500">Fuerza relativa: 1RM / peso corporal</p>
+          </div>
+
+          <!-- Expanded content -->
+          <div id="ranks-expanded" class="hidden mt-3">
+            ${renderAllRanksLegend()}
+          </div>
         </div>
 
         <!-- Guia de Niveles -->
         <div class="bg-dark-surface rounded-2xl p-4">
-          <h3 class="text-sm font-medium text-gray-400 mb-3">GUÍA DE NIVELES</h3>
-          <p class="text-xs text-gray-500 mb-3">
-            Gana XP completando entrenamientos, batiendo PRs, y manteniendo rachas.
-            El nivel 100 (Simétrico) requiere ~4 años de entrenamiento dedicado.
-          </p>
-          <div class="space-y-2 text-xs">
-            <div class="flex justify-between"><span style="color: #6B7280">Principiante I-V</span><span class="text-gray-500">Nivel 1-16</span></div>
-            <div class="flex justify-between"><span style="color: #22C55E">Novato I-V</span><span class="text-gray-500">Nivel 17-33</span></div>
-            <div class="flex justify-between"><span style="color: #3B82F6">Intermedio I-V</span><span class="text-gray-500">Nivel 34-50</span></div>
-            <div class="flex justify-between"><span style="color: #8B5CF6">Avanzado I-V</span><span class="text-gray-500">Nivel 51-66</span></div>
-            <div class="flex justify-between"><span style="color: #F59E0B">Elite I-V</span><span class="text-gray-500">Nivel 67-83</span></div>
-            <div class="flex justify-between"><span style="color: #EF4444">Legendario I-V</span><span class="text-gray-500">Nivel 84-99</span></div>
-            <div class="flex justify-between"><span class="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent font-bold">Simétrico</span><span class="text-gray-500">Nivel 100</span></div>
+          <button
+            class="w-full flex items-center justify-between"
+            onclick="window.toggleSection && window.toggleSection('levels')"
+          >
+            <div class="flex items-center gap-2">
+              <span class="text-blue-400">${icon('info', 'sm')}</span>
+              <h3 class="text-sm font-medium text-white">Guía de Niveles</h3>
+            </div>
+            <span id="levels-chevron" class="text-gray-400 transition-transform duration-200">
+              ${icon('chevronDown', 'sm')}
+            </span>
+          </button>
+
+          <!-- Collapsed hint -->
+          <div id="levels-summary" class="mt-2">
+            <p class="text-xs text-gray-500">XP por entrenamientos, PRs y rachas</p>
+          </div>
+
+          <!-- Expanded content -->
+          <div id="levels-expanded" class="hidden mt-3">
+            ${renderLevelsGuide()}
           </div>
         </div>
       </div>
@@ -345,12 +369,43 @@ function renderAchievementsList(): string {
 }
 
 /**
- * Toggle achievements expanded state
+ * Renderiza la guía de niveles con badges visuales
  */
-function toggleAchievementsExpanded(): void {
-  const summary = document.getElementById('achievements-summary');
-  const expanded = document.getElementById('achievements-expanded');
-  const chevron = document.getElementById('achievements-chevron');
+function renderLevelsGuide(): string {
+  const levels = [
+    { name: 'Principiante', range: '1-16', color: '#6B7280', subniveles: 'I-V' },
+    { name: 'Novato', range: '17-33', color: '#22C55E', subniveles: 'I-V' },
+    { name: 'Intermedio', range: '34-50', color: '#3B82F6', subniveles: 'I-V' },
+    { name: 'Avanzado', range: '51-66', color: '#8B5CF6', subniveles: 'I-V' },
+    { name: 'Elite', range: '67-83', color: '#F59E0B', subniveles: 'I-V' },
+    { name: 'Legendario', range: '84-99', color: '#EF4444', subniveles: 'I-V' },
+    { name: 'Simétrico', range: '100', color: '#3B82F6', subniveles: '', special: true },
+  ];
+
+  return `
+    <div class="grid grid-cols-2 gap-2">
+      ${levels.map(({ name, range, color, subniveles, special }) => `
+        <div class="flex items-center gap-2 bg-dark-bg/30 rounded-lg px-2.5 py-2 ${special ? 'col-span-2 justify-center' : ''}">
+          <div class="w-3 h-3 rounded-full flex-shrink-0" style="background-color: ${color}; ${special ? 'box-shadow: 0 0 8px ' + color : ''}"></div>
+          <div class="${special ? 'text-center' : ''}">
+            <span class="text-xs font-medium ${special ? 'bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent' : ''}" style="${!special ? 'color: ' + color : ''}">
+              ${name}${subniveles ? ' ' + subniveles : ''}
+            </span>
+            <span class="text-[10px] text-gray-500 ml-1">Nv. ${range}</span>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+/**
+ * Toggle section expanded state (generic)
+ */
+function toggleSection(sectionId: string): void {
+  const summary = document.getElementById(`${sectionId}-summary`);
+  const expanded = document.getElementById(`${sectionId}-expanded`);
+  const chevron = document.getElementById(`${sectionId}-chevron`);
 
   if (summary && expanded && chevron) {
     const isExpanded = !expanded.classList.contains('hidden');
@@ -406,5 +461,5 @@ export function hideGamificationModal(): void {
 if (typeof window !== 'undefined') {
   (window as any).showGamificationModal = showGamificationModal;
   (window as any).hideGamificationModal = hideGamificationModal;
-  (window as any).toggleAchievementsExpanded = toggleAchievementsExpanded;
+  (window as any).toggleSection = toggleSection;
 }

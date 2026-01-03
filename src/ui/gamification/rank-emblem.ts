@@ -158,28 +158,32 @@ export function renderRankWithLabel(rank: StrengthRank, size: number = 32): stri
 }
 
 /**
- * Renderiza todos los rangos en una fila (para leyenda)
+ * Renderiza todos los rangos en grid compacto (para leyenda)
  */
 export function renderAllRanksLegend(): string {
-  const ranks: StrengthRank[] = [
-    'Hierro', 'Bronce', 'Plata', 'Oro', 'Platino',
-    'Esmeralda', 'Diamante', 'Campeon', 'Simetrico'
-  ];
-
-  const ratios = [
-    '< 0.3x', '0.3-0.5x', '0.5-0.7x', '0.7-0.9x', '0.9-1.1x',
-    '1.1-1.3x', '1.3-1.6x', '1.6-2.0x', '> 2.0x'
+  const ranks: Array<{ name: StrengthRank; ratio: string }> = [
+    { name: 'Hierro', ratio: '<0.3x' },
+    { name: 'Bronce', ratio: '0.3-0.5x' },
+    { name: 'Plata', ratio: '0.5-0.7x' },
+    { name: 'Oro', ratio: '0.7-0.9x' },
+    { name: 'Platino', ratio: '0.9-1.1x' },
+    { name: 'Esmeralda', ratio: '1.1-1.3x' },
+    { name: 'Diamante', ratio: '1.3-1.6x' },
+    { name: 'Campeon', ratio: '1.6-2.0x' },
+    { name: 'Simetrico', ratio: '>2.0x' },
   ];
 
   return `
-    <div class="space-y-2">
-      ${ranks.map((rank, i) => {
-        const colors = RANK_COLORS[rank];
+    <div class="grid grid-cols-3 gap-2">
+      ${ranks.map(({ name, ratio }) => {
+        const colors = RANK_COLORS[name];
         return `
-          <div class="flex items-center gap-3">
-            <div class="w-6 h-6">${renderRankEmblem(rank, 24)}</div>
-            <span class="text-sm font-medium w-20" style="color: ${colors.fill}">${rank}</span>
-            <span class="text-xs text-gray-500">${ratios[i]} peso corporal</span>
+          <div class="flex items-center gap-1.5 bg-dark-bg/30 rounded-lg px-2 py-1.5">
+            <div class="w-5 h-5 flex-shrink-0">${renderRankEmblem(name, 20)}</div>
+            <div class="min-w-0">
+              <div class="text-[11px] font-medium truncate" style="color: ${colors.fill}">${name}</div>
+              <div class="text-[9px] text-gray-500">${ratio}</div>
+            </div>
           </div>
         `;
       }).join('')}
