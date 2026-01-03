@@ -172,37 +172,3 @@ export function refreshIcons(): void {
   });
 }
 
-// ==========================================
-// ICONOS POR GRUPO MUSCULAR
-// ==========================================
-
-export const MUSCLE_ICONS: Record<string, string> = {
-  Glúteos: 'target',
-  Piernas: 'footprints',
-  Pecho: 'heart',
-  Espalda: 'move-horizontal',
-  Hombros: 'move-up',
-  Bíceps: 'dumbbell',
-  Tríceps: 'hand',
-  Core: 'circle-dot',
-};
-
-export function getMuscleIcon(muscleGroup: string): string {
-  return MUSCLE_ICONS[muscleGroup] || 'dumbbell';
-}
-
-// ==========================================
-// ICONOS POR GRUPO DE ENTRENAMIENTO
-// ==========================================
-
-export const GROUP_ICONS: Record<string, { icon: string; color: string }> = {
-  grupo1: { icon: 'footprints', color: 'text-blue-400' },
-  grupo2: { icon: 'arrow-up-from-line', color: 'text-green-400' },
-  grupo3: { icon: 'scan-line', color: 'text-purple-400' },
-  grupo4: { icon: 'move-horizontal', color: 'text-orange-400' },
-  grupo5: { icon: 'circle-dot', color: 'text-pink-400' },
-};
-
-export function getGroupIcon(groupId: string): { icon: string; color: string } {
-  return GROUP_ICONS[groupId] || { icon: 'dumbbell', color: 'text-accent' };
-}
