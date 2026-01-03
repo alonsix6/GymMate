@@ -20,6 +20,7 @@ export {
 // Muscle map components
 export {
   renderMuscleMap,
+  renderMuscleMapDual,
   renderMuscleMapMini,
   renderMuscleMapWithLegend,
   renderMuscleProgress,
