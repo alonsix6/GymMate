@@ -3,7 +3,7 @@
 // ==========================================
 
 import type { StrengthRank } from '@/types/gamification';
-import { RANK_COLORS } from '@/features/gamification';
+import { RANK_COLORS, RANK_DISPLAY_NAMES } from '@/features/gamification';
 
 /**
  * Configuracion de formas para cada rango
@@ -146,13 +146,17 @@ export function renderRankEmblemMini(rank: StrengthRank): string {
  */
 export function renderRankWithLabel(rank: StrengthRank, size: number = 32): string {
   const colors = RANK_COLORS[rank];
+  const displayName = RANK_DISPLAY_NAMES[rank];
+  const isSimetrico = rank === 'Simetrico';
+  const nameClass = isSimetrico ? 'text-shiny' : '';
+  const nameStyle = isSimetrico ? '' : `style="color: ${colors.fill}"`;
 
   return `
     <div class="flex items-center gap-2">
       <div class="w-${size / 4} h-${size / 4}">
         ${renderRankEmblem(rank, size)}
       </div>
-      <span class="text-sm font-medium" style="color: ${colors.fill}">${rank}</span>
+      <span class="text-sm font-medium ${nameClass}" ${nameStyle}>${displayName}</span>
     </div>
   `;
 }
@@ -177,11 +181,15 @@ export function renderAllRanksLegend(): string {
     <div class="grid grid-cols-3 gap-2">
       ${ranks.map(({ name, ratio }) => {
         const colors = RANK_COLORS[name];
+        const displayName = RANK_DISPLAY_NAMES[name];
+        const isSimetrico = name === 'Simetrico';
+        const nameClass = isSimetrico ? 'text-shiny' : '';
+        const nameStyle = isSimetrico ? '' : `style="color: ${colors.fill}"`;
         return `
           <div class="flex items-center gap-1.5 bg-dark-bg/30 rounded-lg px-2 py-1.5">
             <div class="w-5 h-5 flex-shrink-0">${renderRankEmblem(name, 20)}</div>
             <div class="min-w-0">
-              <div class="text-[11px] font-medium truncate" style="color: ${colors.fill}">${name}</div>
+              <div class="text-[11px] font-medium truncate ${nameClass}" ${nameStyle}>${displayName}</div>
               <div class="text-[9px] text-gray-500">${ratio}</div>
             </div>
           </div>

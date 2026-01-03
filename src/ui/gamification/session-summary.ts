@@ -2,10 +2,29 @@
 // SESSION XP SUMMARY POPUP
 // ==========================================
 
-import type { SessionXPSummary, GamificationMuscleGroup } from '@/types/gamification';
-import { RANK_COLORS } from '@/features/gamification';
+import type { SessionXPSummary, GamificationMuscleGroup, StrengthRank } from '@/types/gamification';
+import { RANK_COLORS, RANK_DISPLAY_NAMES } from '@/features/gamification';
 import { renderLevelBadge } from './level-badge';
 import { renderRankEmblem } from './rank-emblem';
+
+/**
+ * Helper para mostrar nombre de rango con estilo shiny si es Simétrico
+ */
+function displayRank(rank: StrengthRank, useColor: boolean = true): string {
+  const displayName = RANK_DISPLAY_NAMES[rank];
+  const colors = RANK_COLORS[rank];
+  const isSimetrico = rank === 'Simetrico';
+
+  if (isSimetrico) {
+    return `<span class="text-shiny">${displayName}</span>`;
+  }
+
+  if (useColor) {
+    return `<span style="color: ${colors.fill}" class="font-medium">${displayName}</span>`;
+  }
+
+  return displayName;
+}
 
 /**
  * Nombres de musculos en español
@@ -129,7 +148,6 @@ export function renderSessionSummary(summary: SessionXPSummary): string {
             <h3 class="text-sm font-medium text-gray-400 mb-3">RANGOS ACTUALIZADOS</h3>
             <div class="space-y-3">
               ${summary.rankUps.map(ru => {
-                const toColors = RANK_COLORS[ru.to];
                 return `
                   <div class="flex items-center gap-3 p-2 bg-dark-bg rounded-xl">
                     <div class="w-8 h-8">
@@ -138,9 +156,9 @@ export function renderSessionSummary(summary: SessionXPSummary): string {
                     <div class="flex-1">
                       <div class="text-sm font-medium">${MUSCLE_NAMES[ru.muscle]}</div>
                       <div class="text-xs">
-                        <span class="text-gray-500">${ru.from}</span>
+                        <span class="text-gray-500">${RANK_DISPLAY_NAMES[ru.from]}</span>
                         <span class="text-gray-600 mx-1">→</span>
-                        <span style="color: ${toColors.fill}" class="font-medium">${ru.to}</span>
+                        ${displayRank(ru.to)}
                       </div>
                     </div>
                   </div>
@@ -228,19 +246,20 @@ export function renderLevelUpMessage(_oldLevel: number, newLevel: number, titleI
  */
 export function renderRankUpMessage(
   muscle: GamificationMuscleGroup,
-  from: string,
-  to: string
+  from: StrengthRank,
+  to: StrengthRank
 ): string {
-  const toColors = RANK_COLORS[to as keyof typeof RANK_COLORS];
+  const fromDisplay = RANK_DISPLAY_NAMES[from];
+  const toDisplay = RANK_DISPLAY_NAMES[to];
 
   return `
     <div class="flex items-center gap-3 p-3 bg-dark-surface rounded-xl border border-dark-border">
       <div class="w-10 h-10">
-        ${renderRankEmblem(to as any, 40)}
+        ${renderRankEmblem(to, 40)}
       </div>
       <div>
-        <div class="font-medium">¡${MUSCLE_NAMES[muscle]} subió a ${to}!</div>
-        <div class="text-xs text-gray-500">${from} → <span style="color: ${toColors.fill}">${to}</span></div>
+        <div class="font-medium">¡${MUSCLE_NAMES[muscle]} subió a ${toDisplay}!</div>
+        <div class="text-xs text-gray-500">${fromDisplay} → ${displayRank(to)}</div>
       </div>
     </div>
   `;

@@ -9,11 +9,12 @@ import {
   getStreakInfo,
   getAchievementsProgress,
   getAchievements,
+  RANK_COLORS,
+  RANK_DISPLAY_NAMES,
 } from '@/features/gamification';
 import { renderLevelBadge, renderLevelBadgeWithProgress } from './level-badge';
 import { renderMuscleMap, renderMuscleMapDual } from './muscle-map';
 import { renderAllRanksLegend } from './rank-emblem';
-import { RANK_COLORS } from '@/features/gamification';
 import { icon, refreshIcons } from '@/utils/icons';
 
 /**
@@ -186,10 +187,14 @@ export function renderGamificationModal(): string {
             ].map(({ key, label }) => {
               const data = muscleRanks[key as keyof typeof muscleRanks];
               const colors = RANK_COLORS[data.rank];
+              const displayName = RANK_DISPLAY_NAMES[data.rank];
+              const isSimetrico = data.rank === 'Simetrico';
+              const rankClass = isSimetrico ? 'text-shiny' : 'font-medium';
+              const rankStyle = isSimetrico ? '' : `style="color: ${colors.fill}"`;
               return `
                 <div class="flex items-center justify-between">
                   <span class="text-gray-400">${label}</span>
-                  <span class="font-medium" style="color: ${colors.fill}">${data.rank}</span>
+                  <span class="${rankClass}" ${rankStyle}>${displayName}</span>
                 </div>
               `;
             }).join('')}
@@ -377,7 +382,7 @@ function renderLevelsGuide(): string {
     { name: 'Novato', range: '17-33', color: '#22C55E', subniveles: 'I-V' },
     { name: 'Intermedio', range: '34-50', color: '#3B82F6', subniveles: 'I-V' },
     { name: 'Avanzado', range: '51-66', color: '#8B5CF6', subniveles: 'I-V' },
-    { name: 'Elite', range: '67-83', color: '#F59E0B', subniveles: 'I-V' },
+    { name: 'Élite', range: '67-83', color: '#F59E0B', subniveles: 'I-V' },
     { name: 'Legendario', range: '84-99', color: '#EF4444', subniveles: 'I-V' },
     { name: 'Simétrico', range: '100', color: '#3B82F6', subniveles: '', special: true },
   ];
@@ -388,7 +393,7 @@ function renderLevelsGuide(): string {
         <div class="flex items-center gap-2 bg-dark-bg/30 rounded-lg px-2.5 py-2 ${special ? 'col-span-2 justify-center' : ''}">
           <div class="w-3 h-3 rounded-full flex-shrink-0" style="background-color: ${color}; ${special ? 'box-shadow: 0 0 8px ' + color : ''}"></div>
           <div class="${special ? 'text-center' : ''}">
-            <span class="text-xs font-medium ${special ? 'bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent' : ''}" style="${!special ? 'color: ' + color : ''}">
+            <span class="text-xs ${special ? 'text-shiny' : 'font-medium'}" style="${!special ? 'color: ' + color : ''}">
               ${name}${subniveles ? ' ' + subniveles : ''}
             </span>
             <span class="text-[10px] text-gray-500 ml-1">Nv. ${range}</span>
