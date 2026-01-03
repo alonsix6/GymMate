@@ -17,6 +17,12 @@ import {
   confirmRPE,
   skipRPE,
 } from '@/features/workout';
+import { initGamification } from '@/features/gamification';
+import {
+  renderGamificationHeroCard,
+  showGamificationModal,
+  hideGamificationModal,
+} from '@/ui/gamification';
 import {
   showCardioSelector,
   selectCardioMode,
@@ -122,6 +128,10 @@ declare global {
     showMeasurementsHistory: typeof showMeasurementsHistory;
     closeMeasurementsHistoryModal: typeof closeMeasurementsHistoryModal;
     deleteMeasurementEntry: typeof deleteMeasurementEntry;
+
+    // Gamification
+    showGamificationModal: typeof showGamificationModal;
+    hideGamificationModal: typeof hideGamificationModal;
   }
 }
 
@@ -179,6 +189,8 @@ window.closeMeasurementsModal = closeMeasurementsModal;
 window.showMeasurementsHistory = showMeasurementsHistory;
 window.closeMeasurementsHistoryModal = closeMeasurementsHistoryModal;
 window.deleteMeasurementEntry = deleteMeasurementEntry;
+window.showGamificationModal = showGamificationModal;
+window.hideGamificationModal = hideGamificationModal;
 
 // ==========================================
 // RENDERIZAR RUTINAS EN HOME
@@ -329,6 +341,29 @@ function renderCustomWorkoutsInHome(): void {
 
   html += '</div></div>';
   container.innerHTML = html;
+
+  refreshIcons();
+}
+
+// ==========================================
+// RENDERIZAR GAMIFICATION EN HOME
+// ==========================================
+
+function renderGamificationInHome(): void {
+  // Insertar hero card antes de las rutinas
+  const routinesContainer = document.getElementById('routinesContainer');
+  if (routinesContainer) {
+    // Verificar si ya existe el hero card
+    let heroContainer = document.getElementById('gamificationHeroContainer');
+    if (!heroContainer) {
+      heroContainer = document.createElement('div');
+      heroContainer.id = 'gamificationHeroContainer';
+      heroContainer.className = 'mb-6';
+      routinesContainer.parentNode?.insertBefore(heroContainer, routinesContainer);
+    }
+
+    heroContainer.innerHTML = renderGamificationHeroCard();
+  }
 
   refreshIcons();
 }
@@ -852,9 +887,15 @@ function init(): void {
   initializeProfile();
   updateMeasurementPreview();
 
+  // Inicializar gamificacion (migrando datos existentes si es necesario)
+  initGamification();
+
   // Renderizar rutinas en home
   renderRoutinesInHome();
   renderCustomWorkoutsInHome();
+
+  // Renderizar gamificacion en home
+  renderGamificationInHome();
 
   // Cargar historial y PRs
   loadHistory();
