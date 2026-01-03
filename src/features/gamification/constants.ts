@@ -10,6 +10,9 @@ import type {
   Achievement,
 } from '@/types/gamification';
 
+// Re-export LevelTitleBase for use in other modules
+export type { LevelTitleBase } from '@/types/gamification';
+
 // ==========================================
 // STORAGE KEYS
 // ==========================================
@@ -250,6 +253,34 @@ export const RANK_ORDER: StrengthRank[] = [
   'Campeon',
   'Simetrico',
 ];
+
+/**
+ * Nombres de rango para display (con tildes correctas)
+ */
+export const RANK_DISPLAY_NAMES: Record<StrengthRank, string> = {
+  Hierro: 'Hierro',
+  Bronce: 'Bronce',
+  Plata: 'Plata',
+  Oro: 'Oro',
+  Platino: 'Platino',
+  Esmeralda: 'Esmeralda',
+  Diamante: 'Diamante',
+  Campeon: 'Campeón',
+  Simetrico: 'Simétrico',
+};
+
+/**
+ * Nombres de título de nivel para display (con tildes correctas)
+ */
+export const LEVEL_TITLE_DISPLAY_NAMES: Record<LevelTitleBase, string> = {
+  Principiante: 'Principiante',
+  Novato: 'Novato',
+  Intermedio: 'Intermedio',
+  Avanzado: 'Avanzado',
+  Elite: 'Élite',
+  Legendario: 'Legendario',
+  Simetrico: 'Simétrico',
+};
 
 /**
  * Multiplicadores por tipo de ejercicio para normalizar ratios

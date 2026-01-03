@@ -15,7 +15,6 @@ import {
   PR_XP,
   DEFAULT_BODYWEIGHT,
   GAMIFICATION_SCHEMA_VERSION,
-  ACHIEVEMENT_XP_V1,
   ACHIEVEMENT_DEFINITIONS,
 } from './constants';
 import {
@@ -73,18 +72,13 @@ export function migrateExistingData(): GamificationState {
     }
   }
 
-  // Calcular XP retroactivo
-  const { totalXP, xpTransactions } = calculateRetroactiveXP(history, prs);
+  // Calcular XP retroactivo (entrenamientos + PRs)
+  const { totalXP: baseXP, xpTransactions } = calculateRetroactiveXP(history, prs);
 
   // Calcular rangos musculares
   const { muscleRanks, exerciseStrengths } = prs && Object.keys(prs).length > 0
     ? calculateAllMuscleRanks(prs, exerciseToMuscle, bodyweight)
     : { muscleRanks: createInitialMuscleRanks(), exerciseStrengths: {} };
-
-  // Calcular nivel
-  const level = calculateLevel(totalXP);
-  const progress = getLevelProgress(totalXP);
-  const titleInfo = getLevelTitle(level);
 
   // Calcular racha actual
   const currentStreak = calculateCurrentStreak(history);
@@ -99,9 +93,37 @@ export function migrateExistingData(): GamificationState {
     currentStreak
   );
 
+  // Calcular XP de logros desbloqueados y añadirlo al total
+  let achievementXP = 0;
+  for (const achievement of achievements) {
+    if (achievement.unlockedAt) {
+      achievementXP += achievement.xpReward;
+    }
+  }
+
+  // XP total = entrenamientos + PRs + logros
+  const totalXP = baseXP + achievementXP;
+
+  // Registrar XP de logros en transacciones si hay alguno
+  if (achievementXP > 0) {
+    const unlockedCount = achievements.filter(a => a.unlockedAt).length;
+    xpTransactions.push({
+      id: generateTransactionId(),
+      amount: achievementXP,
+      source: 'migration',
+      description: `${unlockedCount} logros desbloqueados`,
+      timestamp: new Date().toISOString(),
+    });
+  }
+
+  // Calcular nivel con XP total (incluyendo logros)
+  const level = calculateLevel(totalXP);
+  const progress = getLevelProgress(totalXP);
+  const titleInfo = getLevelTitle(level);
+
   // Construir estado completo
   const state: GamificationState = {
-    version: 1,
+    version: GAMIFICATION_SCHEMA_VERSION,
     playerStats: {
       totalXP,
       level,
@@ -211,28 +233,14 @@ export function needsMigration(): boolean {
 
 /**
  * Migra el estado de v1 a v2
- * - Actualiza XP de logros ya desbloqueados (retroactivo)
+ * - Añade XP de logros (bug fix: nunca se añadió en v1)
+ * - Actualiza XP rewards a los nuevos valores
  * - Añade el nuevo logro "first_simetrico"
  */
 export function migrateV1toV2(state: GamificationState): GamificationState {
   if ((state.version || 1) >= 2) return state;
 
-  let xpDifference = 0;
-
-  // Calcular diferencia de XP para logros ya desbloqueados
-  for (const achievement of state.achievements) {
-    if (achievement.unlockedAt) {
-      const oldXP = ACHIEVEMENT_XP_V1[achievement.id] || 0;
-      const newDef = ACHIEVEMENT_DEFINITIONS.find(d => d.id === achievement.id);
-      const newXP = newDef?.xpReward || oldXP;
-
-      // Add the difference (new - old)
-      xpDifference += newXP - oldXP;
-
-      // Update the achievement's xpReward to new value
-      achievement.xpReward = newXP;
-    }
-  }
+  let totalAchievementXP = 0;
 
   // Add missing "first_simetrico" achievement if not present
   const hasFirstSimetrico = state.achievements.some(a => a.id === 'first_simetrico');
@@ -249,24 +257,25 @@ export function migrateV1toV2(state: GamificationState): GamificationState {
         unlockedAt: hasSimetricoRank ? new Date().toISOString() : undefined,
         progress: hasSimetricoRank ? 1 : 0,
       });
-
-      // If already unlocked, add XP
-      if (hasSimetricoRank) {
-        xpDifference += simetricoDef.xpReward;
-      }
     }
   }
 
-  // Update all achievement XP rewards to new values
+  // Update all achievement XP rewards to new values AND calculate total XP
+  // Bug fix: In v1, achievement XP was never added to totalXP
   for (const achievement of state.achievements) {
     const newDef = ACHIEVEMENT_DEFINITIONS.find(d => d.id === achievement.id);
     if (newDef) {
       achievement.xpReward = newDef.xpReward;
+
+      // Add FULL achievement XP (not difference) because v1 never added it
+      if (achievement.unlockedAt) {
+        totalAchievementXP += newDef.xpReward;
+      }
     }
   }
 
-  // Update total XP
-  state.playerStats.totalXP += xpDifference;
+  // Update total XP with full achievement XP
+  state.playerStats.totalXP += totalAchievementXP;
 
   // Recalculate level with new XP
   const newLevel = calculateLevel(state.playerStats.totalXP);
@@ -283,12 +292,13 @@ export function migrateV1toV2(state: GamificationState): GamificationState {
   state.version = 2;
 
   // Add migration transaction if XP changed
-  if (xpDifference > 0) {
+  if (totalAchievementXP > 0) {
+    const unlockedCount = state.achievements.filter(a => a.unlockedAt).length;
     state.xpHistory.push({
       id: generateTransactionId(),
-      amount: xpDifference,
+      amount: totalAchievementXP,
       source: 'migration',
-      description: `Ajuste retroactivo v2 (+${xpDifference} XP)`,
+      description: `${unlockedCount} logros (+${totalAchievementXP.toLocaleString()} XP)`,
       timestamp: new Date().toISOString(),
     });
   }

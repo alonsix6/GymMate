@@ -81,6 +81,8 @@ import {
   STREAK_XP,
   DEFAULT_BODYWEIGHT,
   ACHIEVEMENT_DEFINITIONS,
+  RANK_DISPLAY_NAMES,
+  LEVEL_TITLE_DISPLAY_NAMES,
 } from './constants';
 
 // ==========================================
@@ -470,4 +472,6 @@ export {
   STREAK_XP,
   DEFAULT_BODYWEIGHT,
   ACHIEVEMENT_DEFINITIONS,
+  RANK_DISPLAY_NAMES,
+  LEVEL_TITLE_DISPLAY_NAMES,
 };

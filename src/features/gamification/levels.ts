@@ -8,6 +8,7 @@ import {
   LEVEL_CUMULATIVE_XP,
   LEVEL_TITLE_CONFIG,
   ROMAN_NUMERALS,
+  LEVEL_TITLE_DISPLAY_NAMES,
 } from './constants';
 
 /**
@@ -94,10 +95,11 @@ export function getLevelTitle(level: number): LevelTitleInfo {
   // Nivel 100 es especial: Simetrico sin numeral
   if (level >= 100) {
     const config = LEVEL_TITLE_CONFIG.find(t => t.name === 'Simetrico')!;
+    const displayName = LEVEL_TITLE_DISPLAY_NAMES['Simetrico'];
     return {
       base: 'Simetrico',
       numeral: '',
-      full: 'Simetrico',
+      full: displayName,
       color: config.color,
     };
   }
@@ -129,10 +131,13 @@ export function getLevelTitle(level: number): LevelTitleInfo {
   );
   const numeral = ROMAN_NUMERALS[numeralIndex] as LevelNumeral;
 
+  // Usar nombre con tildes para display
+  const displayName = LEVEL_TITLE_DISPLAY_NAMES[config.name];
+
   return {
     base: config.name as LevelTitleBase,
     numeral,
-    full: `${config.name} ${numeral}`,
+    full: `${displayName} ${numeral}`,
     color: config.color,
   };
 }
