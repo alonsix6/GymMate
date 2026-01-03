@@ -127,21 +127,30 @@ Los titulos (Hierro, Bronce, etc.) son exclusivamente para los **rangos por grup
 
 **Nota:** Con entrenamiento muy dedicado (5+ sesiones/semana, muchos PRs), se puede alcanzar nivel 100 en ~4 anos.
 
-### 1.4 Visualizacion del Nivel
+### 1.4 Titulos por Rango de Nivel
 
-El nivel se muestra como un numero simple con barra de progreso:
+Ademas del numero, cada rango de niveles tiene un titulo asociado:
+
+| Niveles | Titulo | Color | Descripcion |
+|---------|--------|-------|-------------|
+| 1-16 | Principiante | #6B7280 (Gris) | Comenzando el viaje |
+| 17-33 | Novato | #22C55E (Verde) | Construyendo bases |
+| 34-50 | Intermedio | #3B82F6 (Azul) | Progreso solido |
+| 51-66 | Avanzado | #8B5CF6 (Morado) | Dominio tecnico |
+| 67-83 | Elite | #F59E0B (Dorado) | Top performer |
+| 84-99 | Legendario | #EF4444 (Rojo) | Los mejores |
+| 100 | Simetrico | Gradiente especial | Maximo logro |
+
+### 1.5 Visualizacion del Nivel
+
+El nivel se muestra con numero + titulo + barra de progreso:
 
 ```
-Nivel 42
+Nivel 42 - Intermedio
 ████████████░░░░░░  12,450 / 15,000 XP
 ```
 
-El color de la barra puede variar segun el rango de nivel:
-- Niveles 1-25: Gris/Blanco
-- Niveles 26-50: Azul
-- Niveles 51-75: Morado
-- Niveles 76-99: Dorado
-- Nivel 100: Gradiente especial
+El color de la barra coincide con el titulo del rango actual.
 
 ---
 
@@ -446,14 +455,23 @@ Vista frontal simplificada del cuerpo con zonas coloreables:
 
 interface PlayerStats {
   totalXP: number;
-  level: number;               // 1-100, sin titulos
+  level: number;               // 1-100
+  title: LevelTitle;           // Titulo segun rango de nivel
   currentLevelXP: number;      // XP en el nivel actual
   xpToNextLevel: number;       // XP necesario para subir
   createdAt: string;           // Fecha inicio
   lastUpdated: string;
 }
 
-// El nivel de cuenta no tiene titulos, solo es un numero 1-100
+// Titulos para rangos de nivel de cuenta
+type LevelTitle =
+  | 'Principiante'  // 1-16
+  | 'Novato'        // 17-33
+  | 'Intermedio'    // 34-50
+  | 'Avanzado'      // 51-66
+  | 'Elite'         // 67-83
+  | 'Legendario'    // 84-99
+  | 'Simetrico';    // 100
 
 interface XPTransaction {
   id: string;
@@ -704,11 +722,12 @@ export function addXP(amount: number, source: XPSource, description: string): vo
 export function calculateSessionXP(session: HistorySession): number;
 export function getPlayerStats(): PlayerStats;
 
-// ===== NIVELES (1-100, sin titulos) =====
+// ===== NIVELES (1-100 con titulos) =====
 export function getCurrentLevel(): number;
+export function getLevelTitle(level: number): LevelTitle;
+export function getLevelColor(level: number): string;
 export function getLevelProgress(): { current: number; max: number; percentage: number };
 export function getXPForLevel(level: number): number;
-export function getLevelBarColor(level: number): string; // Color segun rango de nivel
 
 // ===== RANGOS MUSCULARES =====
 export function getMuscleRanks(): MuscleRanks;
@@ -1156,21 +1175,291 @@ function onBodyweightChange(newWeight: number): void {
 
 ---
 
-## PARTE 9: CONSIDERACIONES TECNICAS
+## PARTE 9: DEPENDENCIAS Y CREACION DE ASSETS
 
-### 9.1 Performance
+### 9.1 Mapa Corporal SVG
+
+**Estrategia:** Crear SVG custom inline (sin dependencias externas).
+
+El mapa corporal sera un SVG simple con paths para cada grupo muscular.
+Se generara programaticamente en TypeScript para permitir coloreado dinamico.
+
+```typescript
+// src/ui/gamification/muscle-map.ts
+
+const MUSCLE_PATHS = {
+  pecho: 'M70 85 Q100 75 130 85 L130 115 Q100 125 70 115 Z',
+  espalda: 'M65 88 L55 125 L68 125 Z M135 88 L145 125 L132 125 Z',
+  hombros: 'M50 75 Q55 65 70 72 M130 72 Q145 65 150 75',
+  biceps: 'M38 95 Q32 115 38 140 Q48 140 45 115 Q42 95 38 95',
+  triceps: 'M32 100 Q28 120 32 138 Q38 138 36 120 Q34 100 32 100',
+  piernas: 'M65 210 L55 320 L85 320 L90 210 Z M110 210 L120 320 L150 320 L145 210 Z',
+  gluteos: 'M75 185 Q80 175 100 180 Q120 175 125 185 Q125 210 100 215 Q75 210 75 185',
+  core: 'M78 130 L122 130 L120 180 Q100 190 80 180 Z',
+};
+
+export function renderMuscleMap(ranks: MuscleRanks): string {
+  return `
+    <svg viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg">
+      <!-- Silueta base -->
+      <ellipse cx="100" cy="35" rx="22" ry="28" fill="#1F2937"/>
+      <path d="M100 63 L100 185" stroke="#1F2937" stroke-width="30"/>
+
+      <!-- Musculos coloreados -->
+      ${Object.entries(MUSCLE_PATHS).map(([muscle, path]) => {
+        const rank = ranks[muscle as keyof MuscleRanks];
+        const color = RANK_COLORS[rank.rank.toLowerCase()];
+        return `<path d="${path}" fill="${color.fill}"
+                      filter="${color.glow !== 'none' ? 'url(#glow)' : 'none'}"/>`;
+      }).join('\n')}
+
+      <!-- Glow filter -->
+      <defs>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="2" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+    </svg>
+  `;
+}
+```
+
+**Ventajas:**
+- Sin dependencias externas
+- Coloreado dinamico por grupo muscular
+- Ligero (~2KB)
+- Tematizable con CSS variables
+
+---
+
+### 9.2 Creacion de Emblemas SVG
+
+**Estrategia:** Funciones TypeScript que generan SVGs programaticamente.
+
+```typescript
+// src/ui/gamification/rank-emblems.ts
+
+const EMBLEM_SHAPES = {
+  hierro: { points: 6, innerRadius: 0.5, rotation: 0 },
+  bronce: { points: 6, innerRadius: 0.6, rotation: 30 },
+  plata: { points: 8, innerRadius: 0.55, rotation: 0 },
+  oro: { points: 8, innerRadius: 0.6, rotation: 22.5 },
+  platino: { points: 5, innerRadius: 0.4, rotation: -90 },
+  esmeralda: { points: 6, innerRadius: 0.45, rotation: 0 },
+  diamante: { points: 8, innerRadius: 0.35, rotation: 22.5 },
+  campeon: { points: 10, innerRadius: 0.4, rotation: 0 },
+  simetrico: { points: 12, innerRadius: 0.5, rotation: 0 },
+};
+
+function generateStarPath(cx: number, cy: number, points: number,
+                          outerR: number, innerR: number, rotation: number): string {
+  const step = Math.PI / points;
+  let path = '';
+  for (let i = 0; i < 2 * points; i++) {
+    const r = i % 2 === 0 ? outerR : innerR * outerR;
+    const angle = i * step - Math.PI / 2 + (rotation * Math.PI / 180);
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+    path += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+  }
+  return path + 'Z';
+}
+
+export function renderRankEmblem(rank: StrengthRank, size: number = 64): string {
+  const config = EMBLEM_SHAPES[rank.toLowerCase()];
+  const color = RANK_COLORS[rank.toLowerCase()];
+  const cx = size / 2, cy = size / 2, r = size * 0.4;
+
+  const starPath = generateStarPath(cx, cy, config.points, r, config.innerRadius, config.rotation);
+
+  return `
+    <svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="${rank}-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:${lighten(color.fill, 20)}"/>
+          <stop offset="100%" style="stop-color:${color.fill}"/>
+        </linearGradient>
+        ${color.glow !== 'none' ? `
+        <filter id="${rank}-glow">
+          <feGaussianBlur stdDeviation="2" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>` : ''}
+      </defs>
+      ${color.glow !== 'none' ? `<circle cx="${cx}" cy="${cy}" r="${r + 4}" fill="${color.glow}"/>` : ''}
+      <path d="${starPath}" fill="url(#${rank}-grad)"
+            ${color.glow !== 'none' ? `filter="url(#${rank}-glow)"` : ''}/>
+    </svg>
+  `;
+}
+```
+
+**Para exportar a PNG (si es necesario):**
+- Usar canvas API: `canvas.toDataURL('image/png')`
+- O pre-generar PNGs en build time con sharp/svg2png
+
+---
+
+### 9.3 Popup de Resumen XP al Terminar Sesion
+
+Despues del popup de RPE, se muestra un resumen desglosado del XP ganado:
+
+```
++--------------------------------------------------+
+|              RESUMEN DE ENTRENAMIENTO            |
++--------------------------------------------------+
+|                                                  |
+|     [Badge Nivel]  Nivel 42 - Intermedio         |
+|     ████████████████░░  14,250 / 15,000 XP       |
+|                                                  |
++--------------------------------------------------+
+|                                                  |
+|     XP GANADO ESTA SESION                        |
+|                                                  |
+|     Entrenamiento completado     +50 XP          |
+|     Volumen (12,500 kg)          +45 XP          |
+|     PR: Press Banca (+5kg)      +100 XP          |
+|     Racha 7 dias                 +75 XP          |
+|     ─────────────────────────────────────        |
+|     TOTAL                       +270 XP          |
+|                                                  |
++--------------------------------------------------+
+|                                                  |
+|     RANGOS ACTUALIZADOS                          |
+|                                                  |
+|     [Pecho] Oro -> Platino!                      |
+|                                                  |
++--------------------------------------------------+
+|               [Continuar]                        |
++--------------------------------------------------+
+```
+
+**Implementacion:**
+
+```typescript
+// src/ui/gamification/session-summary.ts
+
+interface SessionXPSummary {
+  baseXP: number;
+  volumeXP: number;
+  prXP: { exercise: string; amount: number }[];
+  streakXP: number;
+  achievementXP: { name: string; amount: number }[];
+  rankUps: { muscle: string; from: StrengthRank; to: StrengthRank }[];
+  totalXP: number;
+  newLevel: number;
+  newTitle: LevelTitle;
+  levelProgress: { current: number; max: number };
+}
+
+export function showSessionSummary(summary: SessionXPSummary): void {
+  const modal = document.createElement('div');
+  modal.className = 'fixed inset-0 bg-black/80 flex items-center justify-center z-50';
+  modal.innerHTML = `
+    <div class="bg-dark-surface rounded-2xl p-6 max-w-sm w-full mx-4 animate-scale-in">
+      <h2 class="text-xl font-bold text-center mb-4">Resumen de Entrenamiento</h2>
+
+      <!-- Nivel actual -->
+      <div class="text-center mb-6">
+        ${renderLevelBadge(summary.newLevel)}
+        <div class="text-lg font-semibold">Nivel ${summary.newLevel} - ${summary.newTitle}</div>
+        <div class="w-full bg-dark-border rounded-full h-2 mt-2">
+          <div class="h-full rounded-full transition-all"
+               style="width: ${(summary.levelProgress.current / summary.levelProgress.max) * 100}%;
+                      background: ${getLevelColor(summary.newLevel)}"></div>
+        </div>
+        <div class="text-xs text-gray-400 mt-1">
+          ${summary.levelProgress.current.toLocaleString()} / ${summary.levelProgress.max.toLocaleString()} XP
+        </div>
+      </div>
+
+      <!-- Desglose XP -->
+      <div class="space-y-2 mb-6">
+        <div class="text-sm font-medium text-gray-400">XP GANADO</div>
+        <div class="flex justify-between">
+          <span>Entrenamiento completado</span>
+          <span class="text-green-400">+${summary.baseXP} XP</span>
+        </div>
+        ${summary.volumeXP > 0 ? `
+        <div class="flex justify-between">
+          <span>Volumen</span>
+          <span class="text-green-400">+${summary.volumeXP} XP</span>
+        </div>` : ''}
+        ${summary.prXP.map(pr => `
+        <div class="flex justify-between">
+          <span>PR: ${pr.exercise}</span>
+          <span class="text-yellow-400">+${pr.amount} XP</span>
+        </div>`).join('')}
+        ${summary.streakXP > 0 ? `
+        <div class="flex justify-between">
+          <span>Racha</span>
+          <span class="text-blue-400">+${summary.streakXP} XP</span>
+        </div>` : ''}
+        <div class="border-t border-dark-border pt-2 flex justify-between font-bold">
+          <span>TOTAL</span>
+          <span class="text-accent">+${summary.totalXP} XP</span>
+        </div>
+      </div>
+
+      <!-- Rangos actualizados -->
+      ${summary.rankUps.length > 0 ? `
+      <div class="mb-6">
+        <div class="text-sm font-medium text-gray-400 mb-2">RANGOS ACTUALIZADOS</div>
+        ${summary.rankUps.map(ru => `
+        <div class="flex items-center gap-2 text-sm">
+          ${getRankEmblemSVG(ru.to, 24)}
+          <span>${ru.muscle}: ${ru.from} -> ${ru.to}!</span>
+        </div>`).join('')}
+      </div>` : ''}
+
+      <button onclick="this.closest('.fixed').remove()"
+              class="w-full py-3 bg-accent text-white rounded-xl font-semibold">
+        Continuar
+      </button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+```
+
+**Flujo de fin de sesion:**
+
+```
+1. Usuario toca "Terminar"
+        |
+        v
+2. Popup RPE (1-10)
+        |
+        v
+3. Calcular XP de la sesion
+        |
+        v
+4. Popup Resumen XP (nuevo!)
+        |
+        v
+5. Guardar sesion en historial
+        |
+        v
+6. Volver a Home
+```
+
+---
+
+## PARTE 10: CONSIDERACIONES TECNICAS
+
+### 10.1 Performance
 
 - **Calculos pesados:** Cachear resultados de calculos de rango
 - **SVGs:** Usar sprites o inline para evitar requests
 - **localStorage:** Separar historial de XP del estado principal
 
-### 9.2 Compatibilidad
+### 10.2 Compatibilidad
 
 - **Navegadores:** SVG soportado en todos los navegadores modernos
 - **Fallbacks:** Usar colores solidos si SVG falla
 - **Accesibilidad:** Alt text para iconos, ARIA labels
 
-### 9.3 Escalabilidad
+### 10.3 Escalabilidad
 
 - **Nuevos ejercicios:** Sistema permite agregar ejercicios sin cambios
 - **Nuevos logros:** Array extensible de achievements
@@ -1178,7 +1467,7 @@ function onBodyweightChange(newWeight: number): void {
 
 ---
 
-## PARTE 10: RESUMEN DE ARCHIVOS A CREAR
+## PARTE 11: RESUMEN DE ARCHIVOS A CREAR
 
 | Archivo | Proposito | Prioridad |
 |---------|-----------|-----------|
@@ -1196,11 +1485,12 @@ function onBodyweightChange(newWeight: number): void {
 | `src/ui/gamification/rank-emblem.ts` | Emblemas | Media |
 | `src/ui/gamification/xp-bar.ts` | Barra XP | Media |
 | `src/ui/gamification/level-modal.ts` | Modal detalles | Media |
-| `src/assets/gamification/*.svg` | Assets visuales | Media |
+| `src/ui/gamification/session-summary.ts` | Popup resumen XP | Alta |
+| `src/ui/gamification/achievements-view.ts` | Vista de logros | Media |
 
 ---
 
-## PARTE 10: METRICAS DE EXITO
+## PARTE 12: METRICAS DE EXITO
 
 ### KPIs a Monitorear
 
