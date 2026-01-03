@@ -798,23 +798,35 @@ function initializeKeyboardHandler(): void {
 }
 
 // ==========================================
-// EVENT DELEGATION PARA BOTONES DE GUÍA
+// EVENT DELEGATION
 // ==========================================
 
-function initializeGuidanceButtons(): void {
+function initializeEventDelegation(): void {
   document.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
-    const btn = target.closest('[data-guidance-btn]') as HTMLElement;
 
-    if (btn) {
-      const nombre = btn.dataset.exerciseName || '';
-      const type = btn.dataset.guidanceType as GuidanceType;
-      const content = btn.dataset.guidanceContent || '';
-      const fallback = btn.dataset.guidanceFallback; // Description fallback
+    // RPE buttons
+    const rpeBtn = target.closest('[data-rpe]') as HTMLElement;
+    if (rpeBtn) {
+      const rpe = parseInt(rpeBtn.dataset.rpe || '0', 10);
+      if (rpe >= 1 && rpe <= 10) {
+        selectRPE(rpe);
+      }
+      return;
+    }
+
+    // Exercise guidance buttons
+    const guidanceBtn = target.closest('[data-guidance-btn]') as HTMLElement;
+    if (guidanceBtn) {
+      const nombre = guidanceBtn.dataset.exerciseName || '';
+      const type = guidanceBtn.dataset.guidanceType as GuidanceType;
+      const content = guidanceBtn.dataset.guidanceContent || '';
+      const fallback = guidanceBtn.dataset.guidanceFallback;
 
       if (nombre && type && content) {
         showAnimation(nombre, { type, content, fallback });
       }
+      return;
     }
   });
 }
@@ -824,8 +836,6 @@ function initializeGuidanceButtons(): void {
 // ==========================================
 
 function init(): void {
-  console.log('GymMate v3.0 - Initializing...');
-
   // Inicializar iconos Lucide
   initializeIcons();
 
@@ -856,17 +866,11 @@ function init(): void {
   // Ocultar bottom nav cuando el teclado virtual está activo
   initializeKeyboardHandler();
 
-  // Event delegation para botones de guía de ejercicios
-  initializeGuidanceButtons();
+  // Event delegation para botones
+  initializeEventDelegation();
 
   // Refrescar iconos después de renderizar
   setTimeout(refreshIcons, 100);
-
-  console.log('GymMate v3.0 - Ready!');
-  console.log('- Modern UI without gradients');
-  console.log('- Lucide icons');
-  console.log('- TypeScript modules');
-  console.log('- PWA ready');
 }
 
 // Inicializar cuando el DOM esté listo

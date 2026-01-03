@@ -1,4 +1,4 @@
-import type { TabName } from '@/types';
+import type { TabName, HistorySession } from '@/types';
 import { hasUnsavedData, checkForExistingDraft, restoreFromDraft, endSession } from '@/state/session';
 import { loadHistory, loadPRs } from '@/features/history';
 import { initializeCharts } from '@/features/charts';
@@ -293,13 +293,13 @@ function getRecentPR(): { exercise: string; weight: number; reps: number } | nul
 }
 
 function getWeeklyVolume(): number {
-  const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
+  const history: HistorySession[] = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
   const oneWeekAgo = new Date();
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
   return history
-    .filter((s: any) => s.type !== 'cardio' && new Date(s.savedAt || s.date) >= oneWeekAgo)
-    .reduce((sum: number, s: any) => sum + (s.volumenTotal || 0), 0);
+    .filter((s) => s.type !== 'cardio' && new Date(s.savedAt || s.date) >= oneWeekAgo)
+    .reduce((sum, s) => sum + (s.volumenTotal || 0), 0);
 }
 
 function formatVolume(vol: number): string {
@@ -373,8 +373,8 @@ function getQuickHomeStats(): {
   streak: number;
   daysSinceLastWorkout: number;
 } {
-  const history = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
-  const weightSessions = history.filter((s: any) => s.type !== 'cardio');
+  const history: HistorySession[] = JSON.parse(localStorage.getItem('gymmate_history') || '[]');
+  const weightSessions = history.filter((s) => s.type !== 'cardio');
 
   let streak = 0;
   let daysSinceLastWorkout = 0;
@@ -392,7 +392,7 @@ function getQuickHomeStats(): {
       checkDate.setDate(checkDate.getDate() - i);
       const dateString = checkDate.toISOString().split('T')[0];
 
-      const hasWorkout = weightSessions.some((s: any) => {
+      const hasWorkout = weightSessions.some((s) => {
         const sessionDate = new Date(s.savedAt || s.date).toISOString().split('T')[0];
         return sessionDate === dateString;
       });
