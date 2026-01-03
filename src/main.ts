@@ -47,7 +47,8 @@ import {
   deleteCustomExercise,
   CustomExercise
 } from '@/utils/storage';
-import { icon, getGroupIcon } from '@/utils/icons';
+import { icon } from '@/utils/icons';
+import { groupIcon } from '@/utils/muscle-icons';
 import type { MuscleGroup } from '@/types';
 
 // ==========================================
@@ -242,7 +243,6 @@ function renderRoutinesInHome(): void {
 
   // Rutinas predefinidas
   Object.entries(trainingGroups).forEach(([id, group]) => {
-    const groupIcon = getGroupIcon(id);
     const style = groupStyles[id] || groupStyles.grupo1;
     // Extract short name (after the dash)
     const shortName = group.nombre.split(' - ')[1] || group.nombre;
@@ -256,7 +256,7 @@ function renderRoutinesInHome(): void {
       >
         <div class="flex items-center gap-4">
           <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${style.iconGradient} flex items-center justify-center flex-shrink-0 shadow-lg">
-            <i data-lucide="${groupIcon.icon}" class="w-6 h-6 text-white"></i>
+            ${groupIcon(id, 24, 'text-white')}
           </div>
           <div class="flex-1 min-w-0">
             <p class="text-xs ${style.textColor} font-semibold uppercase tracking-wide">${groupNum}</p>

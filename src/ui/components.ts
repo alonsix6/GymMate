@@ -1,5 +1,6 @@
 import type { ExerciseData, PRData, HistorySession } from '@/types';
-import { icon, refreshIcons, getMuscleIcon } from '@/utils/icons';
+import { icon, refreshIcons } from '@/utils/icons';
+import { muscleIcon } from '@/utils/muscle-icons';
 import { getExerciseGuidance } from '@/data/training-groups';
 import { formatDate } from '@/utils/calculations';
 
@@ -106,7 +107,7 @@ export function renderExercise(
   isOptional: boolean = false
 ): string {
   const guidance = getExerciseGuidance(ejercicio.nombre);
-  const muscleIcon = getMuscleIcon(ejercicio.grupoMuscular);
+  const muscleIconSvg = muscleIcon(ejercicio.grupoMuscular, 12, 'inline-block');
 
   const optionalBadge = isOptional
     ? `<span class="text-xs bg-orange-500/20 text-orange-400 px-2 py-0.5 rounded-full font-semibold">Opcional</span>`
@@ -144,7 +145,7 @@ export function renderExercise(
             }">${ejercicio.nombre}</h3>
             <div class="flex items-center gap-2 mt-1">
               <span class="text-xs text-slate-400 flex items-center gap-1">
-                <i data-lucide="${muscleIcon}" class="w-3 h-3"></i>
+                ${muscleIconSvg}
                 ${ejercicio.grupoMuscular}
               </span>
               ${optionalBadge}
