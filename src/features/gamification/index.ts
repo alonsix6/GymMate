@@ -77,6 +77,7 @@ import {
   RANK_UP_XP,
   STREAK_XP,
   DEFAULT_BODYWEIGHT,
+  ACHIEVEMENT_DEFINITIONS,
 } from './constants';
 
 // ==========================================
@@ -454,4 +455,5 @@ export {
   RANK_UP_XP,
   STREAK_XP,
   DEFAULT_BODYWEIGHT,
+  ACHIEVEMENT_DEFINITIONS,
 };
