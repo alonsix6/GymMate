@@ -392,7 +392,7 @@ export const GAMIFICATION_TO_SYSTEM_MUSCLE: Record<GamificationMuscleGroup, stri
 export const ACHIEVEMENT_DEFINITIONS: Omit<Achievement, 'unlockedAt' | 'progress'>[] = [
   // Sesiones
   { id: 'first_session', name: 'Primera Sesión', description: 'Completa tu primer entrenamiento', category: 'sesiones', xpReward: 100, target: 1 },
-  { id: 'sessions_10', name: 'Explorador', description: 'Completa 10 sesiones', category: 'sesiones', xpReward: 150, target: 10 },
+  { id: 'sessions_10', name: 'Constante', description: 'Completa 10 sesiones', category: 'sesiones', xpReward: 100, target: 10 },
   { id: 'sessions_25', name: 'Dedicado', description: 'Completa 25 sesiones', category: 'sesiones', xpReward: 300, target: 25 },
   { id: 'sessions_100', name: 'Veterano', description: 'Completa 100 sesiones', category: 'sesiones', xpReward: 600, target: 100 },
   { id: 'sessions_500', name: 'Leyenda', description: 'Completa 500 sesiones', category: 'sesiones', xpReward: 1500, target: 500 },
@@ -423,8 +423,8 @@ export const ACHIEVEMENT_DEFINITIONS: Omit<Achievement, 'unlockedAt' | 'progress
   { id: 'simetrico', name: 'Simétrico', description: 'Alcanza rango Simétrico en todos los músculos', category: 'rangos', xpReward: 10000, target: 8 },
 
   // Especiales
-  { id: 'use_10_exercises', name: 'Variedad', description: 'Usa 10 ejercicios diferentes', category: 'especial', xpReward: 100, target: 10 },
-  { id: 'use_30_exercises', name: 'Explorador de Ejercicios', description: 'Usa 30 ejercicios diferentes', category: 'especial', xpReward: 300, target: 30 },
+  { id: 'use_10_exercises', name: 'Explorador', description: 'Usa 10 ejercicios diferentes', category: 'especial', xpReward: 150, target: 10 },
+  { id: 'use_30_exercises', name: 'Maestro de Variedad', description: 'Usa 30 ejercicios diferentes', category: 'especial', xpReward: 300, target: 30 },
 ];
 
 // ==========================================
