@@ -1,12 +1,13 @@
 import type { ExerciseData, HistorySession } from '@/types';
 import { getHistory, getPR } from '@/utils/storage';
 import { refreshIcons } from '@/utils/icons';
+import { getStreakInfo, getCurrentLevelProgress } from '@/features/gamification';
 
 // ==========================================
 // COACH MESSAGE TYPES
 // ==========================================
 
-type CoachMessageType = 'info' | 'tip' | 'pr-alert' | 'pr-close' | 'success' | 'motivation';
+type CoachMessageType = 'info' | 'tip' | 'pr-alert' | 'pr-close' | 'success' | 'motivation' | 'streak';
 
 interface CoachMessage {
   type: CoachMessageType;
@@ -28,11 +29,12 @@ let lastTipTime: number = 0;
 const TIP_INTERVAL = 120000; // 2 minutes between tips
 
 // Message priority system - higher priority messages persist longer
-// Priority levels: pr-alert (5) > success (4) > pr-close (3) > motivation (2) > tip (1) > info (0)
+// Priority levels: pr-alert (5) > success (4) > pr-close (3) > streak (3) > motivation (2) > tip (1) > info (0)
 const MESSAGE_PRIORITY: Record<CoachMessageType, number> = {
   'pr-alert': 5,
   'success': 4,
   'pr-close': 3,
+  'streak': 3,
   'motivation': 2,
   'tip': 1,
   'info': 0,
@@ -43,6 +45,7 @@ const MESSAGE_DISPLAY_TIME: Record<CoachMessageType, number> = {
   'pr-alert': 8000,
   'success': 5000,
   'pr-close': 6000,
+  'streak': 5000,
   'motivation': 5000,
   'tip': 4000,
   'info': 0, // info can be overwritten immediately
@@ -104,6 +107,15 @@ function getMessageConfig(type: CoachMessageType): Omit<CoachMessage, 'message' 
         textClass: 'text-orange-400',
         iconBgClass: 'bg-orange-500/20',
       };
+    case 'streak':
+      return {
+        type,
+        icon: 'zap',
+        bgClass: 'bg-gradient-to-r from-orange-500/15 to-yellow-500/15',
+        borderClass: 'border-orange-500/30',
+        textClass: 'text-orange-400',
+        iconBgClass: 'bg-gradient-to-br from-orange-500 to-yellow-500',
+      };
     case 'tip':
       return {
         type,
@@ -140,6 +152,19 @@ export function initCoachSession(): void {
 
 export function updateCoachOnSessionLoad(groupName: string, ejercicios: ExerciseData[]): void {
   initCoachSession();
+
+  // Check for active streak
+  const streak = getStreakInfo();
+  const levelProgress = getCurrentLevelProgress();
+
+  if (streak.current >= 3) {
+    showCoachMessage({
+      ...getMessageConfig('streak'),
+      message: `🔥 Racha de ${streak.current} días consecutivos`,
+      subtext: `Nivel ${levelProgress.level} • ${Math.round(levelProgress.percentage)}% hacia el siguiente`,
+    });
+    return;
+  }
 
   const history = getHistory();
   const groupHistory = history.filter(

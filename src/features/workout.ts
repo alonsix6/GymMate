@@ -1,4 +1,4 @@
-import type { ExerciseData, Exercise, RPEData } from '@/types';
+import type { ExerciseData, Exercise, RPEData, PRData, HistorySession } from '@/types';
 import { getTrainingGroup } from '@/data/training-groups';
 import {
   sessionData,
@@ -19,6 +19,9 @@ import {
   updateCoachOnExerciseUpdate,
   updateCoachOnExerciseComplete,
 } from '@/features/coach';
+import { getPRs } from '@/utils/storage';
+import { processCompletedSession } from '@/features/gamification';
+import { showSessionSummary } from '@/ui/gamification';
 
 // ==========================================
 // CARGAR GRUPO DE ENTRENAMIENTO
@@ -71,6 +74,9 @@ export function loadTrainingGroup(grupoId: string): void {
   });
 
   setSessionExercises(ejercicios);
+
+  // Capture current PRs for comparison at session end
+  captureSessionStartPRs();
 
   // Renderizar UI
   renderWorkoutUI(grupo.nombre, ejercicios, grupo.ejercicios.length);
@@ -473,6 +479,37 @@ export function saveWorkout(): void {
 let selectedRPE: number | null = null;
 let pendingSaveBeforeRPE = false;
 
+// Track PRs at session start to detect new PRs
+let sessionStartPRs: Record<string, PRData> = {};
+
+/**
+ * Capture PRs at the start of a session for comparison later
+ */
+export function captureSessionStartPRs(): void {
+  sessionStartPRs = JSON.parse(JSON.stringify(getPRs()));
+}
+
+/**
+ * Get PRs that were achieved during this session
+ */
+function getNewPRsInSession(): Array<{ exercise: string; oldWeight: number; newWeight: number }> {
+  const currentPRs = getPRs();
+  const newPRs: Array<{ exercise: string; oldWeight: number; newWeight: number }> = [];
+
+  for (const [exercise, prData] of Object.entries(currentPRs)) {
+    const oldPR = sessionStartPRs[exercise];
+    if (!oldPR) {
+      // Completely new PR (exercise never had a PR before)
+      newPRs.push({ exercise, oldWeight: 0, newWeight: prData.peso });
+    } else if (prData.peso > oldPR.peso) {
+      // Improved existing PR
+      newPRs.push({ exercise, oldWeight: oldPR.peso, newWeight: prData.peso });
+    }
+  }
+
+  return newPRs;
+}
+
 const RPE_LABELS: Record<number, string> = {
   1: 'Muy fácil',
   2: 'Fácil',
@@ -592,7 +629,7 @@ export function selectRPE(value: number): void {
   updateRPEDisplay();
 }
 
-export function confirmRPE(): void {
+export async function confirmRPE(): Promise<void> {
   if (selectedRPE === null) return;
 
   const rpeData: RPEData = {
@@ -603,6 +640,9 @@ export function confirmRPE(): void {
   // Save session with RPE if pending
   if (pendingSaveBeforeRPE) {
     saveCurrentSession(rpeData);
+
+    // Process gamification
+    await processAndShowGamification(rpeData);
   }
 
   // Close modal and finish
@@ -613,10 +653,13 @@ export function confirmRPE(): void {
   window.location.reload();
 }
 
-export function skipRPE(): void {
+export async function skipRPE(): Promise<void> {
   // Save session without RPE if pending
   if (pendingSaveBeforeRPE) {
     saveCurrentSession();
+
+    // Process gamification
+    await processAndShowGamification();
   }
 
   // Close modal and finish
@@ -625,6 +668,32 @@ export function skipRPE(): void {
   selectedRPE = null;
   endSession();
   window.location.reload();
+}
+
+/**
+ * Process gamification and show XP summary
+ */
+async function processAndShowGamification(rpe?: RPEData): Promise<void> {
+  try {
+    // Build session data for gamification
+    const session: HistorySession = {
+      ...sessionData,
+      date: new Date().toISOString(),
+      rpe,
+    };
+
+    // Get PRs achieved in this session
+    const newPRs = getNewPRsInSession();
+
+    // Process gamification
+    const summary = processCompletedSession(session, newPRs);
+
+    // Show XP summary popup and wait for user to close it
+    await showSessionSummary(summary);
+  } catch (error) {
+    console.error('Error processing gamification:', error);
+    // Continue even if gamification fails
+  }
 }
 
 // Register callback to update indicator when draft is auto-saved
