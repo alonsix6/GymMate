@@ -16,6 +16,7 @@ import {
   DEFAULT_BODYWEIGHT,
   GAMIFICATION_SCHEMA_VERSION,
   ACHIEVEMENT_DEFINITIONS,
+  ACHIEVEMENT_XP_V2,
 } from './constants';
 import {
   calculateVolumeXP,
@@ -299,6 +300,68 @@ export function migrateV1toV2(state: GamificationState): GamificationState {
       amount: totalAchievementXP,
       source: 'migration',
       description: `${unlockedCount} logros (+${totalAchievementXP.toLocaleString()} XP)`,
+      timestamp: new Date().toISOString(),
+    });
+  }
+
+  return state;
+}
+
+/**
+ * Migra el estado de v2 a v3
+ * - Reduce XP de logros a ~50% de v2
+ * - Recalcula nivel con los nuevos valores
+ */
+export function migrateV2toV3(state: GamificationState): GamificationState {
+  if ((state.version || 1) >= 3) return state;
+
+  // First ensure we're at v2
+  if ((state.version || 1) < 2) {
+    state = migrateV1toV2(state);
+  }
+
+  let xpDifference = 0;
+
+  // Update all achievement XP rewards to new v3 values and calculate difference
+  for (const achievement of state.achievements) {
+    const oldXP = ACHIEVEMENT_XP_V2[achievement.id] || 0;
+    const newDef = ACHIEVEMENT_DEFINITIONS.find(d => d.id === achievement.id);
+    const newXP = newDef?.xpReward || 0;
+
+    if (newDef) {
+      achievement.xpReward = newXP;
+    }
+
+    // Only subtract difference for unlocked achievements
+    if (achievement.unlockedAt) {
+      xpDifference += oldXP - newXP; // Positive = XP to remove
+    }
+  }
+
+  // Subtract the difference (reducing total XP)
+  state.playerStats.totalXP = Math.max(0, state.playerStats.totalXP - xpDifference);
+
+  // Recalculate level with new XP
+  const newLevel = calculateLevel(state.playerStats.totalXP);
+  const newProgress = getLevelProgress(state.playerStats.totalXP);
+  const newTitle = getLevelTitle(newLevel);
+
+  state.playerStats.level = newLevel;
+  state.playerStats.titleInfo = newTitle;
+  state.playerStats.currentLevelXP = newProgress.currentXP;
+  state.playerStats.xpToNextLevel = newProgress.maxXP;
+  state.playerStats.lastUpdated = new Date().toISOString();
+
+  // Update version
+  state.version = 3;
+
+  // Add migration transaction if XP changed
+  if (xpDifference > 0) {
+    state.xpHistory.push({
+      id: generateTransactionId(),
+      amount: -xpDifference,
+      source: 'migration',
+      description: `Rebalanceo de logros (-${xpDifference.toLocaleString()} XP)`,
       timestamp: new Date().toISOString(),
     });
   }
