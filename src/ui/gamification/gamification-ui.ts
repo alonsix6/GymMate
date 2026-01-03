@@ -10,8 +10,9 @@ import {
   getAchievementsProgress,
 } from '@/features/gamification';
 import { renderLevelBadge, renderLevelBadgeWithProgress } from './level-badge';
-import { renderMuscleMap, renderMuscleMapWithLegend } from './muscle-map';
+import { renderMuscleMap, renderMuscleMapDual } from './muscle-map';
 import { renderAllRanksLegend } from './rank-emblem';
+import { RANK_COLORS } from '@/features/gamification';
 
 /**
  * Renderiza el widget de gamificacion para el header
@@ -163,7 +164,34 @@ export function renderGamificationModal(): string {
         <!-- Seccion Rangos Musculares -->
         <div class="bg-dark-surface rounded-2xl p-4 mb-4">
           <h3 class="text-sm font-medium text-gray-400 mb-3">RANGOS MUSCULARES</h3>
-          ${renderMuscleMapWithLegend(muscleRanks)}
+
+          <!-- Dual body map (front + back) -->
+          <div class="flex justify-center mb-4">
+            ${renderMuscleMapDual(muscleRanks, 280, 200)}
+          </div>
+
+          <!-- Legend grid -->
+          <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+            ${[
+              { key: 'pecho', label: 'Pecho' },
+              { key: 'espalda', label: 'Espalda' },
+              { key: 'hombros', label: 'Hombros' },
+              { key: 'biceps', label: 'Bíceps' },
+              { key: 'triceps', label: 'Tríceps' },
+              { key: 'core', label: 'Core' },
+              { key: 'gluteos', label: 'Glúteos' },
+              { key: 'piernas', label: 'Piernas' },
+            ].map(({ key, label }) => {
+              const data = muscleRanks[key as keyof typeof muscleRanks];
+              const colors = RANK_COLORS[data.rank];
+              return `
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-400">${label}</span>
+                  <span class="font-medium" style="color: ${colors.fill}">${data.rank}</span>
+                </div>
+              `;
+            }).join('')}
+          </div>
         </div>
 
         <!-- Seccion Logros -->
