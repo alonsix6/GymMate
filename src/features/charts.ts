@@ -103,6 +103,15 @@ function showNoDataMessage(): void {
 // GRÁFICO DE TENDENCIA DE VOLUMEN
 // ==========================================
 
+// Calculate moving average
+function calculateMovingAverage(data: number[], window: number): (number | null)[] {
+  return data.map((_, index) => {
+    if (index < window - 1) return null;
+    const slice = data.slice(index - window + 1, index + 1);
+    return slice.reduce((a, b) => a + b, 0) / window;
+  });
+}
+
 function createVolumeTrendChart(history: ReturnType<typeof getHistory>): void {
   const ctx = document.getElementById('volumeTrendChart') as HTMLCanvasElement;
   if (!ctx) return;
@@ -119,6 +128,13 @@ function createVolumeTrendChart(history: ReturnType<typeof getHistory>): void {
     formatShortDate(s.savedAt || s.date)
   );
   const volumes = weightSessions.map((s) => s.volumenTotal);
+  const movingAvg = calculateMovingAverage(volumes, 5);
+
+  // Calculate stats
+  const avgVolume = volumes.reduce((a, b) => a + b, 0) / volumes.length;
+  const maxVolume = Math.max(...volumes);
+  const trend = volumes.length > 1 ?
+    ((volumes[volumes.length - 1] - volumes[0]) / volumes[0] * 100).toFixed(1) : 0;
 
   volumeTrendChart = new Chart(ctx, {
     type: 'line',
@@ -126,15 +142,26 @@ function createVolumeTrendChart(history: ReturnType<typeof getHistory>): void {
       labels: dates,
       datasets: [
         {
-          label: 'Volumen Total',
+          label: 'Volumen Total (kg)',
           data: volumes,
           borderColor: THEME_COLORS.accent,
-          backgroundColor: `${THEME_COLORS.accent}20`,
+          backgroundColor: `${THEME_COLORS.accent}15`,
           borderWidth: 2,
           fill: true,
           tension: 0.4,
           pointRadius: 3,
-          pointHoverRadius: 5,
+          pointHoverRadius: 6,
+          pointBackgroundColor: THEME_COLORS.accent,
+        },
+        {
+          label: 'Media móvil (5 sesiones)',
+          data: movingAvg,
+          borderColor: THEME_COLORS.status.warning,
+          borderWidth: 2,
+          borderDash: [5, 5],
+          fill: false,
+          tension: 0.4,
+          pointRadius: 0,
         },
       ],
     },
@@ -148,6 +175,17 @@ function createVolumeTrendChart(history: ReturnType<typeof getHistory>): void {
             color: THEME_COLORS.text.secondary,
           },
         },
+        tooltip: {
+          callbacks: {
+            afterBody: function() {
+              return [
+                `Promedio: ${avgVolume.toFixed(0)} kg`,
+                `Máximo: ${maxVolume} kg`,
+                `Tendencia: ${trend}%`
+              ];
+            }
+          }
+        }
       },
     },
   });

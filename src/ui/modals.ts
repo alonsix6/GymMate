@@ -75,6 +75,8 @@ export function showAnimation(nombre: string, guidanceOrUrl: string | ExerciseGu
     const img = new Image();
     img.className = 'w-full max-w-md rounded-lg shadow-lg';
     img.alt = nombre;
+    img.loading = 'lazy';
+    img.decoding = 'async';
 
     img.onload = () => {
       container.innerHTML = '';

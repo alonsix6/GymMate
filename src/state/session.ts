@@ -180,7 +180,6 @@ export function saveDraftNow(): void {
   if (sessionData.ejercicios.length > 0) {
     saveDraft(sessionData);
     hasUnsavedChanges = false;
-    console.log('Draft saved');
     // Notify UI to update indicator
     if (onDraftSavedCallback) {
       onDraftSavedCallback();
@@ -211,8 +210,6 @@ export function restoreFromDraft(draft: SessionData): void {
   sessionSaved = false;
   lastSavedData = null;
   sessionId = null;
-
-  console.log('Session restored from draft');
 }
 
 // ==========================================
