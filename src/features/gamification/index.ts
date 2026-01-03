@@ -71,6 +71,7 @@ import {
   needsMigration,
   getExerciseToMuscleMap,
   migrateV1toV2,
+  migrateV2toV3,
 } from './migration';
 
 import { GAMIFICATION_SCHEMA_VERSION } from './constants';
@@ -123,8 +124,16 @@ export function initGamification(): GamificationState {
     const existingState = loadGamificationState();
 
     if (existingState.initialized && (existingState.version || 1) < GAMIFICATION_SCHEMA_VERSION) {
-      // Schema version update - run v1 to v2 migration
-      const migratedState = migrateV1toV2(existingState);
+      // Schema version update - run migrations in order
+      let migratedState = existingState;
+
+      if ((migratedState.version || 1) < 2) {
+        migratedState = migrateV1toV2(migratedState);
+      }
+      if ((migratedState.version || 1) < 3) {
+        migratedState = migrateV2toV3(migratedState);
+      }
+
       persistState(migratedState);
       return migratedState;
     }
