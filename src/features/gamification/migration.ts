@@ -14,6 +14,9 @@ import {
   XP_WORKOUT_COMPLETE,
   PR_XP,
   DEFAULT_BODYWEIGHT,
+  GAMIFICATION_SCHEMA_VERSION,
+  ACHIEVEMENT_XP_V1,
+  ACHIEVEMENT_DEFINITIONS,
 } from './constants';
 import {
   calculateVolumeXP,
@@ -195,10 +198,102 @@ export function needsMigration(): boolean {
     if (!saved) return true;
 
     const state = JSON.parse(saved) as GamificationState;
-    return !state.initialized;
+    if (!state.initialized) return true;
+
+    // Check if schema version needs update
+    if ((state.version || 1) < GAMIFICATION_SCHEMA_VERSION) return true;
+
+    return false;
   } catch {
     return true;
   }
+}
+
+/**
+ * Migra el estado de v1 a v2
+ * - Actualiza XP de logros ya desbloqueados (retroactivo)
+ * - Añade el nuevo logro "first_simetrico"
+ */
+export function migrateV1toV2(state: GamificationState): GamificationState {
+  if ((state.version || 1) >= 2) return state;
+
+  let xpDifference = 0;
+
+  // Calcular diferencia de XP para logros ya desbloqueados
+  for (const achievement of state.achievements) {
+    if (achievement.unlockedAt) {
+      const oldXP = ACHIEVEMENT_XP_V1[achievement.id] || 0;
+      const newDef = ACHIEVEMENT_DEFINITIONS.find(d => d.id === achievement.id);
+      const newXP = newDef?.xpReward || oldXP;
+
+      // Add the difference (new - old)
+      xpDifference += newXP - oldXP;
+
+      // Update the achievement's xpReward to new value
+      achievement.xpReward = newXP;
+    }
+  }
+
+  // Add missing "first_simetrico" achievement if not present
+  const hasFirstSimetrico = state.achievements.some(a => a.id === 'first_simetrico');
+  if (!hasFirstSimetrico) {
+    const simetricoDef = ACHIEVEMENT_DEFINITIONS.find(d => d.id === 'first_simetrico');
+    if (simetricoDef) {
+      // Check if already has Simetrico rank in any muscle
+      const hasSimetricoRank = Object.values(state.muscleRanks).some(
+        m => m.rank === 'Simetrico'
+      );
+
+      state.achievements.push({
+        ...simetricoDef,
+        unlockedAt: hasSimetricoRank ? new Date().toISOString() : undefined,
+        progress: hasSimetricoRank ? 1 : 0,
+      });
+
+      // If already unlocked, add XP
+      if (hasSimetricoRank) {
+        xpDifference += simetricoDef.xpReward;
+      }
+    }
+  }
+
+  // Update all achievement XP rewards to new values
+  for (const achievement of state.achievements) {
+    const newDef = ACHIEVEMENT_DEFINITIONS.find(d => d.id === achievement.id);
+    if (newDef) {
+      achievement.xpReward = newDef.xpReward;
+    }
+  }
+
+  // Update total XP
+  state.playerStats.totalXP += xpDifference;
+
+  // Recalculate level with new XP
+  const newLevel = calculateLevel(state.playerStats.totalXP);
+  const newProgress = getLevelProgress(state.playerStats.totalXP);
+  const newTitle = getLevelTitle(newLevel);
+
+  state.playerStats.level = newLevel;
+  state.playerStats.titleInfo = newTitle;
+  state.playerStats.currentLevelXP = newProgress.currentXP;
+  state.playerStats.xpToNextLevel = newProgress.maxXP;
+  state.playerStats.lastUpdated = new Date().toISOString();
+
+  // Update version
+  state.version = 2;
+
+  // Add migration transaction if XP changed
+  if (xpDifference > 0) {
+    state.xpHistory.push({
+      id: generateTransactionId(),
+      amount: xpDifference,
+      source: 'migration',
+      description: `Ajuste retroactivo v2 (+${xpDifference} XP)`,
+      timestamp: new Date().toISOString(),
+    });
+  }
+
+  return state;
 }
 
 /**

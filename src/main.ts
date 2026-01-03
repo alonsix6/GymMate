@@ -350,18 +350,9 @@ function renderCustomWorkoutsInHome(): void {
 // ==========================================
 
 function renderGamificationInHome(): void {
-  // Insertar hero card antes de las rutinas
-  const routinesContainer = document.getElementById('routinesContainer');
-  if (routinesContainer) {
-    // Verificar si ya existe el hero card
-    let heroContainer = document.getElementById('gamificationHeroContainer');
-    if (!heroContainer) {
-      heroContainer = document.createElement('div');
-      heroContainer.id = 'gamificationHeroContainer';
-      heroContainer.className = 'mb-6';
-      routinesContainer.parentNode?.insertBefore(heroContainer, routinesContainer);
-    }
-
+  // Renderizar el hero card de gamificación en su contenedor
+  const heroContainer = document.getElementById('gamificationHeroContainer');
+  if (heroContainer) {
     heroContainer.innerHTML = renderGamificationHeroCard();
   }
 

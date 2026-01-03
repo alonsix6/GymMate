@@ -171,6 +171,10 @@ export function checkAchievements(
         progress = countMusclesWithRank(muscleRanks, 'Diamante');
         unlocked = progress >= 1;
         break;
+      case 'first_simetrico':
+        progress = countMusclesWithRank(muscleRanks, 'Simetrico');
+        unlocked = progress >= 1;
+        break;
       case 'simetrico':
         progress = countMusclesWithRank(muscleRanks, 'Simetrico');
         unlocked = progress >= 8;
