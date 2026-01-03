@@ -70,7 +70,10 @@ import {
   migrateExistingData,
   needsMigration,
   getExerciseToMuscleMap,
+  migrateV1toV2,
 } from './migration';
+
+import { GAMIFICATION_SCHEMA_VERSION } from './constants';
 
 import {
   RANK_COLORS,
@@ -114,6 +117,17 @@ function persistState(state: GamificationState): void {
  */
 export function initGamification(): GamificationState {
   if (needsMigration()) {
+    // Check if there's existing state that just needs schema update
+    const existingState = loadGamificationState();
+
+    if (existingState.initialized && (existingState.version || 1) < GAMIFICATION_SCHEMA_VERSION) {
+      // Schema version update - run v1 to v2 migration
+      const migratedState = migrateV1toV2(existingState);
+      persistState(migratedState);
+      return migratedState;
+    }
+
+    // Full migration from scratch
     const migratedState = migrateExistingData();
     persistState(migratedState);
     return migratedState;

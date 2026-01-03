@@ -20,7 +20,35 @@ export const GAMIFICATION_STORAGE_KEYS = {
 } as const;
 
 // Current schema version for migrations
-export const GAMIFICATION_SCHEMA_VERSION = 1;
+export const GAMIFICATION_SCHEMA_VERSION = 2;
+
+// Old XP values for v1->v2 migration (retroactive XP adjustment)
+export const ACHIEVEMENT_XP_V1: Record<string, number> = {
+  first_session: 100,
+  sessions_10: 100,
+  sessions_25: 300,
+  sessions_100: 600,
+  sessions_500: 1500,
+  sessions_1000: 3000,
+  volume_100k: 200,
+  volume_500k: 500,
+  volume_1m: 1000,
+  volume_5m: 2500,
+  volume_10m: 5000,
+  first_pr: 50,
+  prs_10: 150,
+  prs_50: 400,
+  prs_100: 800,
+  streak_7: 100,
+  streak_30: 500,
+  streak_90: 2000,
+  first_oro: 200,
+  all_plata: 500,
+  first_diamante: 800,
+  simetrico: 10000,
+  use_10_exercises: 150,
+  use_30_exercises: 300,
+};
 
 // ==========================================
 // XP SYSTEM CONSTANTS
@@ -388,43 +416,45 @@ export const GAMIFICATION_TO_SYSTEM_MUSCLE: Record<GamificationMuscleGroup, stri
 
 /**
  * Definiciones de todos los logros
+ * XP rewards actualizados v2 - más generosos y motivadores
  */
 export const ACHIEVEMENT_DEFINITIONS: Omit<Achievement, 'unlockedAt' | 'progress'>[] = [
-  // Sesiones
-  { id: 'first_session', name: 'Primera Sesión', description: 'Completa tu primer entrenamiento', category: 'sesiones', xpReward: 100, target: 1 },
-  { id: 'sessions_10', name: 'Constante', description: 'Completa 10 sesiones', category: 'sesiones', xpReward: 100, target: 10 },
-  { id: 'sessions_25', name: 'Dedicado', description: 'Completa 25 sesiones', category: 'sesiones', xpReward: 300, target: 25 },
-  { id: 'sessions_100', name: 'Veterano', description: 'Completa 100 sesiones', category: 'sesiones', xpReward: 600, target: 100 },
-  { id: 'sessions_500', name: 'Leyenda', description: 'Completa 500 sesiones', category: 'sesiones', xpReward: 1500, target: 500 },
-  { id: 'sessions_1000', name: 'Titan', description: 'Completa 1,000 sesiones', category: 'sesiones', xpReward: 3000, target: 1000 },
+  // Sesiones (6)
+  { id: 'first_session', name: 'Primera Sesión', description: 'Completa tu primer entrenamiento', category: 'sesiones', xpReward: 200, target: 1 },
+  { id: 'sessions_10', name: 'Constante', description: 'Completa 10 sesiones', category: 'sesiones', xpReward: 400, target: 10 },
+  { id: 'sessions_25', name: 'Dedicado', description: 'Completa 25 sesiones', category: 'sesiones', xpReward: 1000, target: 25 },
+  { id: 'sessions_100', name: 'Veterano', description: 'Completa 100 sesiones', category: 'sesiones', xpReward: 3000, target: 100 },
+  { id: 'sessions_500', name: 'Leyenda', description: 'Completa 500 sesiones', category: 'sesiones', xpReward: 10000, target: 500 },
+  { id: 'sessions_1000', name: 'Titan', description: 'Completa 1,000 sesiones', category: 'sesiones', xpReward: 25000, target: 1000 },
 
-  // Volumen
-  { id: 'volume_100k', name: 'Volumen 100K', description: 'Acumula 100,000 kg de volumen', category: 'volumen', xpReward: 200, target: 100000 },
-  { id: 'volume_500k', name: 'Volumen 500K', description: 'Acumula 500,000 kg de volumen', category: 'volumen', xpReward: 500, target: 500000 },
-  { id: 'volume_1m', name: 'Volumen 1M', description: 'Acumula 1,000,000 kg de volumen', category: 'volumen', xpReward: 1000, target: 1000000 },
-  { id: 'volume_5m', name: 'Volumen 5M', description: 'Acumula 5,000,000 kg de volumen', category: 'volumen', xpReward: 2500, target: 5000000 },
-  { id: 'volume_10m', name: 'Volumen 10M', description: 'Acumula 10,000,000 kg de volumen', category: 'volumen', xpReward: 5000, target: 10000000 },
+  // Volumen (5)
+  { id: 'volume_100k', name: 'Volumen 100K', description: 'Acumula 100,000 kg de volumen', category: 'volumen', xpReward: 500, target: 100000 },
+  { id: 'volume_500k', name: 'Volumen 500K', description: 'Acumula 500,000 kg de volumen', category: 'volumen', xpReward: 2000, target: 500000 },
+  { id: 'volume_1m', name: 'Volumen 1M', description: 'Acumula 1,000,000 kg de volumen', category: 'volumen', xpReward: 5000, target: 1000000 },
+  { id: 'volume_5m', name: 'Volumen 5M', description: 'Acumula 5,000,000 kg de volumen', category: 'volumen', xpReward: 15000, target: 5000000 },
+  { id: 'volume_10m', name: 'Volumen 10M', description: 'Acumula 10,000,000 kg de volumen', category: 'volumen', xpReward: 35000, target: 10000000 },
 
-  // PRs
-  { id: 'first_pr', name: 'Primer PR', description: 'Consigue tu primer récord personal', category: 'prs', xpReward: 50, target: 1 },
-  { id: 'prs_10', name: '10 PRs', description: 'Consigue 10 récords personales', category: 'prs', xpReward: 150, target: 10 },
-  { id: 'prs_50', name: '50 PRs', description: 'Consigue 50 récords personales', category: 'prs', xpReward: 400, target: 50 },
-  { id: 'prs_100', name: '100 PRs', description: 'Consigue 100 récords personales', category: 'prs', xpReward: 800, target: 100 },
+  // PRs (4)
+  { id: 'first_pr', name: 'Primer PR', description: 'Consigue tu primer récord personal', category: 'prs', xpReward: 150, target: 1 },
+  { id: 'prs_10', name: '10 PRs', description: 'Consigue 10 récords personales', category: 'prs', xpReward: 500, target: 10 },
+  { id: 'prs_50', name: '50 PRs', description: 'Consigue 50 récords personales', category: 'prs', xpReward: 2000, target: 50 },
+  { id: 'prs_100', name: '100 PRs', description: 'Consigue 100 récords personales', category: 'prs', xpReward: 5000, target: 100 },
 
-  // Rachas
-  { id: 'streak_7', name: 'Semana Perfecta', description: 'Entrena 7 días consecutivos', category: 'rachas', xpReward: 100, target: 7 },
-  { id: 'streak_30', name: 'Mes Imparable', description: 'Entrena 30 días consecutivos', category: 'rachas', xpReward: 500, target: 30 },
-  { id: 'streak_90', name: 'Trimestre de Hierro', description: 'Entrena 90 días consecutivos', category: 'rachas', xpReward: 2000, target: 90 },
+  // Rachas (3)
+  { id: 'streak_7', name: 'Semana Perfecta', description: 'Entrena 7 días consecutivos', category: 'rachas', xpReward: 400, target: 7 },
+  { id: 'streak_30', name: 'Mes Imparable', description: 'Entrena 30 días consecutivos', category: 'rachas', xpReward: 2000, target: 30 },
+  { id: 'streak_90', name: 'Trimestre de Hierro', description: 'Entrena 90 días consecutivos', category: 'rachas', xpReward: 8000, target: 90 },
 
-  // Rangos
-  { id: 'first_oro', name: 'Primer Oro', description: 'Alcanza rango Oro en cualquier músculo', category: 'rangos', xpReward: 200, target: 1 },
-  { id: 'all_plata', name: 'Cuerpo de Plata', description: 'Alcanza rango Plata en todos los músculos', category: 'rangos', xpReward: 500, target: 8 },
-  { id: 'first_diamante', name: 'Primer Diamante', description: 'Alcanza rango Diamante en cualquier músculo', category: 'rangos', xpReward: 800, target: 1 },
-  { id: 'simetrico', name: 'Simétrico', description: 'Alcanza rango Simétrico en todos los músculos', category: 'rangos', xpReward: 10000, target: 8 },
+  // Rangos (5) - añadido first_simetrico
+  { id: 'first_oro', name: 'Primer Oro', description: 'Alcanza rango Oro en cualquier músculo', category: 'rangos', xpReward: 600, target: 1 },
+  { id: 'all_plata', name: 'Cuerpo de Plata', description: 'Alcanza rango Plata en todos los músculos', category: 'rangos', xpReward: 2000, target: 8 },
+  { id: 'first_diamante', name: 'Primer Diamante', description: 'Alcanza rango Diamante en cualquier músculo', category: 'rangos', xpReward: 4000, target: 1 },
+  { id: 'first_simetrico', name: 'Primer Simétrico', description: 'Alcanza rango Simétrico en cualquier músculo', category: 'rangos', xpReward: 10000, target: 1 },
+  { id: 'simetrico', name: 'Cuerpo Simétrico', description: 'Alcanza rango Simétrico en todos los músculos', category: 'rangos', xpReward: 50000, target: 8 },
 
-  // Especiales
-  { id: 'use_10_exercises', name: 'Explorador', description: 'Usa 10 ejercicios diferentes', category: 'especial', xpReward: 150, target: 10 },
-  { id: 'use_30_exercises', name: 'Maestro de Variedad', description: 'Usa 30 ejercicios diferentes', category: 'especial', xpReward: 300, target: 30 },
+  // Especiales (2)
+  { id: 'use_10_exercises', name: 'Explorador', description: 'Usa 10 ejercicios diferentes', category: 'especial', xpReward: 400, target: 10 },
+  { id: 'use_30_exercises', name: 'Maestro de Variedad', description: 'Usa 30 ejercicios diferentes', category: 'especial', xpReward: 1200, target: 30 },
 ];
 
 // ==========================================
