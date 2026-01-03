@@ -67,11 +67,14 @@ El sistema consta de **DOS componentes independientes pero integrados**:
 
 | Nuevo Rango Alcanzado | XP |
 |-----------------------|-----|
-| Novato | 50 |
-| Intermedio | 100 |
-| Avanzado | 200 |
-| Elite | 400 |
-| Legendario | 800 |
+| Bronce | 25 |
+| Plata | 50 |
+| Oro | 100 |
+| Platino | 150 |
+| Esmeralda | 250 |
+| Diamante | 400 |
+| Campeon | 600 |
+| Simetrico | 1000 |
 
 ---
 
@@ -95,74 +98,90 @@ El sistema consta de **DOS componentes independientes pero integrados**:
 
 ### 1.3 Tabla de Niveles (1-100)
 
+El nivel de cuenta es simplemente un numero del 1 al 100. No tiene titulos especiales.
+Los titulos (Hierro, Bronce, etc.) son exclusivamente para los **rangos por grupo muscular**.
+
 **Formula de XP por nivel:**
 - Niveles 1-20: Progresion lineal suave
 - Niveles 21-50: Progresion moderada
 - Niveles 51-80: Progresion pronunciada
 - Niveles 81-100: Progresion elite
 
-| Nivel | Titulo | XP Requerido | XP Acumulado | Tiempo Aprox |
-|-------|--------|--------------|--------------|--------------|
-| 1 | Novato I | 0 | 0 | Inicio |
-| 5 | Novato V | 400 | 1,000 | 2 semanas |
-| 10 | Aprendiz I | 600 | 3,500 | 1 mes |
-| 15 | Aprendiz V | 800 | 7,000 | 2 meses |
-| 20 | Entusiasta I | 1,000 | 12,000 | 3 meses |
-| 25 | Entusiasta V | 1,200 | 18,500 | 5 meses |
-| 30 | Dedicado I | 1,400 | 26,500 | 7 meses |
-| 35 | Dedicado V | 1,600 | 36,000 | 10 meses |
-| 40 | Atleta I | 1,800 | 47,000 | **1 ano** |
-| 45 | Atleta V | 2,000 | 59,500 | 1.3 anos |
-| 50 | Veterano I | 2,200 | 73,500 | 1.6 anos |
-| 55 | Veterano V | 2,400 | 89,000 | 2 anos |
-| 60 | Experto I | 2,600 | 106,000 | 2.3 anos |
-| 65 | Experto V | 2,800 | 124,500 | 2.7 anos |
-| 70 | Maestro I | 3,000 | 144,500 | **3 anos** |
-| 75 | Maestro V | 3,200 | 166,000 | 3.4 anos |
-| 80 | Elite I | 3,400 | 189,000 | 3.7 anos |
-| 85 | Elite V | 3,600 | 213,500 | 4 anos |
-| 90 | Leyenda I | 3,800 | 239,500 | 4.3 anos |
-| 95 | Leyenda V | 4,000 | 267,000 | 4.7 anos |
-| 100 | **Simetrico** | 4,200 | 296,000 | **~5 anos** |
+| Nivel | XP Requerido | XP Acumulado | Tiempo Aprox |
+|-------|--------------|--------------|--------------|
+| 1 | 0 | 0 | Inicio |
+| 5 | 400 | 1,000 | 2 semanas |
+| 10 | 600 | 3,500 | 1 mes |
+| 15 | 800 | 7,000 | 2 meses |
+| 20 | 1,000 | 12,000 | 3 meses |
+| 25 | 1,200 | 18,500 | 5 meses |
+| 30 | 1,400 | 26,500 | 7 meses |
+| 35 | 1,600 | 36,000 | 10 meses |
+| 40 | 1,800 | 47,000 | **1 ano** |
+| 50 | 2,200 | 73,500 | 1.6 anos |
+| 60 | 2,600 | 106,000 | 2.3 anos |
+| 70 | 3,000 | 144,500 | **3 anos** |
+| 80 | 3,400 | 189,000 | 3.7 anos |
+| 90 | 3,800 | 239,500 | 4.3 anos |
+| 100 | 4,200 | 296,000 | **~4-5 anos** |
 
 **Nota:** Con entrenamiento muy dedicado (5+ sesiones/semana, muchos PRs), se puede alcanzar nivel 100 en ~4 anos.
 
----
+### 1.4 Visualizacion del Nivel
 
-### 1.4 Titulos por Rango de Nivel
+El nivel se muestra como un numero simple con barra de progreso:
 
-| Niveles | Titulo | Color Principal | Descripcion |
-|---------|--------|-----------------|-------------|
-| 1-9 | Novato | Gris (#6B7280) | Comenzando el viaje |
-| 10-19 | Aprendiz | Verde (#22C55E) | Aprendiendo las bases |
-| 20-29 | Entusiasta | Azul Claro (#38BDF8) | Comprometido con el progreso |
-| 30-39 | Dedicado | Azul (#3B82F6) | Entrenamiento consistente |
-| 40-49 | Atleta | Indigo (#6366F1) | Resultados visibles |
-| 50-59 | Veterano | Morado (#A855F7) | Experiencia solida |
-| 60-69 | Experto | Rosa (#EC4899) | Dominio tecnico |
-| 70-79 | Maestro | Naranja (#F97316) | Conocimiento profundo |
-| 80-89 | Elite | Rojo (#EF4444) | Top performers |
-| 90-99 | Leyenda | Dorado (#EAB308) | Los mejores |
-| 100 | Simetrico | Gradiente Dorado-Blanco | Maximo logro |
+```
+Nivel 42
+████████████░░░░░░  12,450 / 15,000 XP
+```
+
+El color de la barra puede variar segun el rango de nivel:
+- Niveles 1-25: Gris/Blanco
+- Niveles 26-50: Azul
+- Niveles 51-75: Morado
+- Niveles 76-99: Dorado
+- Nivel 100: Gradiente especial
 
 ---
 
 ## PARTE 2: RANGO POR GRUPO MUSCULAR
 
-### 2.1 Sistema de Rangos de Fuerza
+### 2.1 Sistema de Rangos de Fuerza (9 Rangos)
 
-Basado en estandares de fuerza de [Strength Level](https://strengthlevel.com/), [Symmetric Strength](https://symmetricstrength.com/), y [Jeff Nippard](https://jeffnippard.com/blogs/news/how-strong-should-you-be-noob-to-freak-1).
+Basado en estandares de fuerza de [Strength Level](https://strengthlevel.com/), [Symmetric Strength](https://symmetricstrength.com/), y la app Symmetry.
+
+Cada grupo muscular tiene su propio rango con titulo y emblema distintivo.
+
+#### Los 9 Rangos y sus Colores
+
+```typescript
+const RANK_COLORS = {
+  hierro:    { fill: '#6B7280', glow: 'none' },           // Gris
+  bronce:    { fill: '#92400E', glow: 'rgba(146,64,14,0.3)' },   // Bronce
+  plata:     { fill: '#9CA3AF', glow: 'rgba(156,163,175,0.4)' }, // Plata
+  oro:       { fill: '#F59E0B', glow: 'rgba(245,158,11,0.5)' },  // Dorado
+  platino:   { fill: '#EF4444', glow: 'rgba(239,68,68,0.5)' },   // Rojo
+  esmeralda: { fill: '#10B981', glow: 'rgba(16,185,129,0.5)' },  // Verde esmeralda
+  diamante:  { fill: '#8B5CF6', glow: 'rgba(139,92,246,0.6)' },  // Morado
+  campeon:   { fill: '#F97316', glow: 'rgba(249,115,22,0.6)' },  // Naranja
+  simetrico: { fill: '#3B82F6', glow: 'rgba(59,130,246,0.7)' },  // Azul brillante
+};
+```
 
 #### Rangos y Ratios (1RM vs Peso Corporal)
 
-| Rango | Ratio Minimo | Ratio Maximo | Color | Hex |
-|-------|--------------|--------------|-------|-----|
-| Principiante | 0 | 0.4x | Gris | #6B7280 |
-| Novato | 0.4x | 0.7x | Verde | #22C55E |
-| Intermedio | 0.7x | 1.0x | Azul | #3B82F6 |
-| Avanzado | 1.0x | 1.4x | Morado | #A855F7 |
-| Elite | 1.4x | 1.8x | Dorado | #EAB308 |
-| Legendario | 1.8x | infinito | Rojo/Fuego | #EF4444 |
+| # | Rango | Ratio Min | Ratio Max | Color | Hex | Glow |
+|---|-------|-----------|-----------|-------|-----|------|
+| 1 | Hierro | 0 | 0.3x | Gris | #6B7280 | none |
+| 2 | Bronce | 0.3x | 0.5x | Bronce | #92400E | rgba(146,64,14,0.3) |
+| 3 | Plata | 0.5x | 0.7x | Plata | #9CA3AF | rgba(156,163,175,0.4) |
+| 4 | Oro | 0.7x | 0.9x | Dorado | #F59E0B | rgba(245,158,11,0.5) |
+| 5 | Platino | 0.9x | 1.1x | Rojo | #EF4444 | rgba(239,68,68,0.5) |
+| 6 | Esmeralda | 1.1x | 1.3x | Verde | #10B981 | rgba(16,185,129,0.5) |
+| 7 | Diamante | 1.3x | 1.6x | Morado | #8B5CF6 | rgba(139,92,246,0.6) |
+| 8 | Campeon | 1.6x | 2.0x | Naranja | #F97316 | rgba(249,115,22,0.6) |
+| 9 | Simetrico | 2.0x | infinito | Azul | #3B82F6 | rgba(59,130,246,0.7) |
 
 #### Ajustes por Tipo de Ejercicio
 
@@ -229,76 +248,54 @@ Se utiliza la **formula de Epley** para estimar el 1RM a partir de los datos reg
 
 ## PARTE 3: DISENO VISUAL
 
-### 3.1 Iconos de Nivel General (SVG)
+### 3.1 Badge de Nivel General (SVG)
 
-Cada titulo tiene un icono unico que evoluciona visualmente:
+El nivel de cuenta es simplemente un numero del 1 al 100. El badge muestra el numero con un estilo visual que varia segun el rango de nivel.
 
-#### Estructura Base del Icono
+#### Colores del Badge segun Nivel
 
-```
-Nivel 1-9 (Novato):     Escudo simple, borde gris
-Nivel 10-19 (Aprendiz): Escudo con 1 estrella
-Nivel 20-29 (Entusiasta): Escudo con 2 estrellas
-Nivel 30-39 (Dedicado): Escudo con corona pequena
-Nivel 40-49 (Atleta): Escudo con corona + 1 rayo
-Nivel 50-59 (Veterano): Escudo doble + corona
-Nivel 60-69 (Experto): Escudo triple + corona + alas pequenas
-Nivel 70-79 (Maestro): Escudo con alas completas
-Nivel 80-89 (Elite): Escudo con alas + llamas
-Nivel 90-99 (Leyenda): Escudo dorado con alas + llamas + aureola
-Nivel 100 (Simetrico): Escudo maximo con todos los elementos + brillo
-```
+| Niveles | Color del Badge | Hex |
+|---------|-----------------|-----|
+| 1-25 | Gris/Blanco | #9CA3AF |
+| 26-50 | Azul | #3B82F6 |
+| 51-75 | Morado | #8B5CF6 |
+| 76-99 | Dorado | #F59E0B |
+| 100 | Gradiente Especial | #3B82F6 -> #8B5CF6 |
 
 #### Especificaciones SVG
 
-- **Tamano base:** 64x64px (escalable)
-- **Viewbox:** 0 0 64 64
-- **Colores:** Usar variables CSS para temas
-- **Exportar a PNG:** 64px, 128px, 256px para diferentes usos
+- **Tamano base:** 48x48px (escalable)
+- **Viewbox:** 0 0 48 48
+- **Fuente:** Bold, centrada
+- **Borde:** Sutil con color del rango
 
-#### Ejemplo SVG - Icono Novato
+#### Ejemplo SVG - Badge de Nivel
 
 ```svg
-<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="novato-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#9CA3AF"/>
-      <stop offset="100%" style="stop-color:#6B7280"/>
+    <linearGradient id="level-bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1F2937"/>
+      <stop offset="100%" style="stop-color:#111827"/>
     </linearGradient>
   </defs>
-  <!-- Escudo base -->
-  <path d="M32 4 L56 14 L56 32 C56 48 32 60 32 60 C32 60 8 48 8 32 L8 14 Z"
-        fill="url(#novato-grad)" stroke="#4B5563" stroke-width="2"/>
+  <!-- Fondo circular -->
+  <circle cx="24" cy="24" r="22" fill="url(#level-bg)" stroke="#3B82F6" stroke-width="2"/>
   <!-- Numero de nivel -->
-  <text x="32" y="38" text-anchor="middle" fill="white" font-size="16" font-weight="bold">1</text>
+  <text x="24" y="30" text-anchor="middle" fill="#3B82F6" font-size="18" font-weight="bold">42</text>
 </svg>
 ```
 
----
-
-### 3.2 Emblemas de Rango Muscular (SVG)
-
-Cada rango tiene un emblema distintivo:
-
-| Rango | Forma | Elementos | Color Principal |
-|-------|-------|-----------|-----------------|
-| Principiante | Circulo | Borde simple | Gris #6B7280 |
-| Novato | Hexagono | 1 marca interior | Verde #22C55E |
-| Intermedio | Octogono | 2 marcas + brillo | Azul #3B82F6 |
-| Avanzado | Estrella 6 puntas | Corona pequena | Morado #A855F7 |
-| Elite | Estrella 8 puntas | Corona + rayos | Dorado #EAB308 |
-| Legendario | Estrella 12 puntas | Corona + fuego + aura | Rojo/Naranja gradiente |
-
-#### Ejemplo SVG - Emblema Elite
+#### Badge Nivel 100 (Especial)
 
 ```svg
-<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="elite-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#FCD34D"/>
-      <stop offset="100%" style="stop-color:#EAB308"/>
+    <linearGradient id="level100-border" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6"/>
+      <stop offset="100%" style="stop-color:#8B5CF6"/>
     </linearGradient>
-    <filter id="glow">
+    <filter id="level100-glow">
       <feGaussianBlur stdDeviation="2" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
@@ -306,12 +303,88 @@ Cada rango tiene un emblema distintivo:
       </feMerge>
     </filter>
   </defs>
+  <!-- Fondo con glow -->
+  <circle cx="24" cy="24" r="22" fill="#111827" stroke="url(#level100-border)"
+          stroke-width="3" filter="url(#level100-glow)"/>
+  <!-- Numero 100 -->
+  <text x="24" y="29" text-anchor="middle" fill="url(#level100-border)"
+        font-size="14" font-weight="bold">100</text>
+</svg>
+```
+
+---
+
+### 3.2 Emblemas de Rango Muscular (SVG)
+
+Cada uno de los 9 rangos tiene un emblema distintivo con glow effect:
+
+| # | Rango | Forma | Elementos | Color | Glow |
+|---|-------|-------|-----------|-------|------|
+| 1 | Hierro | Circulo simple | Borde basico | #6B7280 | none |
+| 2 | Bronce | Hexagono | 1 marca interior | #92400E | rgba(146,64,14,0.3) |
+| 3 | Plata | Octogono | Brillo sutil | #9CA3AF | rgba(156,163,175,0.4) |
+| 4 | Oro | Escudo | Corona pequena | #F59E0B | rgba(245,158,11,0.5) |
+| 5 | Platino | Estrella 5 puntas | Rayos | #EF4444 | rgba(239,68,68,0.5) |
+| 6 | Esmeralda | Estrella 6 puntas | Gema central | #10B981 | rgba(16,185,129,0.5) |
+| 7 | Diamante | Estrella 8 puntas | Facetas brillantes | #8B5CF6 | rgba(139,92,246,0.6) |
+| 8 | Campeon | Estrella 10 puntas | Corona + fuego | #F97316 | rgba(249,115,22,0.6) |
+| 9 | Simetrico | Estrella 12 puntas | Aura completa + efectos | #3B82F6 | rgba(59,130,246,0.7) |
+
+#### Ejemplo SVG - Emblema Diamante
+
+```svg
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="diamante-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#A78BFA"/>
+      <stop offset="100%" style="stop-color:#8B5CF6"/>
+    </linearGradient>
+    <filter id="diamante-glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Glow background -->
+  <circle cx="32" cy="32" r="28" fill="rgba(139,92,246,0.2)"/>
   <!-- Estrella 8 puntas -->
   <polygon points="32,4 38,24 58,24 42,36 48,56 32,44 16,56 22,36 6,24 26,24"
-           fill="url(#elite-grad)" filter="url(#glow)"/>
-  <!-- Corona -->
-  <path d="M22 18 L27 10 L32 16 L37 10 L42 18"
-        fill="none" stroke="#FCD34D" stroke-width="2"/>
+           fill="url(#diamante-grad)" filter="url(#diamante-glow)"/>
+  <!-- Facetas -->
+  <path d="M32 16 L40 32 L32 48 L24 32 Z" fill="rgba(255,255,255,0.2)"/>
+</svg>
+```
+
+#### Ejemplo SVG - Emblema Simetrico (Maximo Rango)
+
+```svg
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="simetrico-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60A5FA"/>
+      <stop offset="50%" style="stop-color:#3B82F6"/>
+      <stop offset="100%" style="stop-color:#2563EB"/>
+    </linearGradient>
+    <filter id="simetrico-glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="pulse">
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"/>
+    </filter>
+  </defs>
+  <!-- Aura externa -->
+  <circle cx="32" cy="32" r="30" fill="rgba(59,130,246,0.3)" filter="url(#simetrico-glow)"/>
+  <!-- Estrella 12 puntas -->
+  <path d="M32 2 L35 20 L48 8 L40 22 L58 20 L44 30 L60 38 L44 38 L52 54 L38 42 L38 60 L32 46 L26 60 L26 42 L12 54 L20 38 L4 38 L20 30 L6 20 L24 22 L16 8 L29 20 Z"
+        fill="url(#simetrico-grad)" filter="url(#simetrico-glow)"/>
+  <!-- Centro brillante -->
+  <circle cx="32" cy="32" r="8" fill="white" opacity="0.3"/>
 </svg>
 ```
 
@@ -373,17 +446,14 @@ Vista frontal simplificada del cuerpo con zonas coloreables:
 
 interface PlayerStats {
   totalXP: number;
-  level: number;
-  title: LevelTitle;
+  level: number;               // 1-100, sin titulos
   currentLevelXP: number;      // XP en el nivel actual
   xpToNextLevel: number;       // XP necesario para subir
   createdAt: string;           // Fecha inicio
   lastUpdated: string;
 }
 
-type LevelTitle =
-  | 'Novato' | 'Aprendiz' | 'Entusiasta' | 'Dedicado' | 'Atleta'
-  | 'Veterano' | 'Experto' | 'Maestro' | 'Elite' | 'Leyenda' | 'Simetrico';
+// El nivel de cuenta no tiene titulos, solo es un numero 1-100
 
 interface XPTransaction {
   id: string;
@@ -425,8 +495,8 @@ interface MuscleRankData {
 }
 
 type StrengthRank =
-  | 'Principiante' | 'Novato' | 'Intermedio'
-  | 'Avanzado' | 'Elite' | 'Legendario';
+  | 'Hierro' | 'Bronce' | 'Plata' | 'Oro' | 'Platino'
+  | 'Esmeralda' | 'Diamante' | 'Campeon' | 'Simetrico';
 
 interface ExerciseStrength {
   exerciseName: string;
@@ -597,14 +667,17 @@ src/
 │
 ├── assets/
 │   └── gamification/
-│       ├── level-icons/          # SVGs de iconos de nivel (1-100)
-│       │   ├── novato.svg
-│       │   ├── aprendiz.svg
-│       │   └── ...
-│       ├── rank-emblems/         # SVGs de emblemas de rango
-│       │   ├── principiante.svg
-│       │   ├── novato.svg
-│       │   └── ...
+│       ├── level-badge.svg       # Badge generico para mostrar nivel (numero)
+│       ├── rank-emblems/         # SVGs de emblemas de rango (9 rangos)
+│       │   ├── hierro.svg
+│       │   ├── bronce.svg
+│       │   ├── plata.svg
+│       │   ├── oro.svg
+│       │   ├── platino.svg
+│       │   ├── esmeralda.svg
+│       │   ├── diamante.svg
+│       │   ├── campeon.svg
+│       │   └── simetrico.svg
 │       ├── muscle-map.svg        # Mapa corporal base
 │       └── achievements/         # Iconos de logros
 │           ├── first-session.svg
@@ -631,11 +704,11 @@ export function addXP(amount: number, source: XPSource, description: string): vo
 export function calculateSessionXP(session: HistorySession): number;
 export function getPlayerStats(): PlayerStats;
 
-// ===== NIVELES =====
+// ===== NIVELES (1-100, sin titulos) =====
 export function getCurrentLevel(): number;
 export function getLevelProgress(): { current: number; max: number; percentage: number };
-export function getLevelTitle(level: number): LevelTitle;
 export function getXPForLevel(level: number): number;
+export function getLevelBarColor(level: number): string; // Color segun rango de nivel
 
 // ===== RANGOS MUSCULARES =====
 export function getMuscleRanks(): MuscleRanks;
@@ -649,9 +722,10 @@ export function checkAndUnlockAchievements(): Achievement[]; // Retorna nuevos d
 export function getAchievementProgress(id: string): { current: number; target: number };
 
 // ===== UI HELPERS =====
-export function getLevelIconPath(level: number): string;
-export function getRankEmblemPath(rank: StrengthRank): string;
-export function getMuscleMapColors(): Record<MuscleGroup, string>;
+export function renderLevelBadge(level: number): string;  // SVG con numero
+export function getRankEmblemSVG(rank: StrengthRank): string;
+export function getRankColor(rank: StrengthRank): { fill: string; glow: string };
+export function getMuscleMapColors(): Record<MuscleGroup, { fill: string; glow: string }>;
 ```
 
 ---
@@ -704,35 +778,39 @@ Al tocar el nivel en el header o hero card:
 |  |        (colores por rango)                 |  |
 |  +--------------------------------------------+  |
 |                                                  |
-|  Pecho      [===Intermedio===]    0.95x         |
-|  Espalda    [====Avanzado====]    1.25x         |
-|  Piernas    [=====Elite======]    1.65x         |
-|  Hombros    [===Intermedio===]    0.88x         |
-|  Biceps     [==Novato========]    0.55x         |
-|  Triceps    [===Intermedio===]    0.78x         |
-|  Gluteos    [====Avanzado====]    1.35x         |
-|  Core       [==Novato========]    0.45x         |
+|  Pecho      [=====Oro=======]    0.85x         |
+|  Espalda    [===Esmeralda===]    1.25x         |
+|  Piernas    [====Diamante===]    1.55x         |
+|  Hombros    [=====Oro=======]    0.78x         |
+|  Biceps     [====Plata======]    0.55x         |
+|  Triceps    [=====Oro=======]    0.72x         |
+|  Gluteos    [===Esmeralda===]    1.20x         |
+|  Core       [====Bronce=====]    0.35x         |
 |                                                  |
 +--------------------------------------------------+
 |                                                  |
-|  GUIA DE NIVELES                                 |
+|  GUIA DE NIVELES DE CUENTA                       |
 |                                                  |
-|  1-9    Novato      [icono]                     |
-|  10-19  Aprendiz    [icono]                     |
-|  20-29  Entusiasta  [icono]                     |
-|  ...                                             |
-|  100    Simetrico   [icono]                     |
+|  El nivel de cuenta (1-100) refleja tu          |
+|  dedicacion y consistencia en el tiempo.        |
+|  Se sube ganando XP por entrenamientos,         |
+|  PRs, rachas y logros.                          |
+|                                                  |
+|  Nivel 100 = ~4 anos de entrenamiento dedicado  |
 |                                                  |
 +--------------------------------------------------+
 |                                                  |
 |  GUIA DE RANGOS MUSCULARES                       |
 |                                                  |
-|  [Principiante] < 0.4x peso corporal            |
-|  [Novato]       0.4x - 0.7x                     |
-|  [Intermedio]   0.7x - 1.0x                     |
-|  [Avanzado]     1.0x - 1.4x                     |
-|  [Elite]        1.4x - 1.8x                     |
-|  [Legendario]   > 1.8x                          |
+|  [Hierro]     < 0.3x peso corporal              |
+|  [Bronce]     0.3x - 0.5x                       |
+|  [Plata]      0.5x - 0.7x                       |
+|  [Oro]        0.7x - 0.9x                       |
+|  [Platino]    0.9x - 1.1x                       |
+|  [Esmeralda]  1.1x - 1.3x                       |
+|  [Diamante]   1.3x - 1.6x                       |
+|  [Campeon]    1.6x - 2.0x                       |
+|  [Simetrico]  > 2.0x                            |
 |                                                  |
 +--------------------------------------------------+
 |               [Cerrar]                           |
@@ -861,21 +939,238 @@ const MESSAGE_PRIORITIES = {
 
 ---
 
-## PARTE 8: CONSIDERACIONES TECNICAS
+## PARTE 8: INTEGRIDAD DE DATOS Y NUEVOS EJERCICIOS
 
-### 8.1 Performance
+### 8.1 Principio de No Perdida de Datos
+
+El sistema de gamificacion NUNCA debe perder datos. Toda la informacion existente y futura debe integrarse correctamente.
+
+#### Fuentes de Datos Existentes
+
+```typescript
+// Datos que YA existen y deben ser leidos
+const EXISTING_DATA_SOURCES = {
+  'gymmate_history': HistorySession[],     // Todas las sesiones pasadas
+  'gymmate_prs': Record<string, PRData>,   // PRs por ejercicio
+  'gymmate_profile': ProfileData,          // Peso corporal del usuario
+  'gymmate_custom_exercises': Exercise[],  // Ejercicios personalizados
+};
+```
+
+#### Flujo de Datos
+
+```
+                    ┌─────────────────────────┐
+                    │   gymmate_history       │
+                    │   (sesiones pasadas)    │
+                    └───────────┬─────────────┘
+                                │
+                                ▼
+┌─────────────────┐    ┌─────────────────────────┐    ┌─────────────────┐
+│ gymmate_profile │───▶│   MOTOR DE GAMIFICACION │◀───│   gymmate_prs   │
+│ (peso corporal) │    │                         │    │ (records)       │
+└─────────────────┘    └───────────┬─────────────┘    └─────────────────┘
+                                   │
+                    ┌──────────────┼──────────────┐
+                    ▼              ▼              ▼
+            ┌───────────┐  ┌───────────┐  ┌───────────┐
+            │ XP Total  │  │ Nivel 1-  │  │ Rangos    │
+            │ + History │  │ 100       │  │ Musculares│
+            └───────────┘  └───────────┘  └───────────┘
+```
+
+### 8.2 Manejo de Nuevos Ejercicios
+
+Cuando el usuario agrega un ejercicio nuevo (personalizado o del catalogo):
+
+```typescript
+function handleNewExercise(exercise: Exercise): void {
+  // 1. Determinar grupo muscular
+  const muscleGroup = exercise.grupoMuscular;
+
+  // 2. Si tiene sets/reps/peso, calcular 1RM estimado
+  if (exercise.peso > 0 && exercise.reps > 0) {
+    const estimated1RM = exercise.peso * (1 + exercise.reps / 30);
+
+    // 3. Obtener peso corporal del perfil
+    const profile = getProfile();
+    const bodyweight = profile.weight || 70;
+
+    // 4. Calcular ratio
+    const ratio = estimated1RM / bodyweight;
+
+    // 5. Aplicar multiplicador segun tipo de ejercicio
+    const multiplier = getExerciseMultiplier(exercise.nombre);
+    const adjustedRatio = ratio / multiplier;
+
+    // 6. Determinar rango
+    const rank = getRankFromRatio(adjustedRatio);
+
+    // 7. Actualizar rango del grupo muscular
+    updateMuscleGroupRank(muscleGroup, {
+      exerciseName: exercise.nombre,
+      ratio: adjustedRatio,
+      rank: rank
+    });
+  }
+}
+```
+
+### 8.3 Mapeo Ejercicio -> Grupo Muscular
+
+```typescript
+const EXERCISE_MUSCLE_MAP: Record<string, MuscleGroup> = {
+  // Pecho
+  'Press banca': 'Pecho',
+  'Press inclinado': 'Pecho',
+  'Press declinado': 'Pecho',
+  'Aperturas': 'Pecho',
+  'Fondos': 'Pecho', // Tambien triceps
+
+  // Espalda
+  'Peso muerto': 'Espalda',
+  'Remo con barra': 'Espalda',
+  'Remo con mancuerna': 'Espalda',
+  'Jalon al pecho': 'Espalda',
+  'Dominadas': 'Espalda',
+  'Pullover': 'Espalda',
+
+  // Hombros
+  'Press militar': 'Hombros',
+  'Elevaciones laterales': 'Hombros',
+  'Elevaciones frontales': 'Hombros',
+  'Pajaros': 'Hombros',
+  'Face pull': 'Hombros',
+
+  // Biceps
+  'Curl biceps': 'Biceps',
+  'Curl martillo': 'Biceps',
+  'Curl concentrado': 'Biceps',
+  'Curl predicador': 'Biceps',
+
+  // Triceps
+  'Extension triceps': 'Triceps',
+  'Press frances': 'Triceps',
+  'Patada triceps': 'Triceps',
+  'Fondos en banco': 'Triceps',
+
+  // Piernas
+  'Sentadilla': 'Piernas',
+  'Prensa': 'Piernas',
+  'Extension de cuadriceps': 'Piernas',
+  'Curl femoral': 'Piernas',
+  'Zancadas': 'Piernas',
+
+  // Gluteos
+  'Hip thrust': 'Gluteos',
+  'Peso muerto rumano': 'Gluteos',
+  'Patada de gluteo': 'Gluteos',
+  'Puente de gluteo': 'Gluteos',
+
+  // Core
+  'Plancha': 'Core',
+  'Crunch': 'Core',
+  'Russian twist': 'Core',
+  'Elevacion de piernas': 'Core',
+};
+
+// Para ejercicios no mapeados, usar el grupoMuscular del ejercicio
+function getMuscleGroup(exercise: Exercise): MuscleGroup {
+  return EXERCISE_MUSCLE_MAP[exercise.nombre] || exercise.grupoMuscular;
+}
+```
+
+### 8.4 Multiplicadores por Tipo de Ejercicio
+
+Los ratios "normalizados" permiten comparar ejercicios diferentes:
+
+```typescript
+const EXERCISE_MULTIPLIERS: Record<string, number> = {
+  // Ejercicios de empuje (base 1.0x)
+  'Press banca': 1.0,
+  'Press inclinado': 1.0,
+  'Press militar': 1.0,
+
+  // Sentadillas (mas fuertes que press)
+  'Sentadilla': 1.25,
+  'Sentadilla frontal': 1.1,
+
+  // Peso muerto (el mas fuerte)
+  'Peso muerto': 1.5,
+  'Peso muerto rumano': 1.3,
+
+  // Prensa (maquina = mas peso)
+  'Prensa': 2.0,
+  'Prensa 45': 2.0,
+
+  // Ejercicios de aislamiento (menos peso)
+  'Curl biceps': 0.4,
+  'Extension triceps': 0.35,
+  'Elevaciones laterales': 0.2,
+
+  // Ejercicios de traccion
+  'Remo con barra': 0.8,
+  'Jalon al pecho': 0.75,
+  'Dominadas': 0.9, // Peso corporal + extra
+
+  // Hip thrust (fuerte en gluteos)
+  'Hip thrust': 1.4,
+};
+
+// Default para ejercicios no listados
+function getExerciseMultiplier(exerciseName: string): number {
+  return EXERCISE_MULTIPLIERS[exerciseName] || 1.0;
+}
+```
+
+### 8.5 Recalculo al Cambiar Peso Corporal
+
+Cuando el usuario actualiza su peso en el perfil:
+
+```typescript
+function onBodyweightChange(newWeight: number): void {
+  // 1. Obtener todos los PRs
+  const prs = getAllPRs();
+
+  // 2. Recalcular todos los ratios
+  for (const [exercise, prData] of Object.entries(prs)) {
+    const estimated1RM = prData.peso * (1 + prData.reps / 30);
+    const ratio = estimated1RM / newWeight;
+    const multiplier = getExerciseMultiplier(exercise);
+    const adjustedRatio = ratio / multiplier;
+    const newRank = getRankFromRatio(adjustedRatio);
+
+    // 3. Actualizar ejercicio
+    updateExerciseStrength(exercise, {
+      estimated1RM,
+      bodyweightRatio: ratio,
+      adjustedRatio,
+      rank: newRank
+    });
+  }
+
+  // 4. Recalcular rangos musculares
+  recalculateAllMuscleRanks();
+}
+```
+
+---
+
+## PARTE 9: CONSIDERACIONES TECNICAS
+
+### 9.1 Performance
 
 - **Calculos pesados:** Cachear resultados de calculos de rango
 - **SVGs:** Usar sprites o inline para evitar requests
 - **localStorage:** Separar historial de XP del estado principal
 
-### 8.2 Compatibilidad
+### 9.2 Compatibilidad
 
 - **Navegadores:** SVG soportado en todos los navegadores modernos
 - **Fallbacks:** Usar colores solidos si SVG falla
 - **Accesibilidad:** Alt text para iconos, ARIA labels
 
-### 8.3 Escalabilidad
+### 9.3 Escalabilidad
 
 - **Nuevos ejercicios:** Sistema permite agregar ejercicios sin cambios
 - **Nuevos logros:** Array extensible de achievements
@@ -883,7 +1178,7 @@ const MESSAGE_PRIORITIES = {
 
 ---
 
-## PARTE 9: RESUMEN DE ARCHIVOS A CREAR
+## PARTE 10: RESUMEN DE ARCHIVOS A CREAR
 
 | Archivo | Proposito | Prioridad |
 |---------|-----------|-----------|
