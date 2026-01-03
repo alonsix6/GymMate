@@ -2,6 +2,9 @@
 // TIPOS PRINCIPALES
 // ==========================================
 
+// Re-export gamification types
+export * from './gamification';
+
 export interface Exercise {
   nombre: string;
   esMancuerna: boolean;
