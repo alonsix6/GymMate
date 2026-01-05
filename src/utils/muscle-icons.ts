@@ -1,11 +1,11 @@
 // ==========================================
 // ICONOS SVG DE GRUPOS MUSCULARES
-// Usando IconScout SVGs con soporte currentColor
+// Usando IconScout SVGs con colores originales
 // ==========================================
 
 /**
  * Mapeo de nombres de músculos a archivos de IconScout
- * Los archivos están en public/Muscle Icons/ y usan currentColor
+ * Los archivos están en public/Muscle Icons/ con colores originales profesionales
  */
 const MUSCLE_ICON_FILES: Record<string, string> = {
   chest: 'Chest Muscle.svg',
@@ -58,8 +58,8 @@ export function getMuscleIconUrl(muscle: string): string | null {
 }
 
 /**
- * Genera un icono de músculo usando CSS mask-image
- * Esto permite que el icono herede el color del texto (currentColor)
+ * Genera un icono de músculo usando <img>
+ * Muestra los iconos con sus colores originales profesionales
  *
  * @param muscle - Nombre del músculo
  * @param size - Tamaño en pixels (default 24)
@@ -74,7 +74,7 @@ export function muscleIcon(
 
   if (!url) {
     // Fallback: icono genérico de dumbbell
-    return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" class="${className}" fill="none" stroke="currentColor" stroke-width="1.5">
+    return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" class="muscle-icon ${className}" fill="none" stroke="currentColor" stroke-width="1.5">
       <rect x="2" y="10" width="4" height="4" rx="1"/>
       <rect x="18" y="10" width="4" height="4" rx="1"/>
       <line x1="6" y1="12" x2="18" y2="12"/>
@@ -83,55 +83,25 @@ export function muscleIcon(
     </svg>`;
   }
 
-  // Usar CSS mask-image para que el icono herede currentColor
-  return `<span
+  return `<img
+    src="${url}"
+    width="${size}"
+    height="${size}"
     class="muscle-icon ${className}"
-    style="
-      display: inline-block;
-      width: ${size}px;
-      height: ${size}px;
-      background-color: currentColor;
-      -webkit-mask-image: url('${url}');
-      mask-image: url('${url}');
-      -webkit-mask-size: contain;
-      mask-size: contain;
-      -webkit-mask-repeat: no-repeat;
-      mask-repeat: no-repeat;
-      -webkit-mask-position: center;
-      mask-position: center;
-    "
-    role="img"
-    aria-label="${muscle}"
-  ></span>`;
+    alt="${muscle}"
+    style="object-fit: contain;"
+  />`;
 }
 
 /**
- * Genera un elemento <img> para mostrar el icono
- * Nota: Los colores serán los del SVG (currentColor = negro por defecto)
- *
- * @param muscle - Nombre del músculo
- * @param size - Tamaño en pixels
- * @param className - Clases CSS adicionales
+ * Alias de muscleIcon para compatibilidad
  */
 export function muscleIconImg(
   muscle: string,
   size: number = 48,
   className: string = ''
 ): string {
-  const url = getMuscleIconUrl(muscle);
-
-  if (!url) {
-    return muscleIcon(muscle, size, className);
-  }
-
-  return `<img
-    src="${url}"
-    width="${size}"
-    height="${size}"
-    class="${className}"
-    alt="${muscle}"
-    style="object-fit: contain;"
-  />`;
+  return muscleIcon(muscle, size, className);
 }
 
 /**
