@@ -22,6 +22,7 @@ import {
   calculateVolumeXP,
   generateTransactionId,
   calculateCurrentStreak,
+  calculateCardioSessionXP,
 } from './xp';
 import { calculateLevel, getLevelProgress, getLevelTitle } from './levels';
 import { calculateAllMuscleRanks, toGamificationMuscle } from './muscle-ranks';
@@ -173,25 +174,49 @@ function calculateRetroactiveXP(
 
   // XP por cada sesion
   for (const session of sortedHistory) {
-    // Solo sesiones de pesas
-    if (session.type === 'cardio') continue;
+    if (session.type === 'cardio') {
+      // Sesion de cardio
+      const cardioXP = calculateCardioSessionXP(session);
+      totalXP += cardioXP.totalXP;
 
-    // XP base por completar
-    totalXP += XP_WORKOUT_COMPLETE;
+      const modeNames: Record<string, string> = {
+        tabata: 'Tabata',
+        emom: 'EMOM',
+        amrap: 'AMRAP',
+        circuit: 'Circuito',
+        pyramid: 'Pirámide',
+        custom: 'Personalizado',
+        fortime: 'For Time',
+      };
+      const modeName = modeNames[session.mode || 'custom'] || 'Cardio';
 
-    // XP por volumen
-    const volumeXP = calculateVolumeXP(session.volumenTotal || 0);
-    totalXP += volumeXP;
+      transactions.push({
+        id: generateTransactionId(),
+        amount: cardioXP.totalXP,
+        source: 'migration',
+        description: `Cardio ${modeName}`,
+        timestamp: session.date,
+        sessionId: session.sessionId,
+      });
+    } else {
+      // Sesion de pesas
+      // XP base por completar
+      totalXP += XP_WORKOUT_COMPLETE;
 
-    // Registrar transaccion
-    transactions.push({
-      id: generateTransactionId(),
-      amount: XP_WORKOUT_COMPLETE + volumeXP,
-      source: 'migration',
-      description: `Sesion ${session.grupo || 'Entrenamiento'}`,
-      timestamp: session.date,
-      sessionId: session.sessionId,
-    });
+      // XP por volumen
+      const volumeXP = calculateVolumeXP(session.volumenTotal || 0);
+      totalXP += volumeXP;
+
+      // Registrar transaccion
+      transactions.push({
+        id: generateTransactionId(),
+        amount: XP_WORKOUT_COMPLETE + volumeXP,
+        source: 'migration',
+        description: `Sesion ${session.grupo || 'Entrenamiento'}`,
+        timestamp: session.date,
+        sessionId: session.sessionId,
+      });
+    }
   }
 
   // XP por PRs existentes (asumimos PR menor promedio)

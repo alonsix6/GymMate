@@ -36,6 +36,63 @@ El sistema consta de **DOS componentes independientes pero integrados**:
 | PR Mayor | +11-15 kg | 150 XP |
 | PR Excepcional | +16+ kg | 250 XP |
 
+---
+
+### 1.1b Sistema de XP para Cardio
+
+Las sesiones de cardio tambien generan XP, basado en el tiempo de trabajo y la intensidad.
+
+#### XP Base Cardio
+
+| Actividad | XP Base | Notas |
+|-----------|---------|-------|
+| Completar sesion cardio | 40 XP | Siempre se otorga |
+
+#### XP por Tiempo de Trabajo
+
+| Rango de Tiempo | XP por Minuto | Max XP |
+|-----------------|---------------|--------|
+| Primeros 10 min | 2 XP/min | 20 XP |
+| 10-20 min | 1.5 XP/min | 15 XP |
+| 20-30 min | 1 XP/min | 10 XP |
+| 30+ min | 0.5 XP/min | 10 XP |
+| **Total tiempo maximo** | - | **55 XP** |
+
+#### XP por Rondas Completadas
+
+| Rondas | XP | Notas |
+|--------|-----|-------|
+| Por cada ronda | 1 XP | Aplica a HIIT, Tabata, AMRAP, EMOM |
+| **Max rondas** | **20 XP** | Tope de 20 rondas |
+
+#### Bonus por Modo de Cardio
+
+| Modo | Bonus XP | Razon |
+|------|----------|-------|
+| Tabata | +15 XP | Alta intensidad (20s trabajo / 10s descanso) |
+| Pyramid | +12 XP | Subida Y bajada de tiempos, muy exigente |
+| HIIT | +10 XP | Intervalos intensos |
+| AMRAP | +10 XP | Esfuerzo maximo por tiempo |
+| EMOM | +5 XP | Intensidad moderada-alta |
+| Custom | +5 XP | Variable |
+
+#### Ejemplo de Calculo Cardio
+
+**Sesion Tabata de 20 minutos, 8 rondas:**
+
+| Concepto | Calculo | XP |
+|----------|---------|-----|
+| Base | Sesion completada | 40 |
+| Tiempo 0-10 min | 10 × 2 | 20 |
+| Tiempo 10-20 min | 10 × 1.5 | 15 |
+| Rondas | 8 × 1 | 8 |
+| Bonus Tabata | Modo intenso | 15 |
+| **TOTAL** | | **98 XP** |
+
+**Comparacion:** Una sesion de pesas de 8,000 kg genera ~90 XP, asi que las recompensas son equivalentes.
+
+---
+
 #### Bonos de Consistencia
 
 | Racha | Bonus XP | Frecuencia |
@@ -63,6 +120,23 @@ El sistema consta de **DOS componentes independientes pero integrados**:
 | Volumen 5M | 2,500 | 5,000,000 kg acumulados |
 | Volumen 10M | 5,000 | 10,000,000 kg acumulados |
 
+#### Logros de Cardio (Una sola vez)
+
+| Logro | XP | Condicion |
+|-------|-----|-----------|
+| Primera sesion cardio | 75 | Completar primera sesion de cardio |
+| Cardio Warrior | 150 | 10 sesiones de cardio |
+| Cardio Master | 400 | 50 sesiones de cardio |
+| Tabata Champion | 200 | 20 sesiones de Tabata |
+| HIIT Hero | 200 | 20 sesiones de HIIT |
+| Pyramid Pro | 200 | 20 sesiones de Pyramid |
+| Marathon Mind | 300 | 1 hora total de trabajo en una sesion |
+| Tiempo Total 1h | 50 | 1 hora de trabajo cardio acumulada |
+| Tiempo Total 5h | 100 | 5 horas de trabajo cardio acumuladas |
+| Tiempo Total 10h | 200 | 10 horas de trabajo cardio acumuladas |
+| Tiempo Total 50h | 500 | 50 horas de trabajo cardio acumuladas |
+| Tiempo Total 100h | 1,000 | 100 horas de trabajo cardio acumuladas |
+
 #### XP por Subir Rango Muscular
 
 | Nuevo Rango Alcanzado | XP |
@@ -80,17 +154,21 @@ El sistema consta de **DOS componentes independientes pero integrados**:
 
 ### 1.2 Proyeccion de XP Anual
 
-**Usuario tipico (4 sesiones/semana, volumen promedio 8,000 kg/sesion):**
+**Usuario tipico (3 pesas + 1 cardio/semana):**
 
 | Fuente | Calculo | XP/Ano |
 |--------|---------|--------|
-| Entrenamientos base | 200 x 50 | 10,000 |
-| Volumen | 200 x 40 avg | 8,000 |
-| PRs | 40 x 80 avg | 3,200 |
+| Entrenamientos pesas base | 150 x 50 | 7,500 |
+| Volumen pesas | 150 x 40 avg | 6,000 |
+| Sesiones cardio base | 50 x 40 | 2,000 |
+| Tiempo cardio | 50 x 50 avg | 2,500 |
+| PRs | 30 x 80 avg | 2,400 |
 | Rachas | ~6 rachas | 2,000 |
-| Logros primer ano | Variable | 1,500 |
+| Logros primer ano | Variable | 2,000 |
 | Subir rangos | ~5 rangos | 500 |
 | **TOTAL ANO 1** | | **~25,000 XP** |
+
+**Nota:** Las rachas cuentan CUALQUIER tipo de sesion (pesas o cardio). Esto incentiva la actividad consistente sin importar el tipo de entrenamiento.
 
 **Anos siguientes (menos logros nuevos):** ~22,000-24,000 XP/ano
 

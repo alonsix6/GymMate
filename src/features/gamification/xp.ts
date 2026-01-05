@@ -15,6 +15,11 @@ import {
   PR_WEIGHT_THRESHOLDS,
   STREAK_XP,
   STREAK_MILESTONES,
+  XP_CARDIO_COMPLETE,
+  CARDIO_TIME_XP_TIERS,
+  XP_PER_CARDIO_ROUND,
+  MAX_CARDIO_ROUND_XP,
+  CARDIO_MODE_BONUS,
 } from './constants';
 
 /**
@@ -327,4 +332,85 @@ export function estimateOneRM(weight: number, reps: number): number {
 
   // Formula de Epley: 1RM = peso × (1 + reps/30)
   return weight * (1 + reps / 30);
+}
+
+// ==========================================
+// CARDIO XP CALCULATIONS
+// ==========================================
+
+/**
+ * Calcula XP por tiempo de trabajo en una sesion de cardio
+ * @param workTimeSeconds - Tiempo de trabajo en segundos
+ */
+export function calculateCardioTimeXP(workTimeSeconds: number): number {
+  if (workTimeSeconds <= 0) return 0;
+
+  const workTimeMinutes = workTimeSeconds / 60;
+  let xp = 0;
+  let remainingMinutes = workTimeMinutes;
+  let previousThreshold = 0;
+
+  for (const tier of CARDIO_TIME_XP_TIERS) {
+    const minutesInTier = Math.min(
+      remainingMinutes,
+      tier.maxMinutes - previousThreshold
+    );
+
+    if (minutesInTier <= 0) break;
+
+    const tierXP = Math.min(
+      Math.floor(minutesInTier * tier.xpPerMin),
+      tier.maxXP
+    );
+
+    xp += tierXP;
+    remainingMinutes -= minutesInTier;
+    previousThreshold = tier.maxMinutes;
+
+    if (remainingMinutes <= 0) break;
+  }
+
+  return xp;
+}
+
+/**
+ * Calcula XP por rondas completadas en una sesion de cardio
+ * @param roundsCompleted - Numero de rondas completadas
+ */
+export function calculateCardioRoundsXP(roundsCompleted: number): number {
+  if (roundsCompleted <= 0) return 0;
+  return Math.min(roundsCompleted * XP_PER_CARDIO_ROUND, MAX_CARDIO_ROUND_XP);
+}
+
+/**
+ * Obtiene el bonus XP por el modo de cardio
+ * @param mode - Modo de cardio (tabata, emom, amrap, etc.)
+ */
+export function getCardioModeBonus(mode: string | undefined): number {
+  if (!mode) return CARDIO_MODE_BONUS.custom || 5;
+  return CARDIO_MODE_BONUS[mode.toLowerCase()] || CARDIO_MODE_BONUS.custom || 5;
+}
+
+/**
+ * Calcula el XP total para una sesion de cardio
+ */
+export function calculateCardioSessionXP(session: HistorySession): {
+  baseXP: number;
+  timeXP: number;
+  roundsXP: number;
+  modeBonus: number;
+  totalXP: number;
+} {
+  if (session.type !== 'cardio' || !session.stats) {
+    return { baseXP: 0, timeXP: 0, roundsXP: 0, modeBonus: 0, totalXP: 0 };
+  }
+
+  const baseXP = XP_CARDIO_COMPLETE;
+  const timeXP = calculateCardioTimeXP(session.stats.workTime || 0);
+  const roundsXP = calculateCardioRoundsXP(session.stats.roundsCompleted || 0);
+  const modeBonus = getCardioModeBonus(session.mode);
+
+  const totalXP = baseXP + timeXP + roundsXP + modeBonus;
+
+  return { baseXP, timeXP, roundsXP, modeBonus, totalXP };
 }
