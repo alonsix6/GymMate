@@ -104,51 +104,108 @@ export function exportToCSV(): void {
     return;
   }
 
-  // Headers
-  const headers = [
-    'Fecha',
-    'Grupo',
-    'Ejercicio',
-    'Sets',
-    'Reps',
-    'Peso (kg)',
-    'Es Mancuerna',
-    'Grupo Muscular',
-    'Volumen',
-    'Completado',
-    'Volumen Total Sesión',
-  ];
+  // Separar sesiones por tipo
+  const weightSessions = history.filter(s => s.type !== 'cardio' && s.ejercicios);
+  const cardioSessions = history.filter(s => s.type === 'cardio');
 
-  const rows: string[][] = [headers];
+  const rows: string[][] = [];
 
-  // Data rows - solo exportar sesiones de pesas
-  history.forEach((session) => {
-    if (session.ejercicios && Array.isArray(session.ejercicios)) {
-      const fecha = new Date(session.savedAt || session.date).toLocaleDateString(
-        'es-ES'
-      );
-      const grupo = session.grupo;
-      const volumenTotalSesion = session.volumenTotal;
+  // ==========================================
+  // SECCIÓN 1: ENTRENAMIENTOS DE PESAS
+  // ==========================================
+  if (weightSessions.length > 0) {
+    rows.push(['=== ENTRENAMIENTOS DE PESAS ===']);
+    rows.push([
+      'Fecha',
+      'Grupo',
+      'Ejercicio',
+      'Sets',
+      'Reps',
+      'Peso (kg)',
+      'Es Mancuerna',
+      'Grupo Muscular',
+      'Volumen',
+      'Completado',
+      'Volumen Total Sesión',
+    ]);
 
-      session.ejercicios.forEach((ej) => {
-        if (ej.volumen > 0) {
-          rows.push([
-            fecha,
-            grupo,
-            ej.nombre,
-            String(ej.sets),
-            String(ej.reps),
-            String(ej.peso),
-            ej.esMancuerna ? 'Sí' : 'No',
-            ej.grupoMuscular,
-            String(ej.volumen),
-            ej.completado ? 'Sí' : 'No',
-            String(volumenTotalSesion),
-          ]);
-        }
-      });
-    }
-  });
+    weightSessions.forEach((session) => {
+      if (session.ejercicios && Array.isArray(session.ejercicios)) {
+        const fecha = new Date(session.savedAt || session.date).toLocaleDateString('es-ES');
+        const grupo = session.grupo;
+        const volumenTotalSesion = session.volumenTotal;
+
+        session.ejercicios.forEach((ej) => {
+          if (ej.volumen > 0) {
+            rows.push([
+              fecha,
+              grupo,
+              ej.nombre,
+              String(ej.sets),
+              String(ej.reps),
+              String(ej.peso),
+              ej.esMancuerna ? 'Sí' : 'No',
+              ej.grupoMuscular,
+              String(ej.volumen),
+              ej.completado ? 'Sí' : 'No',
+              String(volumenTotalSesion),
+            ]);
+          }
+        });
+      }
+    });
+
+    rows.push([]); // Línea en blanco
+  }
+
+  // ==========================================
+  // SECCIÓN 2: SESIONES DE CARDIO
+  // ==========================================
+  if (cardioSessions.length > 0) {
+    rows.push(['=== SESIONES DE CARDIO ===']);
+    rows.push([
+      'Fecha',
+      'Modo',
+      'Tiempo Total (seg)',
+      'Tiempo Trabajo (seg)',
+      'Tiempo Descanso (seg)',
+      'Rondas Completadas',
+      'Calorías Estimadas',
+    ]);
+
+    cardioSessions.forEach((session) => {
+      const fecha = new Date(session.savedAt || session.date).toLocaleDateString('es-ES');
+      const stats = session.stats;
+
+      if (stats) {
+        const modeNames: Record<string, string> = {
+          tabata: 'Tabata',
+          emom: 'EMOM',
+          amrap: 'AMRAP',
+          circuit: 'Circuito',
+          pyramid: 'Pirámide',
+          custom: 'Personalizado',
+          fortime: 'For Time',
+        };
+        const modeName = modeNames[session.mode || 'custom'] || session.mode || 'Cardio';
+
+        rows.push([
+          fecha,
+          modeName,
+          String(stats.totalTime || 0),
+          String(stats.workTime || 0),
+          String(stats.restTime || 0),
+          String(stats.roundsCompleted || 0),
+          String(stats.calories || 0),
+        ]);
+      }
+    });
+  }
+
+  if (rows.length === 0) {
+    alert('No hay datos para exportar');
+    return;
+  }
 
   // Generar CSV con BOM para Excel
   const BOM = '\uFEFF';

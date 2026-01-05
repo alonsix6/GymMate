@@ -530,3 +530,47 @@ export const MAX_XP_HISTORY = 100;
  * Peso corporal por defecto si no hay perfil
  */
 export const DEFAULT_BODYWEIGHT = 70;
+
+// ==========================================
+// CARDIO XP SYSTEM CONSTANTS
+// ==========================================
+
+/**
+ * XP base por completar una sesion de cardio
+ */
+export const XP_CARDIO_COMPLETE = 40;
+
+/**
+ * XP por tiempo de trabajo (escalonado, en minutos)
+ * Primeros 10 min: 2 XP/min (max 20 XP)
+ * 10-20 min: 1.5 XP/min (max 15 XP)
+ * 20-30 min: 1 XP/min (max 10 XP)
+ * 30+ min: 0.5 XP/min (max 10 XP)
+ * Total maximo por tiempo: 55 XP
+ */
+export const CARDIO_TIME_XP_TIERS = [
+  { maxMinutes: 10, xpPerMin: 2, maxXP: 20 },
+  { maxMinutes: 20, xpPerMin: 1.5, maxXP: 15 },
+  { maxMinutes: 30, xpPerMin: 1, maxXP: 10 },
+  { maxMinutes: Infinity, xpPerMin: 0.5, maxXP: 10 },
+] as const;
+
+/**
+ * XP por ronda completada (max 20 rondas = 20 XP)
+ */
+export const XP_PER_CARDIO_ROUND = 1;
+export const MAX_CARDIO_ROUND_XP = 20;
+
+/**
+ * Bonus XP por modo de cardio
+ */
+export const CARDIO_MODE_BONUS: Record<string, number> = {
+  tabata: 15,     // Alta intensidad (20s trabajo / 10s descanso)
+  pyramid: 12,    // Subida Y bajada de tiempos, muy exigente
+  hiit: 10,       // Intervalos intensos (no existe actualmente pero por si se agrega)
+  amrap: 10,      // Esfuerzo máximo por tiempo
+  emom: 5,        // Intensidad moderada-alta
+  fortime: 5,     // Variable
+  circuit: 5,     // Variable
+  custom: 5,      // Variable
+};
