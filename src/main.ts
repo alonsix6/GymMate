@@ -17,7 +17,7 @@ import {
   confirmRPE,
   skipRPE,
 } from '@/features/workout';
-import { initGamification } from '@/features/gamification';
+import { initGamification, reinitGamification } from '@/features/gamification';
 import {
   renderGamificationHeroCard,
   showGamificationModal,
@@ -133,6 +133,7 @@ declare global {
     // Gamification
     showGamificationModal: typeof showGamificationModal;
     hideGamificationModal: typeof hideGamificationModal;
+    recalculateXP: () => void;
   }
 }
 
@@ -192,6 +193,15 @@ window.closeMeasurementsHistoryModal = closeMeasurementsHistoryModal;
 window.deleteMeasurementEntry = deleteMeasurementEntry;
 window.showGamificationModal = showGamificationModal;
 window.hideGamificationModal = hideGamificationModal;
+
+// Utility to recalculate all XP from history (for recovery)
+window.recalculateXP = (): void => {
+  if (confirm('¿Recalcular todo el XP desde el historial? Esto puede tomar un momento.')) {
+    reinitGamification();
+    alert('XP recalculado correctamente. Recargando página...');
+    window.location.reload();
+  }
+};
 
 // ==========================================
 // RENDERIZAR RUTINAS EN HOME

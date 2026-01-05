@@ -478,6 +478,7 @@ export function saveWorkout(): void {
 
 let selectedRPE: number | null = null;
 let pendingSaveBeforeRPE = false;
+let hasSessionData = false; // Track if session has data for gamification
 
 // Track PRs at session start to detect new PRs
 let sessionStartPRs: Record<string, PRData> = {};
@@ -524,6 +525,9 @@ const RPE_LABELS: Record<number, string> = {
 };
 
 export function finishWorkout(): void {
+  // Check if there's any session data (for gamification)
+  hasSessionData = sessionData.volumenTotal > 0;
+
   // Check if there's data to save
   if (hasUnsavedData()) {
     if (
@@ -637,34 +641,40 @@ export async function confirmRPE(): Promise<void> {
     label: RPE_LABELS[selectedRPE] || '',
   };
 
-  // Save session with RPE if pending
+  // Save session with RPE if there are pending changes
   if (pendingSaveBeforeRPE) {
     saveCurrentSession(rpeData);
+  }
 
-    // Process gamification
+  // Process gamification if session has data (always process even if already saved)
+  if (hasSessionData) {
     await processAndShowGamification(rpeData);
   }
 
   // Close modal and finish
   closeRPEModal();
   pendingSaveBeforeRPE = false;
+  hasSessionData = false;
   selectedRPE = null;
   endSession();
   window.location.reload();
 }
 
 export async function skipRPE(): Promise<void> {
-  // Save session without RPE if pending
+  // Save session without RPE if there are pending changes
   if (pendingSaveBeforeRPE) {
     saveCurrentSession();
+  }
 
-    // Process gamification
+  // Process gamification if session has data (always process even if already saved)
+  if (hasSessionData) {
     await processAndShowGamification();
   }
 
   // Close modal and finish
   closeRPEModal();
   pendingSaveBeforeRPE = false;
+  hasSessionData = false;
   selectedRPE = null;
   endSession();
   window.location.reload();
