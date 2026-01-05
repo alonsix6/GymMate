@@ -278,3 +278,83 @@ export function getAvailableGroupIcons(): string[] {
 
 // Export raw SVGs for direct use if needed
 export { MUSCLE_SVG_ICONS, GROUP_SVG_ICONS };
+
+// ==========================================
+// ICONOS DE ICONSCOUT (archivos externos)
+// Para uso en display grande con más detalle
+// ==========================================
+
+/**
+ * Mapeo de nombres de músculos a archivos de IconScout
+ * Estos archivos están en public/Muscle Icons/
+ */
+const ICONSCOUT_FILES: Record<string, string> = {
+  chest: 'Chest Muscle.svg',
+  back: 'Back Muscle.svg',
+  shoulders: 'Shoulder muscle.svg',
+  biceps: 'Biceps muscle.svg',
+  triceps: 'Triceps muscle.svg',
+  legs: 'Quadriceps.svg',
+  glutes: 'Glutes.svg',
+  core: 'Abdominals (core).svg',
+};
+
+/**
+ * Obtiene la ruta al archivo SVG de IconScout para un músculo
+ * Ideal para mostrar iconos grandes con más detalle
+ * @param muscle - Nombre del músculo
+ * @returns Ruta al archivo SVG o null si no existe
+ */
+export function getMuscleIconPath(muscle: string): string | null {
+  const normalizedMuscle = muscle.toLowerCase().replace(/[áéíóú]/g, (match) => {
+    const map: Record<string, string> = { á: 'a', é: 'e', í: 'i', ó: 'o', ú: 'u' };
+    return map[match] || match;
+  });
+
+  const muscleMap: Record<string, string> = {
+    pecho: 'chest',
+    espalda: 'back',
+    hombros: 'shoulders',
+    biceps: 'biceps',
+    triceps: 'triceps',
+    piernas: 'legs',
+    cuadriceps: 'legs',
+    gluteos: 'glutes',
+    core: 'core',
+    abdominales: 'core',
+  };
+
+  const key = muscleMap[normalizedMuscle] || normalizedMuscle;
+  const filename = ICONSCOUT_FILES[key];
+
+  if (!filename) return null;
+
+  return `/Muscle Icons/${filename}`;
+}
+
+/**
+ * Genera un elemento <img> para mostrar un icono de IconScout
+ * @param muscle - Nombre del músculo
+ * @param size - Tamaño en pixels
+ * @param className - Clases CSS adicionales
+ */
+export function muscleIconImg(
+  muscle: string,
+  size: number = 48,
+  className: string = ''
+): string {
+  const path = getMuscleIconPath(muscle);
+  if (!path) {
+    // Fallback al icono inline si no hay IconScout
+    return muscleIcon(muscle, size, className);
+  }
+
+  return `<img src="${path}" width="${size}" height="${size}" class="${className}" alt="${muscle}" style="object-fit: contain;" />`;
+}
+
+/**
+ * Lista de todos los músculos con icono de IconScout disponible
+ */
+export function getIconScoutMuscles(): string[] {
+  return Object.keys(ICONSCOUT_FILES);
+}
