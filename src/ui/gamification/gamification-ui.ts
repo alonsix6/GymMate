@@ -262,7 +262,7 @@ export function renderGamificationModal(): string {
         </div>
 
         <!-- Guia de Niveles -->
-        <div class="bg-dark-surface rounded-2xl p-4">
+        <div class="bg-dark-surface rounded-2xl p-4 mb-3">
           <button
             class="w-full flex items-center justify-between"
             onclick="window.toggleSection && window.toggleSection('levels')"
@@ -284,6 +284,50 @@ export function renderGamificationModal(): string {
           <!-- Expanded content -->
           <div id="levels-expanded" class="hidden mt-3">
             ${renderLevelsGuide()}
+          </div>
+        </div>
+
+        <!-- Herramientas -->
+        <div class="bg-dark-surface rounded-2xl p-4">
+          <button
+            class="w-full flex items-center justify-between"
+            onclick="window.toggleSection && window.toggleSection('tools')"
+          >
+            <div class="flex items-center gap-2">
+              <span class="text-gray-400">${icon('settings', 'sm')}</span>
+              <h3 class="text-sm font-medium text-white">Herramientas</h3>
+            </div>
+            <span id="tools-chevron" class="text-gray-400 transition-transform duration-200">
+              ${icon('chevronDown', 'sm')}
+            </span>
+          </button>
+
+          <!-- Collapsed hint -->
+          <div id="tools-summary" class="mt-2">
+            <p class="text-xs text-gray-500">Opciones de mantenimiento</p>
+          </div>
+
+          <!-- Expanded content -->
+          <div id="tools-expanded" class="hidden mt-3">
+            <div class="space-y-3">
+              <div class="p-3 bg-dark-bg/50 rounded-lg">
+                <div class="flex items-start gap-3">
+                  <span class="text-yellow-400 mt-0.5">${icon('refresh', 'sm')}</span>
+                  <div class="flex-1">
+                    <p class="text-sm text-white font-medium">Recalcular XP</p>
+                    <p class="text-xs text-gray-500 mt-1">
+                      Recalcula todo el XP desde el historial. Útil si falta XP de alguna sesión.
+                    </p>
+                    <button
+                      onclick="window.recalculateXP && window.recalculateXP()"
+                      class="mt-2 px-3 py-1.5 bg-yellow-500/20 text-yellow-400 text-xs font-medium rounded-lg active:scale-95 transition-transform"
+                    >
+                      Recalcular ahora
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
