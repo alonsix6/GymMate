@@ -70,10 +70,10 @@ Las sesiones de cardio tambien generan XP, basado en el tiempo de trabajo y la i
 | Modo | Bonus XP | Razon |
 |------|----------|-------|
 | Tabata | +15 XP | Alta intensidad (20s trabajo / 10s descanso) |
+| Pyramid | +12 XP | Subida Y bajada de tiempos, muy exigente |
 | HIIT | +10 XP | Intervalos intensos |
 | AMRAP | +10 XP | Esfuerzo maximo por tiempo |
 | EMOM | +5 XP | Intensidad moderada-alta |
-| Pyramid | +5 XP | Progresion gradual |
 | Custom | +5 XP | Variable |
 
 #### Ejemplo de Calculo Cardio
@@ -129,10 +129,13 @@ Las sesiones de cardio tambien generan XP, basado en el tiempo de trabajo y la i
 | Cardio Master | 400 | 50 sesiones de cardio |
 | Tabata Champion | 200 | 20 sesiones de Tabata |
 | HIIT Hero | 200 | 20 sesiones de HIIT |
+| Pyramid Pro | 200 | 20 sesiones de Pyramid |
 | Marathon Mind | 300 | 1 hora total de trabajo en una sesion |
-| Tiempo Total 10h | 150 | 10 horas de trabajo cardio acumuladas |
-| Tiempo Total 50h | 400 | 50 horas de trabajo cardio acumuladas |
-| Tiempo Total 100h | 800 | 100 horas de trabajo cardio acumuladas |
+| Tiempo Total 1h | 50 | 1 hora de trabajo cardio acumulada |
+| Tiempo Total 5h | 100 | 5 horas de trabajo cardio acumuladas |
+| Tiempo Total 10h | 200 | 10 horas de trabajo cardio acumuladas |
+| Tiempo Total 50h | 500 | 50 horas de trabajo cardio acumuladas |
+| Tiempo Total 100h | 1,000 | 100 horas de trabajo cardio acumuladas |
 
 #### XP por Subir Rango Muscular
 
