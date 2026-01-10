@@ -352,6 +352,17 @@ function renderCustomWorkoutsInHome(): void {
   html += '</div></div>';
   container.innerHTML = html;
 
+  // Add event listeners for custom workout clicks
+  container.querySelectorAll('[data-custom-workout]').forEach((card) => {
+    card.addEventListener('click', function (this: HTMLElement) {
+      const workoutId = this.dataset.customWorkout;
+      if (workoutId) {
+        loadTrainingGroup(workoutId);
+        switchTab('workout');
+      }
+    });
+  });
+
   refreshIcons();
 }
 

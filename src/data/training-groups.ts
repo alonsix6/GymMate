@@ -1,5 +1,6 @@
 import type { TrainingGroup } from '@/types';
 import { getExerciseImage, getExerciseGuidance as getGuidance } from '@/data/exercises';
+import { getCustomWorkouts } from '@/utils/storage';
 
 // ==========================================
 // GRUPOS DE ENTRENAMIENTO PREDEFINIDOS
@@ -220,7 +221,19 @@ export const trainingGroups: Record<string, TrainingGroup> = {
 // ==========================================
 
 export function getTrainingGroup(grupoId: string): TrainingGroup | null {
-  return trainingGroups[grupoId] || null;
+  // First check predefined groups
+  if (trainingGroups[grupoId]) {
+    return trainingGroups[grupoId];
+  }
+
+  // Then check custom workouts
+  const customWorkouts = getCustomWorkouts();
+  const customWorkout = customWorkouts.find((w) => w.id === grupoId);
+  if (customWorkout) {
+    return customWorkout;
+  }
+
+  return null;
 }
 
 // Get exercise image from database
