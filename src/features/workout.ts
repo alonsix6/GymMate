@@ -322,12 +322,12 @@ export function updateVolumeDisplay(): void {
     return;
   }
 
-  const maxVolumen = Math.max(...Object.values(volumenPorGrupo));
+  const totalVolumen = sessionData.volumenTotal;
 
   let html = '';
   grupos.forEach((grupo) => {
     const volumen = volumenPorGrupo[grupo];
-    const percentage = maxVolumen > 0 ? (volumen / maxVolumen) * 100 : 0;
+    const percentage = totalVolumen > 0 ? (volumen / totalVolumen) * 100 : 0;
 
     html += `
       <div class="mb-3">
